@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/screens/home/home.dart';
 
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -10,101 +11,168 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool _isEmptyField = false;
+  bool _isPasswordMismatch = false;
   bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
+  //final _dateOfBirthController = TextEditingController();
 
-
-  void _handleLogin() async {
-    try {
-      // Attempt to sign in the user with Firebase
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      // If successful, navigate to the HomeNearby screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeNearby()),
-      );
-    } on FirebaseAuthException catch (e) {
-      // Show an error message if login failed
-      String errorMessage;
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        errorMessage = 'Invalid email or password.';
-      } else {
-        errorMessage = 'An error occurred. Please try again later.';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
-    }
+  Widget _entryField(
+    String title,
+    TextEditingController controller,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: title,
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          ),
+        ),
+      ),
+    );
   }
-  
+
+  Widget _passwordEntryField(String title, TextEditingController controller, bool passwordvisibility, Function togglePasswordVisibility) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+    child: TextField(
+      controller: controller,
+      obscureText: !passwordvisibility, // Use the provided boolean value
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.purple, width: 1.0),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.purple, width: 2.0),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.purple, width: 1.0),
+        ),
+        labelText: title,
+        suffixIcon: IconButton(
+          icon: Icon(
+            passwordvisibility ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            // Call the provided function to toggle password visibility
+            togglePasswordVisibility();
+          },
+        ),
+      ),
+    ),
+  );
+}
+void _togglePasswordVisibility() {
+  setState(() {
+    _passwordVisible = !_passwordVisible; // Toggle the value
+  });
+}
+void _toggleConfirmPasswordVisibility() {
+  setState(() {
+    _confirmPasswordVisible = !_confirmPasswordVisible; // Toggle the value
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(15, 100, 15, 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/logo.PNG", // Update this path to your actual image path
-                  width: 196,
-                  height: 200,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 70),
+            _entryField("First Name", _firstNameController),
+            _entryField("Last Name", _lastNameController),
+            _entryField("username", _usernameController),
+            _entryField("email", _emailController),
+            _passwordEntryField("password", _passwordController, _passwordVisible, _togglePasswordVisibility),
+            _passwordEntryField("Confirm password", _confirmPasswordController,_confirmPasswordVisible,_toggleConfirmPasswordVisibility),
+            const SizedBox(height: 15),
+            if (_isEmptyField)
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'No Field can be empty',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
-                const SizedBox(height: 30),
-                TextField(
-                  controller: _firstNameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'First Name',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
+              ),
+            if (_isPasswordMismatch)
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Passwords do not match',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'E-mail',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: !_passwordVisible,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        // Choose the icon based on the password visibility
-                        _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        // Update the state to toggle password visibility
+              ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_firstNameController.text.isEmpty ||
+                          _lastNameController.text.isEmpty ||
+                          _emailController.text.isEmpty ||
+                          _usernameController.text.isEmpty ||
+                          _passwordController.text.isEmpty ||
+                          _confirmPasswordController.text.isEmpty) {
                         setState(() {
-                          _passwordVisible = !_passwordVisible;
+                          _isEmptyField = true;
                         });
-                      },
+                      } else {
+                        setState(() {
+                          _isEmptyField = false;
+                        });
+                      }
+                      if (_passwordController.text != _confirmPasswordController.text) {
+                        // Set the state to show the error message
+                        setState(() {
+                          _isPasswordMismatch = true;
+                        });
+                      } else {
+                        // Proceed with navigation if passwords match
+                        setState(() {
+                          _isPasswordMismatch = false;
+                        });
+                        if(_isEmptyField == false && _isPasswordMismatch == false) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomeNearby()),
+                          );
+                        }
+                      }
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF624E99),
+                      minimumSize: const Size(150, 50),
+                    ),
+                    child: const Text(
+                      'Sign-Up',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
-                 const SizedBox(height: 20),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
