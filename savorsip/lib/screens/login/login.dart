@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:savorsip/components/colors.dart';
 import 'package:savorsip/screens/home/home.dart';
 import 'package:savorsip/screens/login/sign_up.dart';
 
@@ -105,10 +106,10 @@ class _LoginState extends State<Login> {
                     onPressed: _handleLogin,
                     child: Text(
                       'Login',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColors.on_primary),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
+                      backgroundColor: AppColors.primary,
                       minimumSize: Size(350, 50),
                     ),
                   ),
