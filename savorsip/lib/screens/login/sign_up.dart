@@ -35,10 +35,10 @@ class _SignUpState extends State<SignUp> {
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 2.0),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
         ),
@@ -54,13 +54,13 @@ class _SignUpState extends State<SignUp> {
         controller: controller,
         obscureText: !passwordvisibility, // Use the provided boolean value
         decoration: InputDecoration(
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 2.0),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
           labelText: title,
@@ -106,18 +106,18 @@ class _SignUpState extends State<SignUp> {
                 _passwordVisible, _togglePasswordVisibility),
             _passwordEntryField("Confirm password", _confirmPasswordController,
                 _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             if (_isEmptyField)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'No Field can be empty',
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
             if (_isPasswordMismatch)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Passwords do not match',
                   style: TextStyle(color: Colors.red, fontSize: 16),
