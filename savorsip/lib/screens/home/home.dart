@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/components/WineCardHome.dart';  // Correct the path based on your project structure
+import 'package:savorsip/components/wineCardHome.dart';  // Correct the path based on your project structure
 
 class HomeNearby extends StatelessWidget {
   const HomeNearby({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             //_buildTopNavigation(),
-            const SizedBox(height: 10),
-            const WineCardHome(
+            SizedBox(height: 10),
+            WineCardHome(
               imageUrl: "https://via.placeholder.com/64x64",
               wineName: "Wine Name 1",
               venueName: "Venue Name 1",
@@ -20,8 +20,8 @@ class HomeNearby extends StatelessWidget {
               rating: 4.5,
               friendsRating: 4.2,
             ),
-            const SizedBox(height: 16),
-            const WineCardHome(
+            SizedBox(height: 16),
+            WineCardHome(
               imageUrl: "https://via.placeholder.com/64x64",
               wineName: "Wine Name 2",
               venueName: "Venue Name 2",
@@ -29,7 +29,7 @@ class HomeNearby extends StatelessWidget {
               rating: 4.3,
               friendsRating: 4.1,
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             //_buildBottomNavigation(),
           ],
         ),
