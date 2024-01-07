@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "381630717842",
+    "project_id": "savorsip-8c64d",
+    "storage_bucket": "savorsip-8c64d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381630717842:android:91e0383bd3ed6d8cb66b4b",
+        "android_client_info": {
+          "package_name": "com.example.savorsip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx8j1vb3-Gl-6ncsO-x4DV7bQEMVkhLWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
