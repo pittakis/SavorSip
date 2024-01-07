@@ -1,22 +1,23 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/screens/home/home.dart';
-import 'package:savorsip/screens/login/sign_up.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  _LoginState createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   bool _passwordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _firstName = TextEditingController();
+  final _lastName = TextEditingController();
+  final _username = TextEditingController();
 
-  // Function to handle user login
+
   void _handleLogin() async {
     try {
       // Attempt to sign in the user with Firebase
@@ -42,10 +43,14 @@ class _LoginState extends State<Login> {
       );
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
+      body: Text('SignUp page'),
+    );
+    
+    /*Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -94,56 +99,8 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 25),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ElevatedButton(
-                    onPressed: _handleLogin,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
-                      minimumSize: Size(350, 50),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text('Don’t Have An Account?'),
-                  SizedBox(height: 0),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUp()),
-                      );
-                    },
-                    child: Text(
-                      'Sign-Up',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
-                      minimumSize: Size(150, 50),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+    );*/
   }
 }
