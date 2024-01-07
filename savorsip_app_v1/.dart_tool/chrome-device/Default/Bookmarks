@@ -1,0 +1,90 @@
+{
+   "checksum": "eda929ea0fb72cbad6ce6a38e8949ca9",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13232635038319171",
+            "date_last_used": "0",
+            "guid": "46f92aa2-7b17-404d-ad4f-dae612feac29",
+            "id": "17",
+            "name": "YouTube",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://www.youtube.com/"
+         }, {
+            "children": [ {
+               "date_added": "13215116320447843",
+               "date_last_used": "0",
+               "guid": "89e4573f-bff7-4db6-865c-63aec0287e11",
+               "id": "19",
+               "name": "ASUS Homepage",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "http://www.asus.com/"
+            }, {
+               "date_added": "13215116320447843",
+               "date_last_used": "0",
+               "guid": "ea06437b-39ec-42ef-97b1-e3d6ed11aa6e",
+               "id": "20",
+               "name": "ASUS Member",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "https://account.asus.com/"
+            } ],
+            "date_added": "13347819271173256",
+            "date_last_used": "0",
+            "date_modified": "13349024130996392",
+            "guid": "01dbd6eb-fd80-4de3-b434-0ddc9b209dbf",
+            "id": "18",
+            "name": "ASUS E-Service",
+            "source": "import_fre",
+            "type": "folder"
+         }, {
+            "date_added": "13343612045483483",
+            "date_last_used": "0",
+            "guid": "8b54937b-1a6c-4554-ab99-6954323af67d",
+            "id": "21",
+            "name": "YouTube",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://www.youtube.com/?app"
+         } ],
+         "date_added": "13347819266743686",
+         "date_last_used": "0",
+         "date_modified": "13343612045483483",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Favourites bar",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13347819266743689",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other favourites",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13347819266743692",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile favourites",
+         "source": "unknown",
+         "type": "folder"
+      }
+   },
+   "sync_metadata": "CkEKHgiIgQISCMNNHN+MAQAAKg4QABgAIAAoBDAAOABAABIAIAEqGHdFNFJXK0o5NkZpTE5ENTFXNlNkU0E9PaAGDBKnAQgVEqIBChx5VzhJMWFydmZydUkvYkthSHZrN1NmWjdzcXM9EiQ4YjU0OTM3Yi0xYTZjLTQ1NTQtYWI5OS02OTU0MzIzYWY2N2QYACAAKAAwmJjo5coxOJyLxZ7FMUCci8WexTFKHDk0TUFNSDFWN3JWWUgrS3U2OGdCNTIxcWZoND1aHiIcZ2owMk52dU4yTzdTbTd5RDBBV0hBVGZva0J3PWUAAAAAEqgBCBQSowEKHGIvdkZtTUhmTFVsM09GNkNSQTZYU3d1dWd1Zz0SJGVhMDY0MzdiLTM5ZWMtNDJlZi05N2IxLWUzZDZlZDExYWE2ZRgAIAAoADDGl5KN1zA49piSjdcwQPaYko3XMEocekVmQXhQaWhUMGVubEJHaFpHcS9yb1Q5Tlh3PVofIh20SElESm10TFludDN3TVpialZMZWplcXdDT1JzPWUAAAAAEqcBCBESogEKHFVPY2YzY3p1dW1hTGFHKzBKVVRhOG9XbFovND0SJDQ2ZjkyYWEyLTdiMTctNDA0ZC1hZDRmLWRhZTYxMmZlYWMyORgAIAAoADCZmOjlyjE4hZmSjdcwQIWZko3XMEocQzVKQVM1dU9iSFE0SnU5Rkw0SnN2OFIrKzBNPVoeIhxNSUJHanRpVDFnb1JsRHBScDlxRm1LNHVoNFk9ZQAAAAASpwEIExKiAQoceGVTeGtwb3ZRRVlrTzNtRXcvdWcyczlVRGM0PRIkODllNDU3M2YtYmZmNy00ZGI2LTg2NWMtNjNhZWMwMjg3ZTExGAAgACgAMMWXko3XMDjWmJKN1zBA1piSjdcwShwzY1FnUWdNZzhYYithVWltNklyTFE4WXdLZUk9Wh4iHGhmdCtYUUhoTEpqZzhWWWZJWCt0cHdjTlRDQT1lAAAAABKJAQgCEoQBChxZY1NUb252RVNQd3FDczRMMmNyVmh2NjhMOTg9EiQzYTk1ZWMxYi03ZDhkLTUyMTgtYjZlNS00NWViZjJhNjFiNTIYACAAKAAw/dyQw6guONHdjujqL0DR3Y7o6i9KHG9QVmtod0JSYlY2NUtDV1IyK0lPTkhXb091OD1aAGUAAAAAEqcBCBISogEKHFdXL3F2dUhnR2dyQkNZOUYvaW05UUJEMTF5ND0SJDAxZGJkNmViLWZkODAtNGRlMy1iNDM0LTBkZGM5YjIwOWRiZhgAIAAoADDEl5KN1zA4t5iSjdcwQLeYko3XMEocWGEybE8vTVQ0V3VseVpINUR5RWF5Q2FLZDlvPVoeIhxnMUxMMFJ2a1o0WEsyZmZ0T05vUUdqWHR0alk9ZQAAAAASiQEIARKEAQoceXhKLzZmdmtlY3I3a3A1RVF6QjR0V0xwZGJFPRIkM2M3N2MyZjItMjBmYS01NWRmLThiNDItMzJmZDRmZjJkNTE1GAAgACgAMPzckMOoLjiy3Y7o6i9Ast2O6OovShxhUkNXTGdoRjliNUlucUtJRHZ1Si9qdlFrRmM9WgBlAAAAABKJAQgDEoQBChxuamdEdTg4ZUNydlhwODZwRDdmSEdjcUZwODg9EiRmY2ZhODU2Ny0yYTU4LTU0YzUtOWUxNS00NWI3NjU4MTNjZDgYACAAKAAwgd2Qw6guOM7ejujqL0DO3o7o6i9KHHl6TkIwMWNuNTRBN2NSVTB1VCsvUGdtVHRVbz1aAGUAAAAAMAA4AA==",
+   "version": 1
+}
