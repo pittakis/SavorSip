@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 Future<void> addData(FirstName, LastName, email, username, password) {
-  return firestore.collection('your_collection_name').add({
+  return firestore.collection('Users').add({
     'First Name': FirstName,
     'Last Name': LastName,
     'email': email,
