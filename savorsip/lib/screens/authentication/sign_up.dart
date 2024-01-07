@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/operations/adduser.dart';
-import 'package:savorsip/screens/home/home.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 
 class SignUp extends StatefulWidget {
