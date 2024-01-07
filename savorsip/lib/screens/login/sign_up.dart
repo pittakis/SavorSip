@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/operations/adduser.dart';
 import 'package:savorsip/screens/home/home.dart';
-
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -32,7 +32,7 @@ class _SignUpState extends State<SignUp> {
         controller: controller,
         decoration: InputDecoration(
           labelText: title,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
           focusedBorder: OutlineInputBorder(
@@ -46,46 +46,49 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _passwordEntryField(String title, TextEditingController controller, bool passwordvisibility, Function togglePasswordVisibility) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-    child: TextField(
-      controller: controller,
-      obscureText: !passwordvisibility, // Use the provided boolean value
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.purple, width: 1.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.purple, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.purple, width: 1.0),
-        ),
-        labelText: title,
-        suffixIcon: IconButton(
-          icon: Icon(
-            passwordvisibility ? Icons.visibility : Icons.visibility_off,
+  Widget _passwordEntryField(String title, TextEditingController controller,
+      bool passwordvisibility, Function togglePasswordVisibility) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+      child: TextField(
+        controller: controller,
+        obscureText: !passwordvisibility, // Use the provided boolean value
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 1.0),
           ),
-          onPressed: () {
-            // Call the provided function to toggle password visibility
-            togglePasswordVisibility();
-          },
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          ),
+          labelText: title,
+          suffixIcon: IconButton(
+            icon: Icon(
+              passwordvisibility ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              // Call the provided function to toggle password visibility
+              togglePasswordVisibility();
+            },
+          ),
         ),
       ),
-    ),
-  );
-}
-void _togglePasswordVisibility() {
-  setState(() {
-    _passwordVisible = !_passwordVisible; // Toggle the value
-  });
-}
-void _toggleConfirmPasswordVisibility() {
-  setState(() {
-    _confirmPasswordVisible = !_confirmPasswordVisible; // Toggle the value
-  });
-}
+    );
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _passwordVisible = !_passwordVisible; // Toggle the value
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _confirmPasswordVisible = !_confirmPasswordVisible; // Toggle the value
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +102,10 @@ void _toggleConfirmPasswordVisibility() {
             _entryField("Last Name", _lastNameController),
             _entryField("username", _usernameController),
             _entryField("email", _emailController),
-            _passwordEntryField("password", _passwordController, _passwordVisible, _togglePasswordVisibility),
-            _passwordEntryField("Confirm password", _confirmPasswordController,_confirmPasswordVisible,_toggleConfirmPasswordVisibility),
+            _passwordEntryField("password", _passwordController,
+                _passwordVisible, _togglePasswordVisibility),
+            _passwordEntryField("Confirm password", _confirmPasswordController,
+                _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
             SizedBox(height: 15),
             if (_isEmptyField)
               Padding(
@@ -139,7 +144,8 @@ void _toggleConfirmPasswordVisibility() {
                           _isEmptyField = false;
                         });
                       }
-                      if (_passwordController.text != _confirmPasswordController.text) {
+                      if (_passwordController.text !=
+                          _confirmPasswordController.text) {
                         // Set the state to show the error message
                         setState(() {
                           _isPasswordMismatch = true;
@@ -149,20 +155,27 @@ void _toggleConfirmPasswordVisibility() {
                         setState(() {
                           _isPasswordMismatch = false;
                         });
-                        if(_isEmptyField == false && _isPasswordMismatch == false) {
+                        if (_isEmptyField == false &&
+                            _isPasswordMismatch == false) {
+                          addUser(
+                              _firstNameController.text,
+                              _lastNameController.text,
+                              _emailController.text,
+                              _usernameController.text,
+                              _passwordController.text);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeNearby()),
+                            MaterialPageRoute(
+                                builder: (context) => HomeNearby()),
                           );
                         }
                       }
                     },
-
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF624E99),
-                      minimumSize: Size(150, 50),
+                      minimumSize: const Size(150, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Sign-Up',
                       style: TextStyle(color: Colors.white),
                     ),
