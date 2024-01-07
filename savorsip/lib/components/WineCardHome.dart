@@ -8,7 +8,7 @@ class WineCardHome extends StatelessWidget {
   final double rating;
   final double friendsRating;
 
-  WineCardHome({
+  const WineCardHome({super.key, 
     required this.imageUrl,
     required this.wineName,
     required this.venueName,
@@ -26,7 +26,7 @@ class WineCardHome extends StatelessWidget {
         height: 400,
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         decoration: BoxDecoration(
-          color: Color(0xFF9B8CC4),
+          color: const Color(0xFF9B8CC4),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -62,18 +62,18 @@ class WineCardHome extends StatelessWidget {
             backgroundImage: NetworkImage(imageUrl),
             radius: 32,
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   wineName,
-                  style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400),
+                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400),
                 ),
                 Text(
                   venueName,
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -89,9 +89,9 @@ class WineCardHome extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(wineName, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-          Text(venueName, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-          Text(description, style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500)),
+          Text(wineName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+          Text(venueName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+          Text(description, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -103,13 +103,13 @@ class WineCardHome extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400)),
+          Text(title, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400)),
           Row(
             children: [
-              Icon(Icons.star, color: Color(0xFFFFD700)),
+              const Icon(Icons.star, color: Color(0xFFFFD700)),
               Text(
                 '${rating.toStringAsFixed(1)}/5',
-                style: TextStyle(color: Color(0xFFFFD700), fontSize: 28, fontWeight: FontWeight.w400),
+                style: const TextStyle(color: Color(0xFFFFD700), fontSize: 28, fontWeight: FontWeight.w400),
               ),
             ],
           ),

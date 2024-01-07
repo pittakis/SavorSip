@@ -12,7 +12,7 @@ class HomeNearby extends StatelessWidget {
           children: [
             _buildTopNavigation(),
             const SizedBox(height: 10),
-            WineCardHome(
+            const WineCardHome(
               imageUrl: "https://via.placeholder.com/64x64",
               wineName: "Wine Name 1",
               venueName: "Venue Name 1",
@@ -21,7 +21,7 @@ class HomeNearby extends StatelessWidget {
               friendsRating: 4.2,
             ),
             const SizedBox(height: 16),
-            WineCardHome(
+            const WineCardHome(
               imageUrl: "https://via.placeholder.com/64x64",
               wineName: "Wine Name 2",
               venueName: "Venue Name 2",

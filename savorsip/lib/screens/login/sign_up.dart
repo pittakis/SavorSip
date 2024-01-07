@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeNearby()),
+        MaterialPageRoute(builder: (context) => const HomeNearby()),
       );
     } on FirebaseAuthException catch (e) {
       // Show an error message if login failed
@@ -84,7 +84,7 @@ class _SignUpState extends State<SignUp> {
                   controller: _passwordController,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     labelText: 'Password',
                     suffixIcon: IconButton(
                       icon: Icon(
