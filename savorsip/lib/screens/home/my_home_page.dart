@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/screens/cellar_screen.dart';
-import 'package:savorsip/screens/friends_screen.dart';
-import 'package:savorsip/screens/profile_screen.dart';
-import 'package:savorsip/screens/search_screen.dart';
+import 'package:savorsip/screens/home/cellar_screen.dart';
+import 'package:savorsip/screens/home/friends_screen.dart';
+import 'package:savorsip/screens/home/profile_screen.dart';
+import 'package:savorsip/screens/home/search_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);

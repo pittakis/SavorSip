@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/screens/login/login.dart';
+import 'package:savorsip/screens/authentication/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
