@@ -13,9 +13,9 @@ class _SignUpState extends State<SignUp> {
   bool _passwordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _firstName = TextEditingController();
-  final _lastName = TextEditingController();
-  final _username = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
 
 
   void _handleLogin() async {
@@ -46,11 +46,7 @@ class _SignUpState extends State<SignUp> {
   
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text('SignUp page'),
-    );
-    
-    /*Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -65,16 +61,25 @@ class _SignUpState extends State<SignUp> {
                   width: 196,
                   height: 200,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
+                TextField(
+                  controller: _firstNameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'First Name',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 10),
                 TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'E-mail',
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextField(
                   controller: _passwordController,
                   obscureText: !_passwordVisible,
@@ -95,12 +100,12 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                 const SizedBox(height: 20),
               ],
             ),
           ),
         ],
       ),
-    );*/
+    );
   }
 }
