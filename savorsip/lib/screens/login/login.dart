@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/components/colors.dart';
 import 'package:savorsip/screens/home/home.dart';
+import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/login/sign_up.dart';
 
 class Login extends StatefulWidget {
@@ -28,7 +29,7 @@ class _LoginState extends State<Login> {
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeNearby()),
+        MaterialPageRoute(builder: (context) => MyHomePage()),
       );
     } on FirebaseAuthException catch (e) {
       // Show an error message if login failed

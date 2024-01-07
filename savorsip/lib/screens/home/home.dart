@@ -10,7 +10,7 @@ class HomeNearby extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildTopNavigation(),
+            //_buildTopNavigation(),
             const SizedBox(height: 10),
             const WineCardHome(
               imageUrl: "https://via.placeholder.com/64x64",
@@ -30,7 +30,7 @@ class HomeNearby extends StatelessWidget {
               friendsRating: 4.1,
             ),
             const SizedBox(height: 10),
-            _buildBottomNavigation(),
+            //_buildBottomNavigation(),
           ],
         ),
       ),

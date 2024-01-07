@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/operations/adduser.dart';
 import 'package:savorsip/screens/home/home.dart';
+import 'package:savorsip/screens/home/my_home_page.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -166,7 +167,7 @@ class _SignUpState extends State<SignUp> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeNearby()),
+                                builder: (context) => MyHomePage()),
                           );
                         }
                       }
