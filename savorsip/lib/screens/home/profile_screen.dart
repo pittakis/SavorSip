@@ -16,7 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:const Text("<- Leaderboard")),
+      appBar: AppBar(title:const Text("<- Show Leaderboard")),
       body: const Center(
         child: Placeholder(),
       ),
