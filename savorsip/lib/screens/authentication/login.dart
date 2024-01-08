@@ -118,9 +118,15 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 0),
                   ElevatedButton(
                     onPressed: () {
+                      /*
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SignUp()),
+                      );
+                      */
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()),
                       );
                     },
                     child: Text(
