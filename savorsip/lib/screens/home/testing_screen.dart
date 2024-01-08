@@ -41,20 +41,9 @@ class _TestingScreenState extends State<TestingScreen> {
                 itemCount: myFriends!.length,
                 itemBuilder: (context, index) {
                   final item = myFriends![index];
-                  return Dismissible(
-                    key: Key(item),
-                    onDismissed: (direction) {
-                      setState(() {
-                        myFriends!.removeAt(index);
-                      });
-
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('$item dismissed')));
-                    },
-                    background: Container(color: Colors.red),
-                    child: ListTile(
-                      title: Text(item),
-                    ),
+                  return ListTile(
+                    title: Text(item),
+                    onLongPress: (){},
                   );
                 },
               ),

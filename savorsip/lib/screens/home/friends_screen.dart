@@ -39,6 +39,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
             UserTile(firstName: "George", userName: 'gpit', lastName: 'Pittakis' , leaderboardPosition: 6, profilePicture: Image.asset('assets/images/logo.PNG')),
             //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
             //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 23, profilePicture: Image.asset('assets/images/logo.PNG')),
+            
           ],
         )
       )
