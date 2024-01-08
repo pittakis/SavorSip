@@ -6,8 +6,9 @@ class CellarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(title:const Text("<- Show Leaderboard")),
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             //_buildTopNavigation(),
@@ -34,30 +35,24 @@ class CellarScreen extends StatelessWidget {
           ],
         ),
       ),
-    ); /*ListView.builder(
-        itemCount: myWines.length ,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              child: ListTile(
-                isThreeLine: true,
-                onTap: (){},
-                title: Text(myWines[index].name),
-                subtitle: Text(myWines[index].winemaker),
-                trailing: Text('${myWines[index].year}'),
-                leading: const Padding(
-                  padding: EdgeInsets.fromLTRB(1, 8, 1, 0),
-                  child: Icon(
-                    Icons.wine_bar,
-                    //opticalSize: 15.0,
-                    color: Color.fromARGB(255, 151, 29, 185),
-                    ),
-                ),
-              ),
+      drawer: const Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: Column(
+          // Important: Remove any padding from the ListView.
+          //padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              //decoration: BoxDecoration(
+                //color: Colors.blue,
+              //),
+              child: Text('Who is more of a drunk?'),
             ),
-          );
-        }
-      );*/
+            
+          ],
+        ),
+      ),
+    );
   }
 }
