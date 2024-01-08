@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class UserTile extends StatelessWidget {
+class UserTile_request extends StatelessWidget {
   final String firstName;
   final String userName;
   final String lastName;
   final Image profilePicture;
   final int leaderboardPosition;
 
-  UserTile({super.key, 
+  UserTile_request({super.key, 
     required this.firstName,
     required this.userName,
     required this.lastName,
@@ -50,13 +50,24 @@ class UserTile extends StatelessWidget {
           subtitle: Text(userName,
               style: const TextStyle(
                   fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
-          trailing: IconButton(
-            onPressed: () {
-              print("delete friend");
-            },
-            icon: const Icon(Icons.delete_forever_rounded),
-            iconSize: 35,
-          ),
+          trailing: Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                print("accept friend");
+              },
+              icon: const Icon(Icons.check_box),
+              iconSize: 35,
+            ),
+            IconButton(
+              onPressed: () {
+                print("reject friend");
+              },
+              icon: const Icon(Icons.disabled_by_default),
+              iconSize: 35,
+            ),
+          ],
+        ),
         ),
       ),
     );
@@ -77,3 +88,4 @@ Icon? getBadgeIcon(int position) {
     return null;
   }
 }
+

@@ -10,16 +10,19 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 20),
-          SearchBar(),
-          const SizedBox(height: 100),  
-          const Text('Search Screen'),
-          
-        ],
+    return Scaffold(
+      //appBar: AppBar(),
+      body: Center(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 50),
+            SearchBar(),
+            const SizedBox(height: 100),  
+            const Text('Search Screen'),
+            
+          ],
+        ),
       ),
     );
   }
@@ -33,17 +36,17 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
-      margin: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 215, 184, 221), // Light purple color
+        color: const Color.fromARGB(255, 215, 184, 221), // Light purple color
         borderRadius: BorderRadius.circular(20.0), // Rounded corners
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2), // Shadow color
             spreadRadius: 2, // Spread radius
             blurRadius: 4, // Blur radius
-            offset: Offset(0, 2), // Offset in the x, y direction
+            offset: const Offset(0, 2), // Offset in the x, y direction
           ),
         ],
       ),

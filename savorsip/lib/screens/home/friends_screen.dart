@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/components/UserTile_friendrequest.dart';
 import 'package:savorsip/components/userTile.dart';
 
 
@@ -33,8 +34,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //const SizedBox(height: 100,),
-            UserTile(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets\images\Crown-icon-PNG.png')),
-            UserTile(firstName: "George", userName: 'gpit', lastName: 'Pittakis' , leaderboardPosition: 6, profilePicture: Image.asset('assets\images\Crown-icon-PNG.png'))
+            UserTile(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
+            UserTile(firstName: "George", userName: 'gpit', lastName: 'Pittakis' , leaderboardPosition: 6, profilePicture: Image.asset('assets/images/logo.PNG')),
+            //UserTile_request(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
           ],
         )
       )
