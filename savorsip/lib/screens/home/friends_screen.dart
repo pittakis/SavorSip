@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/components/UserTile_friendrequest.dart';
 import 'package:savorsip/components/userTile.dart';
+import 'package:savorsip/components/userTileRequest.dart';
 
 
 class FriendsScreen extends StatefulWidget {
@@ -36,7 +37,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
             //const SizedBox(height: 100,),
             UserTile(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
             UserTile(firstName: "George", userName: 'gpit', lastName: 'Pittakis' , leaderboardPosition: 6, profilePicture: Image.asset('assets/images/logo.PNG')),
-            //UserTile_request(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
+            //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
+            //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 23, profilePicture: Image.asset('assets/images/logo.PNG')),
           ],
         )
       )

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class UserTile extends StatelessWidget {
+class UserTileRequest extends StatelessWidget {
   final String firstName;
   final String userName;
   final String lastName;
   final Image profilePicture;
   final int leaderboardPosition;
 
-  UserTile({super.key, 
+  UserTileRequest({super.key, 
     required this.firstName,
     required this.userName,
     required this.lastName,
@@ -28,7 +28,6 @@ class UserTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(1),
         ),
         child: ListTile(
-          //contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           onTap: () {},
           leading: CircleAvatar(
@@ -48,13 +47,25 @@ class UserTile extends StatelessWidget {
           subtitle: Text(userName,
               style: const TextStyle(
                   fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
-          trailing: IconButton(
-            onPressed: () {
-              print("delete friend");
-            },
-            icon: const Icon(Icons.delete_forever_rounded),
-            iconSize: 20,
-          ),
+          trailing: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: () {
+                print("accept friend");
+              },
+              icon: const Icon(Icons.check_box),
+              iconSize: 20,
+            ),
+            IconButton(
+              onPressed: () {
+                print("reject friend");
+              },
+              icon: const Icon(Icons.disabled_by_default),
+              iconSize: 20,
+            ),
+          ],
+        ),
         ),
       ),
     );

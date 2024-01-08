@@ -28,16 +28,13 @@ class UserTile_request extends StatelessWidget {
           borderRadius: BorderRadius.circular(1),
         ),
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+          //contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           onTap: () {},
-          leading: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: profilePicture,
-            ),
+          leading: CircleAvatar(
+            radius: 25, // Adjust the radius as needed
+            backgroundImage: profilePicture.image,
           ),
+
           title: Row(
             children: [
               Text(
@@ -57,14 +54,14 @@ class UserTile_request extends StatelessWidget {
                 print("accept friend");
               },
               icon: const Icon(Icons.check_box),
-              iconSize: 35,
+              iconSize: 30,
             ),
             IconButton(
               onPressed: () {
                 print("reject friend");
               },
               icon: const Icon(Icons.disabled_by_default),
-              iconSize: 35,
+              iconSize: 30,
             ),
           ],
         ),
@@ -88,4 +85,3 @@ Icon? getBadgeIcon(int position) {
     return null;
   }
 }
-
