@@ -1,36 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:savorsip/Models/Users.dart';
 
-class User {
-    String? firstName;
-    String? lastName;
-    String? email;
-    String? password;
-    String? username;
-
-    User({this.firstName, this.lastName, this.email, this.password, this.username});
-
-    factory User.fromDocument(DocumentSnapshot doc) {
-        return User(
-            firstName: doc['First Name'] as String,
-            lastName: doc['Last Name'] as String,
-            email: doc['email'] as String,
-            password: doc['password'] as String,
-            username: doc['username'] as String,
-        );
-    }
-}
-
-Future<User> getUser(String username) async {
+class UserOperations {
+  static Future<Users?> getUserByEmail(String email) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     QuerySnapshot querySnapshot = await firestore
         .collection('Users')
-        .where('username', isEqualTo: username)
+        .where('email', isEqualTo: email)
+        .limit(1)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-        // Assuming the username is unique and only one document will be returned
-        return User.fromDocument(querySnapshot.docs.first);
-    } else {
-        throw Exception('User not found');
-    }
+      if (querySnapshot.docs.isNotEmpty) {
+        // Correctly get the data as a Map<String, dynamic>
+        Map<String, dynamic> userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return Users.fromDocument(userData);
+      } else {
+        // User not found
+        return null;
+      }
+  }
 }
