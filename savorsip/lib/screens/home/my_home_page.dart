@@ -3,6 +3,7 @@ import 'package:savorsip/screens/home/cellar_screen.dart';
 import 'package:savorsip/screens/home/friends_screen.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';
 import 'package:savorsip/screens/home/search_screen.dart';
+import 'package:savorsip/screens/home/testing_screen.dart'; // Import your TestScreen
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
     FriendsScreen(),
     SearchScreen(),
     ProfileScreen(),
+    TestingScreen(),
   ];
 
   @override
@@ -63,6 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person_pin_rounded),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.edit),
+            label: 'Testing',
           ),
         ],
         onTap: (index) {

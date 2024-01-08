@@ -30,7 +30,7 @@ class UserTile extends StatelessWidget {
         child: ListTile(
           //contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          onTap: () {},
+          //onTap: () {},
           leading: CircleAvatar(
             radius: 25, // Adjust the radius as needed
             backgroundImage: profilePicture.image,
