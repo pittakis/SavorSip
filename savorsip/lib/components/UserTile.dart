@@ -15,19 +15,7 @@ class UserTile extends StatelessWidget {
     required this.leaderboardPosition,
   });
 
-  Icon? getBadgeIcon(int position) {
-  if (position == 1) {
-    return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
-  } else if (position == 2) {
-    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 117, 116, 114));
-  } else if (position == 3) {
-    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 166, 102, 72));
-  } else if (position<=20) {
-    return const Icon(Icons.check_circle, color: Color.fromARGB(255, 81, 146, 203));
-  } else {
-    return null;
-  }
-}
+  
   @override
   Widget build(BuildContext context) {
     Icon? userBadge = getBadgeIcon(leaderboardPosition);
@@ -63,5 +51,20 @@ class UserTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+Icon? getBadgeIcon(int position) {
+  if (position == 1) {
+    return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
+  } else if (position == 2) {
+    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 117, 116, 114));
+  } else if (position == 3) {
+    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 166, 102, 72));
+  } else if (position<=20) {
+    return const Icon(Icons.check_circle, color: Color.fromARGB(255, 81, 146, 203));
+  } else {
+    return null;
   }
 }
