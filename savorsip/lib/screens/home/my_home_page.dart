@@ -18,11 +18,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    CellarScreen(),
-    FriendsScreen(),
-    SearchScreen(),
-    ProfileScreen(),
-    TestingScreen(),
+    const CellarScreen(),
+    const FriendsScreen(),
+    const SearchScreen(),
+    const ProfileScreen(),
+    const TestingScreen(),
   ];
 
   @override
