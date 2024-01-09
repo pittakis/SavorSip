@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/colors.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/authentication/sign_up.dart';
@@ -25,10 +27,14 @@ class _LoginState extends State<Login> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      //Create the user Object
+      Users newUser = await Users.fetchUserData(FirebaseAuth.instance.currentUser!.uid);
+      //Print users object for test
+      print('This is the user data of the object: $newUser');
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage()),
+        MaterialPageRoute(builder: (context) => MyHomePage()),  //here we can add the newUser ass parameter
       );
     } on FirebaseAuthException catch (e) {
       // Show an error message if login failed
@@ -118,16 +124,16 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 0),
                   ElevatedButton(
                     onPressed: () {
-                      /*
+                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SignUp()),
                       );
-                      */
-                      Navigator.pushReplacement(
+                      
+                      /*Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => MyHomePage()),
-                      );
+                      );*/
                     },
                     child: Text(
                       'Sign-Up',
