@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/operations/adduser.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -144,7 +143,7 @@ class _SignUpState extends State<SignUp> {
                       });
 
                       if (!_isEmptyField && !_isPasswordMismatch) {
-                        String result = await addUser(
+                        String result = await Users.addUser(
                             _firstNameController.text,
                             _lastNameController.text,
                             _emailController.text,
@@ -163,7 +162,7 @@ class _SignUpState extends State<SignUp> {
 
                           // Optionally, pass newUser to the next screen or store it using a state management solution
                           //Printing the User Object
-                          //print("This is the user Object: $newUser");
+                          print("This is the user Object: $newUser");
                           Navigator.push(
                             context,
                             MaterialPageRoute(

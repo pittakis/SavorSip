@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/Models/users.dart';
@@ -30,7 +29,7 @@ class _LoginState extends State<Login> {
       //Create the user Object
       Users newUser = await Users.fetchUserData(FirebaseAuth.instance.currentUser!.uid);
       //Print users object for test
-      //print('This is the user data of the object: $newUser');
+      print('This is the user data of the object: $newUser');
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
