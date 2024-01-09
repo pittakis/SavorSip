@@ -4,7 +4,8 @@ import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
 class TestingScreen extends StatefulWidget {
-  const TestingScreen({super.key});
+  final Users currentUser;
+  const TestingScreen({super.key, required this.currentUser});
 
   @override
   State<TestingScreen> createState() => _TestingScreenState();

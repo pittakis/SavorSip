@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/UserTile.dart';
 import 'package:savorsip/screens/authentication/login.dart';
 import 'package:savorsip/screens/secondary/edit_profile.dart';
@@ -6,7 +7,8 @@ import 'package:savorsip/screens/secondary/my_ratings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final Users currentUser;
+  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,6 +25,22 @@ void signMeOut() async {
           MaterialPageRoute(builder: (context) => Login()),  //here we can add the newUser ass parameter
           );
   }
+
+  void navigateToMyRatingsScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyRatingsScreen(currentUser: widget.currentUser,)), // Replace MyRatingsScreen with your actual screen
+    );
+  }
+
+  void navigateToEditProfileScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProfileScreen(currentUser: widget.currentUser,)), // Replace MyRatingsScreen with your actual screen
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,18 +155,3 @@ Widget _generateButton (String textLabel, Color buttonColor, IconData buttonIcon
     )),
   );
 }
-
-void navigateToMyRatingsScreen(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const MyRatingsScreen()), // Replace MyRatingsScreen with your actual screen
-  );
-}
-
-void navigateToEditProfileScreen(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const EditProfileScreen()), // Replace MyRatingsScreen with your actual screen
-  );
-}
-

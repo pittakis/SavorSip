@@ -57,7 +57,8 @@ Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
 //List<Users>? myUserFriends = List<String>.generate(5
 
 class FriendsScreen extends StatefulWidget {
-  const FriendsScreen({super.key});
+  final Users currentUser;
+  const FriendsScreen({super.key, required this.currentUser});
 
   @override
   State<FriendsScreen> createState() => _FriendsScreenState();

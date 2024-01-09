@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/components.dart';
 
 class CellarScreen extends StatelessWidget {
-  const CellarScreen({Key? key}) : super(key: key);
+  final Users currentUser;
+  const CellarScreen({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

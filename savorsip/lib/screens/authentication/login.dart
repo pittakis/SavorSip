@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage()),  //here we can add the newUser ass parameter
+        MaterialPageRoute(builder: (context) => MyHomePage(currentUser: newUser,)),  //here we can add the newUser ass parameter
       );
     } on FirebaseAuthException catch (e) {
       // Show an error message if login failed

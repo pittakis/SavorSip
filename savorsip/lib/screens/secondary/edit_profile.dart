@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/screens/authentication/sign_up.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+  final Users currentUser;
+  const EditProfileScreen({super.key, required this.currentUser});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -153,7 +153,55 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     padding: const EdgeInsets.all(40),
                     child: Expanded(
                       child: ElevatedButton(
-                        onPressed: () {}, /* async {
+                        onPressed: () async {
+                          // Set flags for field checks
+                          setState(() {
+                            _isEmptyField = false; // As we will use existing data if field is empty
+                            _isPasswordMismatch = _passwordController.text.isNotEmpty && _passwordController.text != _confirmPasswordController.text;
+                            _changeError = '';
+                          });
+
+                          if (!_isPasswordMismatch) {
+                            // Prepare new values, fallback to current values if fields are empty
+                            String newFirstName = _firstNameController.text.isEmpty ? widget.currentUser.firstName : _firstNameController.text;
+                            String newLastName = _lastNameController.text.isEmpty ? widget.currentUser.lastName : _lastNameController.text;
+                            String newUsername = _usernameController.text.isEmpty ? widget.currentUser.username : _usernameController.text;
+
+                            // Call the updateUser method
+                            String result = await Users.updateUser(
+                              uid: widget.currentUser.uid,
+                              firstName: newFirstName,
+                              lastName: newLastName,
+                              username: newUsername,
+                              oldPassword: _oldPasswordController.text,
+                              newPassword: _passwordController.text.isEmpty ? null : _passwordController.text,
+                            );
+
+                            if (result == "Success") {
+                              // Update was successful                           
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Profile updated successfully')),
+                              );
+                              /*Users updatedUser = await Users.fetchUserData(widget.currentUser.uid);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfileScreen(currentUser: updatedUser),
+                                ),
+                              );*/
+                            } else {
+                              // Update failed, show error message
+                              setState(() {
+                                _changeError = result;
+                              });
+                            }
+                          } else {
+                            // Handle password mismatch
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Passwords do not match')),
+                            );
+                          }
+                        }, /* async {
                           setState(() {
                             _isEmptyField = _firstNameController.text.isEmpty ||
                                 _lastNameController.text.isEmpty ||
@@ -228,14 +276,12 @@ Future<void> pickImageAndUpdateProfile() async {
   if (image != null) {
     try {
       // Retrieve the current user instance
-      Users? currentUser = await Users.getUserByEmail('gp@gmail.com');
-      
       // Check if a user is retrieved and then call updateProfilePicture
-      if (currentUser != null) {
-        await currentUser.updateProfilePicture(image);
+      if (widget.currentUser != null) {
+        await widget.currentUser.updateProfilePicture(image);
         // Show a success message, if needed
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile picture updated successfully!')),
+          const SnackBar(content: Text('Profile picture updated successfully!')),
         );
       } else {
         // Handle the case where the user is not found

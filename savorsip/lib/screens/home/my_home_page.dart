@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/home/cellar_screen.dart';
 import 'package:savorsip/screens/home/friends_screen.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';
@@ -7,7 +8,8 @@ import 'package:savorsip/screens/home/testing_screen.dart';
 import 'dart:core';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  final Users currentUser;
+  const MyHomePage({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -17,14 +19,27 @@ class _MyHomePageState extends State<MyHomePage> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const CellarScreen(),
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      CellarScreen(currentUser: widget.currentUser),
+      FriendsScreen(currentUser: widget.currentUser),
+      SearchScreen(currentUser: widget.currentUser),
+      ProfileScreen(currentUser: widget.currentUser),
+      TestingScreen(currentUser: widget.currentUser),
+    ];
+  }
+ /* final List<Widget> _screens = [
+    const CellarScreen(currentUser: currentUser),
     const FriendsScreen(),
     const SearchScreen(),
     const ProfileScreen(),
     const TestingScreen(),
   ];
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(

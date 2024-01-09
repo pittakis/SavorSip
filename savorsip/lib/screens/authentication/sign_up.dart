@@ -170,7 +170,7 @@ class _SignUpState extends State<SignUp> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    MyHomePage()), // Pass newUser as an argument if needed
+                                    MyHomePage(currentUser: newUser,)), // Pass newUser as an argument if needed
                           );
                         } else {
                           setState(() {
