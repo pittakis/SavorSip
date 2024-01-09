@@ -13,13 +13,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isPasswordMismatch = false;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
-  String _registrationError = '';
+  String _changeError = '';
   //final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _oldPasswordController = TextEditingController();
 
   Widget _entryField(String title, TextEditingController controller) {
     return Padding(
@@ -93,23 +94,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Column(
           children: [
             const SizedBox(height: 70),
-            _entryField("First Name", _firstNameController),
-            _entryField("Last Name", _lastNameController),
-            _entryField("username", _usernameController),
-            //_entryField("email", _emailController),
-            _passwordEntryField("password", _passwordController, _passwordVisible, _togglePasswordVisibility),
-            _passwordEntryField("Confirm password", _confirmPasswordController, _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
+            _entryField("Change First Name", _firstNameController),
+            _entryField("Change Last Name", _lastNameController),
+            _entryField("Change username", _usernameController),
+            _entryField("Old Password", _oldPasswordController),
+            _passwordEntryField("New password", _passwordController, _passwordVisible, _togglePasswordVisibility),
+            _passwordEntryField("Confirm new password", _confirmPasswordController, _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
             const SizedBox(height: 15),
-            /*
-            if (_isEmptyField)
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'No Field can be empty',
-                  style: TextStyle(color: Colors.red, fontSize: 16),
-                ),
-              ),
-            */
+
             if (_isPasswordMismatch)
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -118,74 +110,100 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
-            if (_registrationError.isNotEmpty)
+
+            if (_changeError.isNotEmpty)
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  _registrationError,
+                  _changeError,
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
+            
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _isEmptyField = _firstNameController.text.isEmpty ||
-                            _lastNameController.text.isEmpty ||
-                            //_emailController.text.isEmpty ||
-                            _usernameController.text.isEmpty ||
-                            _passwordController.text.isEmpty ||
-                            _confirmPasswordController.text.isEmpty;
-                        _isPasswordMismatch = _passwordController.text !=
-                            _confirmPasswordController.text;
-                      });
-
-                      if (!_isEmptyField && !_isPasswordMismatch) {
-                        String result = await addUser(
-                            _firstNameController.text,
-                            _lastNameController.text,
-                            //_emailController.text,
-                            _usernameController.text,
-                            _passwordController.text);
-
-                        if (result == "Success") {
-                          // Create a Users object
-                          Users newUser = Users(
-                              uid: FirebaseAuth.instance.currentUser!.uid,
-                              firstName: _firstNameController.text,
-                              lastName: _lastNameController.text,
-                              email: _emailController.text,
-                              username: _usernameController.text,
-                              numOfRatings: 0);
-
-                          // Optionally, pass newUser to the next screen or store it using a state management solution
-                          //Printing the User Object
-                          //print("This is the user Object: $newUser");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MyHomePage()), // Pass newUser as an argument if needed
-                          );
-                        } else {
-                          setState(() {
-                            _registrationError = result;
-                          });
-                        }
-                      }
-                    },
-                    // Button styling
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
-                      minimumSize: const Size(150, 50),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(70, 10, 70, 10),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 156, 129, 231),
+                        minimumSize: const Size(150, 50),
+                        elevation: 10
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera_alt_outlined,color:Colors.white),
+                          SizedBox( width:8), 
+                          Text('Change Picture', style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
                     ),
-                    child: const Text(
-                      'Sign-Up',
-                      style: TextStyle(color: Colors.white),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(80),
+                    child: Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {}, /* async {
+                          setState(() {
+                            _isEmptyField = _firstNameController.text.isEmpty ||
+                                _lastNameController.text.isEmpty ||
+                                //_emailController.text.isEmpty ||
+                                _usernameController.text.isEmpty ||
+                                _passwordController.text.isEmpty ||
+                                _confirmPasswordController.text.isEmpty;
+                            _isPasswordMismatch = _passwordController.text !=
+                                _confirmPasswordController.text;
+                          });
+                      
+                          if (!_isEmptyField && !_isPasswordMismatch) {
+                            String result = await addUser(
+                                _firstNameController.text,
+                                _lastNameController.text,
+                                //_emailController.text,
+                                _usernameController.text,
+                                _passwordController.text);
+                      
+                            if (result == "Success") {
+                              // Create a Users object
+                              Users newUser = Users(
+                                  uid: FirebaseAuth.instance.currentUser!.uid,
+                                  firstName: _firstNameController.text,
+                                  lastName: _lastNameController.text,
+                                  email: _emailController.text,
+                                  username: _usernameController.text,
+                                  numOfRatings: 0);
+                      
+                              // Optionally, pass newUser to the next screen or store it using a state management solution
+                              //Printing the User Object
+                              //print("This is the user Object: $newUser");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MyHomePage()), // Pass newUser as an argument if needed
+                              );
+                            } else {
+                              setState(() {
+                                _registrationError = result;
+                              });
+                            }
+                          }
+                        }*/
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 156, 129, 231),
+                          minimumSize: const Size(150, 50),
+                          elevation: 10,
+                        ),
+                        child: const Text(
+                          'Save Changes',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
                 ],
