@@ -12,6 +12,37 @@ class TestingScreen extends StatefulWidget {
 }
 
 class _TestingScreenState extends State<TestingScreen> {
+
+  void _popupRemoveFriend(String friendName) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Text('Remove $friendName from your friends?', style: const TextStyle(fontSize: 16)),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () {
+                // Add your confirm action code here
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +74,7 @@ class _TestingScreenState extends State<TestingScreen> {
                   final item = myFriends![index];
                   return ListTile(
                     title: Text(item),
-                    onLongPress: (){},
+                    onLongPress: () => _popupRemoveFriend(item),
                   );
                 },
               ),

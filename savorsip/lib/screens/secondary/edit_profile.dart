@@ -145,7 +145,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(80),
+                    padding: const EdgeInsets.all(40),
                     child: Expanded(
                       child: ElevatedButton(
                         onPressed: () {}, /* async {

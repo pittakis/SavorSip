@@ -29,16 +29,11 @@ class _PendingRequestsState extends State<PendingRequests> {
                     });
 
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('$item dismissed')));
+                        .showSnackBar(SnackBar(content: Text('$item removed')));
                   },
                   background: Container(color: Colors.red),
                   child: ListTile(
                     title: Text(item),
-                    // Add onPressed property to ListTile
-                    onTap: () {
-                      // Add your logic here for when the ListTile is pressed
-                      print('ListTile pressed for item: $item');
-                    },
                   ),
                 );
               },
