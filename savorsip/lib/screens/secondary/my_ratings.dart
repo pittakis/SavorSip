@@ -10,6 +10,11 @@ class MyRatingsScreen extends StatefulWidget {
 class _MyRatingsScreenState extends State<MyRatingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Ratings"),
+      ),
+      body: const Placeholder()
+    );
   }
 }
