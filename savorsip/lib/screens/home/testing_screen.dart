@@ -3,8 +3,55 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
+  List<Users> userList = [
+    Users(
+      uid: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      username: 'john_doe',
+      email: 'john@example.com',
+      numOfRatings: 10, 
+      profilePic: '',
+    ),
+    Users(
+      uid: '2',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      username: 'jane_doe',
+      email: 'jane@example.com',
+      numOfRatings: 15,
+      profilePic: '',
+    ),
+    Users(
+      uid: '3',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      username: 'alice_smith',
+      email: 'alice@example.com',
+      numOfRatings: 20,
+      profilePic: '',
+    ),
+    Users(
+      uid: '4',
+      firstName: 'Bob',
+      lastName: 'Johnson',
+      username: 'bob_johnson',
+      email: 'bob@example.com',
+      numOfRatings: 5,
+      profilePic: '',
+    ),
+    Users(
+      uid: '5',
+      firstName: 'Eve',
+      lastName: 'Taylor',
+      username: 'eve_taylor',
+      email: 'eve@example.com',
+      numOfRatings: 8,
+      profilePic: '',
+    ),
+  ];
 
-List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
+//List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
 List<String>? myPendingRequests = List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
 Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
 //List<Users>? myUserFriends = List<String>.generate(5
@@ -18,35 +65,69 @@ class TestingScreen extends StatefulWidget {
 
 class _TestingScreenState extends State<TestingScreen> {
 
-  void _popupRemoveFriend(String friendName) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Text('Remove $friendName from your friends?', style: const TextStyle(fontSize: 16)),
+  void _popupRemoveFriend(Users userFriend, int index) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: Text(
+            'Remove ${userFriend.firstName} from your friends?',
+            style: const TextStyle(fontSize: 16),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () {
-                // Add your confirm action code here
-                Navigator.of(context).pop();
-              },
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Confirm'),
+            onPressed: () {
+              // Remove the selected item from the list
+              setState(() {
+                userList.removeAt(index);
+              });
+
+              // Close the dialog
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+  Widget _generateFriendTile(Users userFriend, int index){
+  //Icon? userBadge = getBadgeIcon(userFriend.leaderboardPosition);
+  return ListTile(
+      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      leading: CircleAvatar(
+        radius: 25,
+        backgroundImage: genericProfilePicture.image,
+      ),
+      title: Row(
+        children: [
+          Text(
+            '${userFriend.firstName} ${userFriend.lastName}',
+            style: const TextStyle(
+              fontSize: 18,
             ),
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+          ),
+          //if (userBadge != null) userBadge, // Display badge if not null
+          const Icon(Icons.wine_bar),
+        ],
+      ),
+      subtitle: Text(userFriend.username,
+          style: const TextStyle(
+              fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
+      onLongPress: () => _popupRemoveFriend(userFriend, index),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +142,25 @@ class _TestingScreenState extends State<TestingScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PendingRequests()),
+                  MaterialPageRoute(
+                      builder: (context) => const PendingRequests()),
                 );
               },
             ),
           ),
         ],
       ),
-      body: myFriends == null || myFriends!.isEmpty
+      body: userList == null || userList.isEmpty
           ? const Center(
               child: Text("Your friend list is empty"),
             )
           : Expanded(
               child: ListView.builder(
-                itemCount: myFriends!.length,
+                itemCount: userList.length,
                 itemBuilder: (context, index) {
-                  final item = myFriends![index];
-                  return ListTile(
-                    title: Text(item),
-                    onLongPress: () => _popupRemoveFriend(item),
-                  );
+                  final item = userList[index];
+                  return _generateFriendTile(item, index);
+                  //onLongPress: () => _popupRemoveFriend(item),
                 },
               ),
             ),
@@ -88,31 +168,6 @@ class _TestingScreenState extends State<TestingScreen> {
   }
 }
 
-Widget _generateFriendTile(Users userFriend){
-  //Icon? userBadge = getBadgeIcon(userFriend.leaderboardPosition);
-  return ListTile(
-          //contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-          contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          //onTap: () {},
-          leading: CircleAvatar(
-            radius: 25, // Adjust the radius as needed
-            backgroundImage: genericProfilePicture.image,
-          ),
-
-          title: Row(
-            children: [
-              Text(
-                "$userFriend.firstName $userFriend.lastName ",
-                style: const TextStyle(fontSize: 18,),
-              ),
-              //if (userBadge != null) userBadge, // Display badge if not null
-            ],
-          ),
-          subtitle: Text(userFriend.username,
-              style: const TextStyle(
-                  fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
-        );
-}
 
 Icon? getBadgeIcon(int position) {
   if (position == 1) {
