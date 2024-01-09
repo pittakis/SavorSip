@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/components/UserTile.dart';
+import 'package:savorsip/screens/authentication/login.dart';
 import 'package:savorsip/screens/secondary/edit_profile.dart';
 import 'package:savorsip/screens/secondary/my_ratings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
+
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+//sign Out Function
+void signMeOut() async {
+  await FirebaseAuth.instance.signOut();
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),  //here we can add the newUser ass parameter
+          );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,5 +152,3 @@ void navigateToEditProfileScreen(BuildContext context) {
   );
 }
 
-void signMeOut(){}
-//na ylopoiithei i sinartisi
