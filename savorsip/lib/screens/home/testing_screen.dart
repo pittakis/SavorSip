@@ -1,8 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
+Users 
 List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
 List<String>? myPendingRequests = List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
+Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
+//List<Users>? myUserFriends = List<String>.generate(5
 
 class TestingScreen extends StatefulWidget {
   const TestingScreen({super.key});
@@ -80,5 +85,45 @@ class _TestingScreenState extends State<TestingScreen> {
               ),
             ),
     );
+  }
+}
+
+Widget _generateFriendTile(Users userFriend){
+  //Icon? userBadge = getBadgeIcon(userFriend.leaderboardPosition);
+  return ListTile(
+          //contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+          contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          //onTap: () {},
+          leading: CircleAvatar(
+            radius: 25, // Adjust the radius as needed
+            backgroundImage: genericProfilePicture.image,
+          ),
+
+          title: Row(
+            children: [
+              Text(
+                "$userFriend.firstName $userFriend.lastName ",
+                style: const TextStyle(fontSize: 18,),
+              ),
+              //if (userBadge != null) userBadge, // Display badge if not null
+            ],
+          ),
+          subtitle: Text(userFriend.username,
+              style: const TextStyle(
+                  fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
+        );
+}
+
+Icon? getBadgeIcon(int position) {
+  if (position == 1) {
+    return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
+  } else if (position == 2) {
+    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 117, 116, 114));
+  } else if (position == 3) {
+    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 166, 102, 72));
+  } else if (position<=20) {
+    return const Icon(Icons.check_circle, color: Color.fromARGB(255, 203, 81, 81));
+  } else {
+    return null;
   }
 }

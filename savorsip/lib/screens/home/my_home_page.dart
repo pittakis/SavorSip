@@ -16,7 +16,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
 
-  // Create a list of screen widgets
   final List<Widget> _screens = [
     CellarScreen(),
     FriendsScreen(),
