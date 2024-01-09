@@ -30,7 +30,7 @@ class _LoginState extends State<Login> {
       //Create the user Object
       Users newUser = await Users.fetchUserData(FirebaseAuth.instance.currentUser!.uid);
       //Print users object for test
-      print('This is the user data of the object: $newUser');
+      //print('This is the user data of the object: $newUser');
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,

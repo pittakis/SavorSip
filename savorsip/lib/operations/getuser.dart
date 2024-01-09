@@ -11,11 +11,11 @@ class UserOperations {
         .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Correctly get the data as a Map<String, dynamic>
-        Map<String, dynamic> userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-        return Users.fromDocument(userData);
+        DocumentSnapshot userDoc = querySnapshot.docs.first;
+        String uid = userDoc.id; // Extract the uid
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        return Users.fromMap(userData, uid);
       } else {
-        // User not found
         return null;
       }
   }
