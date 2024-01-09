@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
+
 
 class Users {
   String uid;
@@ -184,6 +189,20 @@ class Users {
       return 'An error occurred while updating the user: ${e.toString()}';
     }
   }
+
+// Combined method to upload a new profile picture and update Firestore
+  Future<void> updateProfilePicture(XFile file) async {
+    // Step 1: Upload the file to Firebase Storage
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child('profile_pictures/${Path.basename(file.path)}');
+    UploadTask uploadTask = ref.putFile(File(file.path));
+    await uploadTask.whenComplete(() => null);
+    String fileUrl = await ref.getDownloadURL();
+
+    // Step 2: Update the profilePic field in Firestore
+    await FirebaseFirestore.instance.collection('Users').doc(this.uid).update({'profilePic': fileUrl});
+  }
+
 
 }
 

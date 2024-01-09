@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/authentication/sign_up.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -128,7 +130,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(70, 10, 70, 10),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                          pickImageAndUpdateProfile();
+                          // Optionally, handle any post-function execution logic here
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 156, 129, 231),
                         minimumSize: const Size(150, 50),
@@ -214,4 +219,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+
+
+Future<void> pickImageAndUpdateProfile() async {
+  final ImagePicker _picker = ImagePicker();
+  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+
+  if (image != null) {
+    try {
+      // Retrieve the current user instance
+      Users? currentUser = await Users.getUserByEmail('gp@gmail.com');
+      
+      // Check if a user is retrieved and then call updateProfilePicture
+      if (currentUser != null) {
+        await currentUser.updateProfilePicture(image);
+        // Show a success message, if needed
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile picture updated successfully!')),
+        );
+      } else {
+        // Handle the case where the user is not found
+          ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User not found.')),
+        );
+      }
+    } catch (e) {
+      // Handle any errors here, e.g., show an error message
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Something went wrong: $e')),
+      );
+    }
+  }
+}
 }
