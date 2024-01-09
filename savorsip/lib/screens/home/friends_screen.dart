@@ -35,7 +35,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //const SizedBox(height: 100,),
-            UserTile(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
+            UserTile(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/profile_pic_default.png')),
             UserTile(firstName: "George", userName: 'gpit', lastName: 'Pittakis' , leaderboardPosition: 6, profilePicture: Image.asset('assets/images/logo.PNG')),
             //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 3, profilePicture: Image.asset('assets/images/logo.PNG')),
             //UserTileRequest(firstName: "John", userName: 'giannouklas', lastName: 'Georgiadis' , leaderboardPosition: 23, profilePicture: Image.asset('assets/images/logo.PNG')),
