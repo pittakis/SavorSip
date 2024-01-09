@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
-Users 
+
 List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
 List<String>? myPendingRequests = List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
 Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
