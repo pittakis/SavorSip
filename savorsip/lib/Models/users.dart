@@ -8,6 +8,7 @@ class Users {
   String username; 
   String email;
   int numOfRatings;
+  String profilePic;
 
   Users({
     required this.uid,
@@ -15,6 +16,7 @@ class Users {
     required this.lastName,
     required this.username,
     required this.email,
+    required this.profilePic,
     required this.numOfRatings,
   });
 
@@ -31,6 +33,7 @@ class Users {
       lastName: data['Last Name'] ?? '',
       username: data['username'] ?? '',
       email: data['email'] ?? '',
+      profilePic: data['profilePic'],
       numOfRatings: data['numOfRating'] ?? '',
     );
   }
@@ -42,6 +45,7 @@ class Users {
       'Last Name': lastName,
       'username': username,
       'email': email,
+      'profilePic': profilePic,
       'numOfRating': numOfRatings,
     };
   }
@@ -84,6 +88,7 @@ class Users {
         'Last Name': lastName,
         'email': email,
         'username': username,
+        'profilePic': "assets/images/profile_pic_default.png",
         'numOfRating': 0,
       });
 

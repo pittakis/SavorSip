@@ -158,6 +158,7 @@ class _SignUpState extends State<SignUp> {
                               lastName: _lastNameController.text,
                               email: _emailController.text,
                               username: _usernameController.text,
+                              profilePic: "assets/images/profile_pic_default.png",
                               numOfRatings: 0);
 
                           // Optionally, pass newUser to the next screen or store it using a state management solution
