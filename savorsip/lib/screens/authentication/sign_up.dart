@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -160,6 +161,7 @@ class _SignUpState extends State<SignUp> {
                               username: _usernameController.text,
                               profilePic: "assets/images/profile_pic_default.png",
                               numOfRatings: 0);
+                            await LeaderboardService.updateLeaderboard(newUser.uid, newUser.username, newUser.numOfRatings);
 
                           // Optionally, pass newUser to the next screen or store it using a state management solution
                           //Printing the User Object
