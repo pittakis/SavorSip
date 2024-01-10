@@ -11,9 +11,9 @@ List<Wine> WineList() {
       wid: '1',
       wineName: 'Chateau Margaux',
       numOfRatings: 120,
-      wineRating: 4.8,
+      wineRating: 4.2,
       winePic: 'https://via.placeholder.com/150', 
-      wineDescription: '',
+      wineDescription: 'hey',
     ),
     Wine(
       wid: '2',
@@ -21,7 +21,31 @@ List<Wine> WineList() {
       numOfRatings: 80,
       wineRating: 4.6,
       winePic: 'https://via.placeholder.com/150',
-      wineDescription: '',
+      wineDescription: 'hey',
+    ),
+    Wine(
+      wid: '3',
+      wineName: 'Moschato',
+      numOfRatings: 30,
+      wineRating: 4.1,
+      winePic: 'https://via.placeholder.com/150',
+      wineDescription: 'hey',
+    ),
+    Wine(
+      wid: '4',
+      wineName: 'Leonidas',
+      numOfRatings: 53,
+      wineRating: 4.9,
+      winePic: 'https://via.placeholder.com/150',
+      wineDescription: 'hey',
+    ),
+    Wine(
+      wid: '5',
+      wineName: 'Screaming Elephant Cabernet 2002',
+      numOfRatings: 33,
+      wineRating: 3.8,
+      winePic: 'https://via.placeholder.com/150',
+      wineDescription: 'hey',
     ),
   ];
 }
@@ -126,19 +150,9 @@ class _SearchScreenState extends State<SearchScreen> {
         itemCount: WineList().length,
         itemBuilder: (context, index) {
           final wine = WineList()[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: WineCardSearch(
-              imageUrl: wine.imageUrl,
-              wineName: wine.wineName,
-              venueName: wine.venueName,
-              description: wine.description,
-              rating: wine.rating,
-              friendsRating: wine.friendsRating,
-            ),
-          );
+          return WineCardSearch( wineDetails: wine,);
         },
-      ),
+      );
   }
 
 
