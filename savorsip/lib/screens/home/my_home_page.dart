@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _currentIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.wine_bar_outlined),
+            icon: Icon(Icons.home_filled),
             label: 'Cellar',
           ),
           BottomNavigationBarItem(

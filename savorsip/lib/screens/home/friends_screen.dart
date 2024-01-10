@@ -128,11 +128,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
           TextButton(
             child: const Text('Confirm'),
             onPressed: () {
-              // Remove the selected item from the list
+              print("Remove ${userFriend.firstName} from the list");
               setState(() {
                 friendList.removeAt(index);
               });
-
               // Close the dialog
               Navigator.of(context).pop();
             },
@@ -197,19 +196,26 @@ class _FriendsScreenState extends State<FriendsScreen> {
           ),
         ],
       ),
-      body: friendList == null || friendList.isEmpty
-          ? const Center(
-              child: Text("Your friend list is empty"),
-            )
-          : Expanded(
-              child: ListView.builder(
-                itemCount: friendList.length,
-                itemBuilder: (context, index) {
-                  final item = friendList[index];
-                  return _generateFriendTile(item, index);
-                },
-              ),
-            ),
+      body: Column(
+        children: [
+          const Text("Long Press to remove someone from your friend list", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),),
+          Expanded(
+          child: friendList == null || friendList.isEmpty
+              ? const Center(
+                  child: Text("Your friend list is empty"),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: friendList.length,
+                    itemBuilder: (context, index) {
+                      final item = friendList[index];
+                      return _generateFriendTile(item, index);
+                    },
+                  ),
+                ),
+          ),
+        ],
+      ),
       floatingActionButton: ClipOval(
         child: Material(
           color: Colors.purple, // Button color
