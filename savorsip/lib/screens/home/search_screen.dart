@@ -1,10 +1,34 @@
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/components/components.dart';
+import 'package:savorsip/components/wineCardSearch.dart';
+
+List<Wine> WineList() {
+  return [
+    Wine(
+      wid: '1',
+      wineName: 'Chateau Margaux',
+      numOfRatings: 120,
+      wineRating: 4.8,
+      winePic: 'https://via.placeholder.com/150', 
+      wineDescription: '',
+    ),
+    Wine(
+      wid: '2',
+      wineName: 'Screaming Eagle Cabernet 2012',
+      numOfRatings: 80,
+      wineRating: 4.6,
+      winePic: 'https://via.placeholder.com/150',
+      wineDescription: '',
+    ),
+  ];
+}
 
 class SearchScreen extends StatefulWidget {
-  final Users currentUser;
-  const SearchScreen({super.key, required this.currentUser});
+  final String userID;
+  const SearchScreen({super.key, required this.userID});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -98,22 +122,23 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildList() {
     // Use ListView or ListView.builder
-    return ListView(
-      children: [
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-        ListTile(title: Text('Item 1')),
-        ListTile(title: Text('Item 2')),
-      ],
-    );
+    return ListView.builder(
+        itemCount: WineList().length,
+        itemBuilder: (context, index) {
+          final wine = WineList()[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: WineCardSearch(
+              imageUrl: wine.imageUrl,
+              wineName: wine.wineName,
+              venueName: wine.venueName,
+              description: wine.description,
+              rating: wine.rating,
+              friendsRating: wine.friendsRating,
+            ),
+          );
+        },
+      ),
   }
 
 

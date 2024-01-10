@@ -4,7 +4,7 @@ import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
-  List<Users> userList = [
+  List<Users> friendList = [
     Users(
       uid: '1',
       firstName: 'John',
@@ -103,8 +103,8 @@ Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
 //List<Users>? myUserFriends = List<String>.generate(5
 
 class FriendsScreen extends StatefulWidget {
-  final Users currentUser;
-  const FriendsScreen({super.key, required this.currentUser});
+  final String userID;
+  const FriendsScreen({super.key, required this.userID});
 
   @override
   State<FriendsScreen> createState() => _FriendsScreenState();
@@ -130,7 +130,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
             onPressed: () {
               // Remove the selected item from the list
               setState(() {
-                userList.removeAt(index);
+                friendList.removeAt(index);
               });
 
               // Close the dialog
@@ -197,15 +197,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
           ),
         ],
       ),
-      body: userList == null || userList.isEmpty
+      body: friendList == null || friendList.isEmpty
           ? const Center(
               child: Text("Your friend list is empty"),
             )
           : Expanded(
               child: ListView.builder(
-                itemCount: userList.length,
+                itemCount: friendList.length,
                 itemBuilder: (context, index) {
-                  final item = userList[index];
+                  final item = friendList[index];
                   return _generateFriendTile(item, index);
                 },
               ),
@@ -219,9 +219,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddFriendsScreen(
-                          currentUser: widget.currentUser,
-                        )), // Replace MyRatingsScreen with your actual screen
+                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
               );
             },
             child: const SizedBox(
