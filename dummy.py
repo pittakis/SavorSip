@@ -5,7 +5,7 @@ from firebase_admin import auth
 import random
 
 # Use the application default credentials
-cred = credentials.Certificate('./savorsip-8c64d-firebase-adminsdk-8u3px-320c8d5624.json')  # Replace with your service account key
+cred = credentials.Certificate('./savorsip-8c64d-firebase-adminsdk-8u3px-326f1b15a8.json')  # Replace with your service account key
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -33,7 +33,7 @@ def create_user(uid, first_name, last_name, username, email, num_of_ratings, pro
         u'lastName': last_name,
         u'username': username,
         u'email': email,
-        u'numOfRatings': num_of_ratings,
+        u'numOfRating': num_of_ratings,
         u'profilePic': profile_pic
     }
     user_doc.set(user_data)

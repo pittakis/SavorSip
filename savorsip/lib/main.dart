@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/screens/authentication/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -8,6 +9,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+    // Call the makeLeaderboard function after Firebase initialization
+  await LeaderboardService.makeLeaderboard();
+  await LeaderboardService.getLeaderboard();
   runApp(const MyApp());
 }
 
