@@ -124,22 +124,19 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
         floatingActionButton: ClipOval(
         child: Material(
-          color: Colors.deepPurple, // Button color
+          color: Colors.deepPurple, 
+          elevation: 10,
           child: InkWell(
             onTap: () {
               // Action to be performed when the FAB is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
-              );
+              print("Navigate to QR scan");
             },
             child: const SizedBox(
               width: 56,
               height: 56,
               child: Icon(
                 Icons.qr_code_2,
-                color: Colors.white, // Icon color
+                color: Colors.white, 
               ),
             ),
           ),
