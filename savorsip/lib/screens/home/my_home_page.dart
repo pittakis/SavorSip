@@ -53,14 +53,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         children: _screens, // Use the list of screen widgets
       ),
-      floatingActionButton: _currentIndex == 2
+      /*floatingActionButton: _currentIndex == 2
           ? FloatingActionButton(
               onPressed: () {
                 // Handle FloatingActionButton action when index is 2
               },
               child: const Icon(Icons.search),
             )
-          : null, // Set to null for other indices
+          : null, // Set to null for other indices*/
       bottomNavigationBar: BottomNavigationBar(
         elevation: 10,
         currentIndex: _currentIndex,

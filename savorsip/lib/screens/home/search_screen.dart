@@ -82,6 +82,25 @@ class _SearchScreenState extends State<SearchScreen> {
           Expanded(child: _buildList()),
         ],
       ),
+      floatingActionButton: ClipOval(
+        child: Material(
+          color: Colors.deepPurple, // Button color
+          child: InkWell(
+            onTap: () {
+              print("barcode reader");
+            },
+            child: const SizedBox(
+              width: 56,
+              height: 56,
+              child: Icon(
+                Icons.barcode_reader,
+                color: Colors.white, // Icon color
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
   
