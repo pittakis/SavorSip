@@ -29,8 +29,8 @@ def create_user(uid, first_name, last_name, username, email, num_of_ratings, pro
     
     user_data = {
         u'uid': uid,
-        u'firstName': first_name,
-        u'lastName': last_name,
+        u'First Name': first_name,
+        u'Last Name': last_name,
         u'username': username,
         u'email': email,
         u'numOfRating': num_of_ratings,
