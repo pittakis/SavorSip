@@ -13,14 +13,113 @@ class TestingScreen extends StatefulWidget {
 
 class _TestingScreenState extends State<TestingScreen> {
 
+ double _sliderValue = 0;
+ List<bool> isSelected = [true, true, true,];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Test'),
-      )
+        title: const Text('Search'),
+      ),
+      body: Column(
+        children: [
+          _buildSearchBar(),
+          _buildButtonRow(),
+          _buildSlider(),
+          Text(
+            "Adjust the slider to select minimum rating",
+            style:TextStyle( fontSize: 10, color: Colors.grey[700])
+          ),
+          Expanded(child: _buildList()),
+        ],
+      ),
     );
   }
+  
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search...',
+          prefixIcon: const Icon(Icons.search),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onChanged: (value) {
+          // Update the state based on the search input
+        },
+      ),
+    );
+  }
+
+  Widget _buildButtonRow() {
+    return ToggleButtons(
+      isSelected: isSelected,
+      onPressed: (int index) {
+        setState(() {
+          isSelected[index] = !isSelected[index];
+          // Add your search filter logic here based on the state of isSelected
+        });
+      },
+      children: const <Widget>[
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('Red Wines'),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('Rosé Wines'),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text('White Wines'),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildSlider() {
+  return Slider(
+    value: _sliderValue,
+    min: 0,
+    max: 4.5,
+    divisions: 9,
+    label: _sliderValue.toStringAsFixed(1),
+    onChanged: (double value) {
+      setState(() {
+        _sliderValue = value;
+      });
+    },
+  );
+}
+
+
+  Widget _buildList() {
+    // Use ListView or ListView.builder
+    return ListView(
+      children: [
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+        ListTile(title: Text('Item 1')),
+        ListTile(title: Text('Item 2')),
+      ],
+    );
+  }
+
+
+  
+
 }
 
 
