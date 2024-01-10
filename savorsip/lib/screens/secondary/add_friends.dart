@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/screens/Tertiary/qr_scan_screen.dart';
 
 Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
 List<Users> potentialFriendList = [
@@ -104,6 +105,27 @@ class AddFriendsScreen extends StatefulWidget {
 }
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
+
+  Users? currentUser; // Local variable to hold the updated user data
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAndSetCurrentUser();
+  }
+
+  Future<void> _fetchAndSetCurrentUser() async {
+    try {
+      Users fetchedUser = await Users.fetchUserData(widget.userID);
+      setState(() {
+        currentUser = fetchedUser;
+      });
+    } catch (e) {
+      // Handle errors, e.g., user not found or network issues
+      print("Error fetching user data: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +153,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+                    builder: (context) => QRScanScreen(myUserID: widget.userID,)),
               );
             },
             child: const SizedBox(
