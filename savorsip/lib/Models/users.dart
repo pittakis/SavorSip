@@ -131,64 +131,77 @@ class Users {
 
   // Method to update existing user data in Firestore and password in Firebase Auth
   static Future<String> updateUser({
-    required String uid,
-    String? firstName,
-    String? lastName,
-    String? username,
-    String? oldPassword,
-    String? newPassword,
-  }) async {
-    try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      User? currentUser = FirebaseAuth.instance.currentUser;
+  required String uid,
+  String? firstName,
+  String? lastName,
+  String? username,
+  String? oldPassword,
+  String? newPassword,
+}) async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    User? currentUser = FirebaseAuth.instance.currentUser;
 
-      // Authenticate the old password if it's provided
-      if (oldPassword != null && newPassword != null && currentUser != null) {
-        // Re-authenticate the user
-        AuthCredential credential = EmailAuthProvider.credential(
-          email: currentUser.email!,
-          password: oldPassword,
-        );
-
-        await currentUser.reauthenticateWithCredential(credential);
-        // Once re-authenticated, update the password
-        await currentUser.updatePassword(newPassword);
+    // Check if old password is empty but new password is provided
+    if (oldPassword == null || oldPassword.isEmpty) {
+      if (newPassword != null && newPassword.isNotEmpty) {
+        return 'Please add the old password before saving.';
       }
-
-      // Prepare the update data for Firestore
-      Map<String, dynamic> updateData = {};
-      if (firstName != null) updateData['First Name'] = firstName;
-      if (lastName != null) updateData['Last Name'] = lastName;
-      if (username != null) {
-        // Check if the username is already in use by another user
-        var existingUser = await firestore.collection('Users')
-            .where('username', isEqualTo: username)
-            .get();
-
-        if (existingUser.docs.any((doc) => doc.id != uid)) {
-          return 'Username already in use. Please choose a different one.';
-        }
-        updateData['username'] = username;
-      }
-
-      // Update Firestore data if there are fields to update
-      if (updateData.isNotEmpty) {
-        await firestore.collection('Users').doc(uid).update(updateData);
-      }
-
-      return "Success";
-    } on FirebaseAuthException catch (authError) {
-      if (authError.code == 'wrong-password') {
-        return 'The old password is incorrect.';
-      } else if (authError.code == 'weak-password') {
-        return 'The new password provided is too weak.';
-      } else {
-        return 'An error occurred while updating the user: ${authError.message}';
-      }
-    } catch (e) {
-      return 'An error occurred while updating the user: ${e.toString()}';
     }
+
+    if (oldPassword != null && oldPassword.isNotEmpty) {
+      if (newPassword == null || newPassword.isEmpty) {
+        return 'Please add the new password before saving.';
+      }
+    }    
+
+    // Authenticate the old password if it's provided
+    if (oldPassword != null && newPassword != null && currentUser != null) {
+      // Re-authenticate the user
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: currentUser.email!,
+        password: oldPassword,
+      );
+
+      await currentUser.reauthenticateWithCredential(credential);
+      // Once re-authenticated, update the password
+      await currentUser.updatePassword(newPassword);
+    }
+
+    // Prepare the update data for Firestore
+    Map<String, dynamic> updateData = {};
+    if (firstName != null) updateData['First Name'] = firstName;
+    if (lastName != null) updateData['Last Name'] = lastName;
+    if (username != null) {
+      // Check if the username is already in use by another user
+      var existingUser = await firestore.collection('Users')
+          .where('username', isEqualTo: username)
+          .get();
+
+      if (existingUser.docs.any((doc) => doc.id != uid)) {
+        return 'Username already in use. Please choose a different one.';
+      }
+      updateData['username'] = username;
+    }
+
+    // Update Firestore data if there are fields to update
+    if (updateData.isNotEmpty) {
+      await firestore.collection('Users').doc(uid).update(updateData);
+    }
+
+    return "Success";
+  } on FirebaseAuthException catch (authError) {
+    if (authError.code == 'wrong-password') {
+      return 'The old password is incorrect.';
+    } else if (authError.code == 'weak-password') {
+      return 'The new password provided is too weak.';
+    } else {
+      return 'An error occurred while updating the user: ${authError.message}';
+    }
+  } catch (e) {
+    return 'An error occurred while updating the user: ${e.toString()}';
   }
+}
 
 // Combined method to upload a new profile picture and update Firestore
   Future<void> updateProfilePicture(XFile file) async {

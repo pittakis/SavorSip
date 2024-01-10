@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:savorsip/screens/home/profile_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String userID;
@@ -204,6 +205,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Profile updated successfully')),
                               );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(userID: widget.userID), // Or pass the whole updatedUser object if needed
+                                ),
+                              );
                               /*Users updatedUser = await Users.fetchUserData(widget.currentUser.uid);
                               Navigator.pushReplacement(
                                 context,
@@ -215,6 +222,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               // Update failed, show error message
                               setState(() {
                                 _changeError = result;
+                                _firstNameController.clear();
+                                _lastNameController.clear();
+                                _usernameController.clear();
+                                _oldPasswordController.clear();
+                                _passwordController.clear();
+                                _confirmPasswordController.clear();
                               });
                             }
                           } else {
@@ -222,6 +235,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Passwords do not match')),
                             );
+                                setState(() {
+                                _firstNameController.clear();
+                                _lastNameController.clear();
+                                _usernameController.clear();
+                                _oldPasswordController.clear();
+                                _passwordController.clear();
+                                _confirmPasswordController.clear();
+                              });
                           }
                         }, /* async {
                           setState(() {
