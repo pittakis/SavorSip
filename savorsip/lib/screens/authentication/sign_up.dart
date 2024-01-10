@@ -166,7 +166,7 @@ class _SignUpState extends State<SignUp> {
                           // Optionally, pass newUser to the next screen or store it using a state management solution
                           //Printing the User Object
                           print("This is the user Object: $newUser");
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
