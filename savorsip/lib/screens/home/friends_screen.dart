@@ -218,7 +218,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
       ),
       floatingActionButton: ClipOval(
         child: Material(
-          color: Colors.purple, // Button color
+          color: Colors.deepPurple, // Button color
           child: InkWell(
             onTap: () {
               // Action to be performed when the FAB is pressed

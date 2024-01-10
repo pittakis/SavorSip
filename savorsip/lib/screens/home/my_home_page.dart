@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
             curve: Curves.easeInOut,
           );
         },
-        selectedItemColor: Colors.purple,
+        selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,
       ),
     );
