@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:savorsip/Models/Wines.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
+  final Function(double) onRate;
+  
 
-  const WineCardSearch({super.key, required this.wineDetails});
+  WineCardSearch({super.key, required this.wineDetails, required this.onRate});
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();
@@ -12,6 +15,7 @@ class WineCardSearch extends StatefulWidget {
 
 class _WineCardSearchState extends State<WineCardSearch> {
   bool isExpanded = false;
+  double sliderValue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +60,82 @@ class _WineCardSearchState extends State<WineCardSearch> {
             ),
           ),
           if (isExpanded)
-            Container(
-              padding: const EdgeInsets.all(10),
-              alignment: Alignment.centerLeft,
-              child: Text(widget.wineDetails.wineDescription),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  alignment: Alignment.centerLeft,
+                  child: Text(widget.wineDetails.wineDescription),
+                ),
+                TextButton(
+                  onPressed: ()=>_showRatingDialog(context),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star, size: 20),
+                      Text('Rate', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                    ],
+                  )
+                )
+              ],
             ),
         ],
       ),
+    );
+  }
+ void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.star, color: Colors.amber),
+              Text('Insert your rating'),
+              Icon(Icons.star, color: Colors.amber),
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Slider(
+                    value: sliderValue,
+                    min: 1,
+                    max: 5,
+                    divisions: 4,
+                    label: '${sliderValue.toStringAsFixed(1)}/5',
+                    thumbColor: Colors.amber,
+                    activeColor: Colors.amber,
+                    onChanged: (value) {
+                      setState(() => sliderValue = value);
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          widget.onRate(sliderValue);
+                          // Handle the 'Save' action here
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Save', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Close', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

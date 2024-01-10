@@ -5,8 +5,7 @@ import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/components.dart';
 import 'package:savorsip/components/wineCardSearch.dart';
 
-List<Wine> WineList() {
-  return [
+List<Wine> WineList = [
     Wine(
       wid: '1',
       wineName: 'Chateau Margaux',
@@ -46,9 +45,8 @@ List<Wine> WineList() {
       wineRating: 3.8,
       winePic: 'https://via.placeholder.com/150',
       wineDescription: 'hey',
-    ),
+    )
   ];
-}
 
 class SearchScreen extends StatefulWidget {
   final String userID;
@@ -147,11 +145,18 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _buildList() {
     // Use ListView or ListView.builder
     return ListView.builder(
-        itemCount: WineList().length,
+        itemCount: WineList.length,
         itemBuilder: (context, index) {
-          final wine = WineList()[index];
-          return WineCardSearch( wineDetails: wine,);
-        },
+          final wine = WineList[index];
+          return WineCardSearch( wineDetails: wine,onRate: (double rrr) {
+    setState(() {
+      print("Saved rating $rrr for wine ${wine.wineName}");
+      //WineList.removeAt(index);
+      // Logic to handle the rating action
+      // This could involve removing the wine, updating its rating, etc.
+    });
+        });
+        }
       );
   }
 
