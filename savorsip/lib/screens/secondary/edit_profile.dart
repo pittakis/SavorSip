@@ -3,14 +3,36 @@ import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final Users currentUser;
-  const EditProfileScreen({super.key, required this.currentUser});
+  final String userID;
+  const EditProfileScreen({super.key, required this.userID});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  
+  Users? currentUser; // Local variable to hold the updated user data
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAndSetCurrentUser();
+  }
+
+  Future<void> _fetchAndSetCurrentUser() async {
+    try {
+      Users fetchedUser = await Users.fetchUserData(widget.userID);
+      setState(() {
+        currentUser = fetchedUser;
+      });
+    } catch (e) {
+      // Handle errors, e.g., user not found or network issues
+      print("Error fetching user data: $e");
+    }
+  }
+
+  
   bool _isEmptyField = false;
   bool _isPasswordMismatch = false;
   bool _passwordVisible = false;
@@ -163,13 +185,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                           if (!_isPasswordMismatch) {
                             // Prepare new values, fallback to current values if fields are empty
-                            String newFirstName = _firstNameController.text.isEmpty ? widget.currentUser.firstName : _firstNameController.text;
-                            String newLastName = _lastNameController.text.isEmpty ? widget.currentUser.lastName : _lastNameController.text;
-                            String newUsername = _usernameController.text.isEmpty ? widget.currentUser.username : _usernameController.text;
+                            String newFirstName = _firstNameController.text.isEmpty ? currentUser!.firstName : _firstNameController.text;
+                            String newLastName = _lastNameController.text.isEmpty ? currentUser!.lastName : _lastNameController.text;
+                            String newUsername = _usernameController.text.isEmpty ? currentUser!.username : _usernameController.text;
 
                             // Call the updateUser method
                             String result = await Users.updateUser(
-                              uid: widget.currentUser.uid,
+                              uid: currentUser!.uid,
                               firstName: newFirstName,
                               lastName: newLastName,
                               username: newUsername,
@@ -277,8 +299,8 @@ Future<void> pickImageAndUpdateProfile() async {
     try {
       // Retrieve the current user instance
       // Check if a user is retrieved and then call updateProfilePicture
-      if (widget.currentUser != null) {
-        await widget.currentUser.updateProfilePicture(image);
+      if (currentUser != null) {
+        await currentUser!.updateProfilePicture(image);
         // Show a success message, if needed
           ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile picture updated successfully!')),

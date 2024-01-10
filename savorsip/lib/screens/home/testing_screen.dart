@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 
 class TestingScreen extends StatefulWidget {
-  final Users currentUser;
-  const TestingScreen({super.key, required this.currentUser});
+  final String userID;
+  const TestingScreen({super.key, required this.userID});
   @override
   State<TestingScreen> createState() => _TestingScreenState();
 }

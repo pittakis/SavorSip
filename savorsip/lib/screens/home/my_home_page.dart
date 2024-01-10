@@ -8,8 +8,8 @@ import 'package:savorsip/screens/home/testing_screen.dart';
 import 'dart:core';
 
 class MyHomePage extends StatefulWidget {
-  final Users currentUser;
-  const MyHomePage({Key? key, required this.currentUser}) : super(key: key);
+  final String userID;
+  const MyHomePage({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -25,11 +25,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _screens = [
-      CellarScreen(currentUser: widget.currentUser),
-      FriendsScreen(currentUser: widget.currentUser),
-      SearchScreen(currentUser: widget.currentUser),
-      ProfileScreen(currentUser: widget.currentUser),
-      TestingScreen(currentUser: widget.currentUser),
+      CellarScreen(userID: widget.userID),
+      FriendsScreen(userID: widget.userID),
+      SearchScreen(userID: widget.userID),
+      ProfileScreen(userID: widget.userID),
+      TestingScreen(userID: widget.userID),
     ];
   }
  /* final List<Widget> _screens = [

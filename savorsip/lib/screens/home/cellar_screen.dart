@@ -3,8 +3,8 @@ import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/components.dart';
 
 class CellarScreen extends StatelessWidget {
-  final Users currentUser;
-  const CellarScreen({Key? key, required this.currentUser}) : super(key: key);
+  final String userID;
+  const CellarScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

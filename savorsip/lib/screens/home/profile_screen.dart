@@ -7,8 +7,8 @@ import 'package:savorsip/screens/secondary/my_ratings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Users currentUser;
-  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
+  final String userID;
+  const ProfileScreen({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -29,14 +29,14 @@ void signMeOut() async {
   void navigateToMyRatingsScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyRatingsScreen(currentUser: widget.currentUser,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(builder: (context) => MyRatingsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
     );
   }
 
   void navigateToEditProfileScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfileScreen(currentUser: widget.currentUser,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(builder: (context) => EditProfileScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
     );
   }
 

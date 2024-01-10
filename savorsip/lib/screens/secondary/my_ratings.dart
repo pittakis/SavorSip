@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 
 class MyRatingsScreen extends StatefulWidget {
-  final Users currentUser;
-  const MyRatingsScreen({super.key, required this.currentUser});
+  final String userID;
+  const MyRatingsScreen({super.key, required this.userID});
 
   @override
   State<MyRatingsScreen> createState() => _MyRatingsScreenState();

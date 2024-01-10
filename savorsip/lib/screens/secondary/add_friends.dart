@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 
 class AddFriendsScreen extends StatefulWidget {
-  final Users currentUser;
-  const AddFriendsScreen({super.key, required this.currentUser});
+  final String userID;
+  const AddFriendsScreen({super.key, required this.userID});
 
   @override
   State<AddFriendsScreen> createState() => _AddFriendsScreenState();
