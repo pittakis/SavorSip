@@ -1,9 +1,55 @@
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
   List<Users> userList = [
+    Users(
+      uid: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      username: 'john_doe',
+      email: 'john@example.com',
+      numOfRatings: 10, 
+      profilePic: '',
+    ),
+    Users(
+      uid: '2',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      username: 'jane_doe',
+      email: 'jane@example.com',
+      numOfRatings: 15,
+      profilePic: '',
+    ),
+    Users(
+      uid: '3',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      username: 'alice_smith',
+      email: 'alice@example.com',
+      numOfRatings: 20,
+      profilePic: '',
+    ),
+    Users(
+      uid: '4',
+      firstName: 'Bob',
+      lastName: 'Johnson',
+      username: 'bob_johnson',
+      email: 'bob@example.com',
+      numOfRatings: 5,
+      profilePic: '',
+    ),
+    Users(
+      uid: '5',
+      firstName: 'Eve',
+      lastName: 'Taylor',
+      username: 'eve_taylor',
+      email: 'eve@example.com',
+      numOfRatings: 8,
+      profilePic: '',
+    ),
     Users(
       uid: '1',
       firstName: 'John',
@@ -161,24 +207,51 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 itemBuilder: (context, index) {
                   final item = userList[index];
                   return _generateFriendTile(item, index);
-                  //onLongPress: () => _popupRemoveFriend(item),
                 },
               ),
             ),
+      floatingActionButton: ClipOval(
+        child: Material(
+          color: Colors.purple, // Button color
+          child: InkWell(
+            onTap: () {
+              // Action to be performed when the FAB is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddFriendsScreen(
+                          currentUser: widget.currentUser,
+                        )), // Replace MyRatingsScreen with your actual screen
+              );
+            },
+            child: const SizedBox(
+              width: 56,
+              height: 56,
+              child: Icon(
+                Icons.add,
+                color: Colors.white, // Icon color
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
-
 
 Icon? getBadgeIcon(int position) {
   if (position == 1) {
     return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
   } else if (position == 2) {
-    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 117, 116, 114));
+    return const Icon(Icons.wine_bar_sharp,
+        color: Color.fromARGB(255, 117, 116, 114));
   } else if (position == 3) {
-    return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 166, 102, 72));
-  } else if (position<=20) {
-    return const Icon(Icons.check_circle, color: Color.fromARGB(255, 203, 81, 81));
+    return const Icon(Icons.wine_bar_sharp,
+        color: Color.fromARGB(255, 166, 102, 72));
+  } else if (position <= 20) {
+    return const Icon(Icons.check_circle,
+        color: Color.fromARGB(255, 203, 81, 81));
   } else {
     return null;
   }

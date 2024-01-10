@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/users.dart';
+
+Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
 
 class UserTile extends StatelessWidget {
-  final String firstName;
-  final String userName;
-  final String lastName;
-  final Image profilePicture;
-  final int leaderboardPosition;
+  final Users userFriend;
 
   UserTile({super.key, 
-    required this.firstName,
-    required this.userName,
-    required this.lastName,
-    required this.profilePicture,
-    required this.leaderboardPosition,
+    required this.userFriend,
   });
 
   
   @override
   Widget build(BuildContext context) {
-    Icon? userBadge = getBadgeIcon(leaderboardPosition);
+    //Icon? userBadge = getBadgeIcon(leaderboardPosition);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 3, 0, 0),
@@ -32,29 +27,31 @@ class UserTile extends StatelessWidget {
           contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           //onTap: () {},
           leading: CircleAvatar(
-            radius: 25, // Adjust the radius as needed
-            backgroundImage: profilePicture.image,
+            radius: 25,
+            backgroundImage: genericProfilePicture.image,
           ),
 
           title: Row(
             children: [
               Text(
-                "$firstName $lastName ",
-                style: const TextStyle(fontSize: 18,),
+                "${userFriend.firstName} ${userFriend.lastName}",
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
               ),
-              if (userBadge != null) userBadge, // Display badge if not null
+              //if (userBadge != null) userBadge, // Display badge if not null
             ],
           ),
-          subtitle: Text(userName,
+          subtitle: Text(userFriend.username,
               style: const TextStyle(
                   fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
-          trailing: IconButton(
+          /*trailing: IconButton(
             onPressed: () {
               print("delete friend");
             },
             icon: const Icon(Icons.delete_forever_rounded),
             iconSize: 20,
-          ),
+          ),*/
         ),
       ),
     );
