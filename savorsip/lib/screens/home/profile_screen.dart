@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/UserTile.dart';
 import 'package:savorsip/screens/authentication/login.dart';
@@ -16,6 +18,35 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+Users? currentUser; // Local variable to hold the updated user data
+int userPosition = -1; // Initialize with a default value
+
+@override
+void initState() {
+  super.initState();
+  _fetchAndSetCurrentUser();
+  _fetchUserPosition();
+}
+
+  Future<void> _fetchUserPosition() async {
+    int position = await LeaderboardService.getUserPosition(widget.userID);
+    setState(() {
+      userPosition = position;
+    });
+  }
+
+  Future<void> _fetchAndSetCurrentUser() async {
+    try {
+      Users fetchedUser = await Users.fetchUserData(widget.userID);
+      setState(() {
+        currentUser = fetchedUser;
+      });
+    } catch (e) {
+      // Handle errors, e.g., user not found or network issues
+      print("Error fetching user data: $e");
+    }
+  }
 
 //sign Out Function
 void signMeOut() async {
@@ -48,8 +79,18 @@ void signMeOut() async {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _generateMyProfile("Giannis", "Georgiadis", "giannouklas", 20, 3,
-                Image.asset('assets/images/logo.PNG'), Image.asset('assets/images/logo.PNG')),
+        if (currentUser != null) // Check if currentUser is not null
+          _generateMyProfile(
+            currentUser!.firstName,
+            currentUser!.lastName,
+            currentUser!.username,
+            currentUser!.numOfRatings, // Assuming static for now
+            userPosition, // Assuming static for now
+            currentUser!.profilePic,
+            widget.userID,
+          )
+        else
+          CircularProgressIndicator(),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,7 +117,7 @@ void signMeOut() async {
 }
 
 Widget _generateMyProfile(String myFirstName, String myLastName, String myUserName,
-    int myNumOfReviews, int myPosition, Image myProfilePicture, Image myQRcode) {
+    int myNumOfReviews, int myPosition, String myProfilePicUrl, String userID) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,7 +126,7 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
           contentPadding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
           leading: CircleAvatar(
             radius: 25,
-            backgroundImage: myProfilePicture.image,
+            backgroundImage: NetworkImage(myProfilePicUrl),
           ),
           title: Row(
             children: [
@@ -126,7 +167,13 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
       ),
       Padding(
         padding: const EdgeInsets.fromLTRB(80, 20, 80, 20),
-        child: myQRcode,
+        child: QrImageView(
+                data: userID,
+                version: QrVersions.auto,
+                size: 200.0,
+                gapless: false,
+              )
+
       ),
     ],
   );

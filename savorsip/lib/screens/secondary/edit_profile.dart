@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -155,7 +156,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                           pickImageAndUpdateProfile();
-                          // Optionally, handle any post-function execution logic here
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyHomePage(userID: widget.userID), // Or pass the whole updatedUser object if needed
+                                ),
+                              );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 156, 129, 231),
@@ -208,16 +214,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(userID: widget.userID), // Or pass the whole updatedUser object if needed
+                                  builder: (context) => MyHomePage(userID: widget.userID), // Or pass the whole updatedUser object if needed
                                 ),
                               );
-                              /*Users updatedUser = await Users.fetchUserData(widget.currentUser.uid);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditProfileScreen(currentUser: updatedUser),
-                                ),
-                              );*/
                             } else {
                               // Update failed, show error message
                               setState(() {
@@ -244,52 +243,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 _confirmPasswordController.clear();
                               });
                           }
-                        }, /* async {
-                          setState(() {
-                            _isEmptyField = _firstNameController.text.isEmpty ||
-                                _lastNameController.text.isEmpty ||
-                                //_emailController.text.isEmpty ||
-                                _usernameController.text.isEmpty ||
-                                _passwordController.text.isEmpty ||
-                                _confirmPasswordController.text.isEmpty;
-                            _isPasswordMismatch = _passwordController.text !=
-                                _confirmPasswordController.text;
-                          });
-                      
-                          if (!_isEmptyField && !_isPasswordMismatch) {
-                            String result = await addUser(
-                                _firstNameController.text,
-                                _lastNameController.text,
-                                //_emailController.text,
-                                _usernameController.text,
-                                _passwordController.text);
-                      
-                            if (result == "Success") {
-                              // Create a Users object
-                              Users newUser = Users(
-                                  uid: FirebaseAuth.instance.currentUser!.uid,
-                                  firstName: _firstNameController.text,
-                                  lastName: _lastNameController.text,
-                                  email: _emailController.text,
-                                  username: _usernameController.text,
-                                  numOfRatings: 0);
-                      
-                              // Optionally, pass newUser to the next screen or store it using a state management solution
-                              //Printing the User Object
-                              //print("This is the user Object: $newUser");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        MyHomePage()), // Pass newUser as an argument if needed
-                              );
-                            } else {
-                              setState(() {
-                                _registrationError = result;
-                              });
-                            }
-                          }
-                        }*/
+                        }, 
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(255, 156, 129, 231),
                           minimumSize: const Size(150, 50),
@@ -318,26 +272,28 @@ Future<void> pickImageAndUpdateProfile() async {
 
   if (image != null) {
     try {
-      // Retrieve the current user instance
-      // Check if a user is retrieved and then call updateProfilePicture
       if (currentUser != null) {
         await currentUser!.updateProfilePicture(image);
-        // Show a success message, if needed
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile picture updated successfully!')),
-        );
+            const SnackBar(content: Text('Profile picture updated successfully!')),
+          );
+        }
       } else {
-        // Handle the case where the user is not found
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User not found.')),
-        );
+            SnackBar(content: Text('User not found.')),
+          );
+        }
       }
     } catch (e) {
-      // Handle any errors here, e.g., show an error message
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Something went wrong: $e')),
-      );
+          SnackBar(content: Text('Something went wrong: $e')),
+        );
+      }
     }
   }
 }
+
 }
