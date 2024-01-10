@@ -46,6 +46,7 @@ class Users {
   // Method to convert Users object to a map
   Map<String, dynamic> toMap() {
     return {
+      'userID': uid,
       'First Name': firstName,
       'Last Name': lastName,
       'username': username,
@@ -89,6 +90,7 @@ class Users {
 
       // Add additional user details to Firestore
       await FirebaseFirestore.instance.collection('Users').doc(userId).set({
+        'userID': userId,
         'First Name': firstName,
         'Last Name': lastName,
         'email': email,
