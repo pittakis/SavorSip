@@ -72,9 +72,12 @@ class _SearchScreenState extends State<SearchScreen> {
           _buildSearchBar(),
           _buildButtonRow(),
           _buildSlider(),
-          Text(
-            "Adjust the slider to select minimum rating",
-            style:TextStyle( fontSize: 10, color: Colors.grey[700])
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+            child: Text(
+              "Adjust the slider to select minimum rating",
+              style:TextStyle( fontSize: 10, color: Colors.grey[700])
+            ),
           ),
           Expanded(child: _buildList()),
         ],
@@ -94,6 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         onChanged: (value) {
+          print("user typed $value");
           // Update the state based on the search input
         },
       ),
@@ -134,6 +138,7 @@ class _SearchScreenState extends State<SearchScreen> {
     divisions: 9,
     label: _sliderValue.toStringAsFixed(1),
     onChanged: (double value) {
+      print("Slider bar set to $value");
       setState(() {
         _sliderValue = value;
       });

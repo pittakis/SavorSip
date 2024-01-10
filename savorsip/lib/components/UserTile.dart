@@ -67,7 +67,7 @@ Icon? getBadgeIcon(int position) {
   } else if (position == 3) {
     return const Icon(Icons.wine_bar_sharp, color: Color.fromARGB(255, 166, 102, 72));
   } else if (position<=20) {
-    return const Icon(Icons.check_circle, color: Color.fromARGB(255, 203, 81, 81));
+    return const Icon(Icons.check_circle, color: Colors.deepPurple);
   } else {
     return null;
   }

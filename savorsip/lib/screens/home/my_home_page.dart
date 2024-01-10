@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _currentIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.wine_bar_outlined),
+            icon: Icon(Icons.home_filled),
             label: 'Cellar',
           ),
           BottomNavigationBarItem(
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
             curve: Curves.easeInOut,
           );
         },
-        selectedItemColor: Colors.purple,
+        selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,
       ),
     );
