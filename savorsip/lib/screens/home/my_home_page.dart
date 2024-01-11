@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
       FriendsScreen(userID: widget.userID),
       SearchScreen(userID: widget.userID),
       ProfileScreen(userID: widget.userID),
-      TestingScreen(userID: widget.userID),
+      //TestingScreen(userID: widget.userID),
     ];
   }
  /* final List<Widget> _screens = [
@@ -81,10 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.person_pin_rounded),
             label: 'Profile',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.edit),
-            label: 'Testing',
-          ),
+         // BottomNavigationBarItem(
+          //  icon: Icon(Icons.edit),
+         //   label: 'Testing',
+          //),
         ],
         onTap: (index) {
           // Handle BottomNavigationBar item tap

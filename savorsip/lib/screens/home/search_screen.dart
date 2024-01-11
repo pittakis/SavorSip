@@ -84,7 +84,8 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       floatingActionButton: ClipOval(
         child: Material(
-          color: Colors.deepPurple, // Button color
+          color: Colors.deepPurple, 
+          elevation: 10,
           child: InkWell(
             onTap: () {
               print("barcode reader");

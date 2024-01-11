@@ -174,14 +174,15 @@ Widget _generateFriendTile(Users userFriend, int index){
       ),
       floatingActionButton: ClipOval(
         child: Material(
-          color: Colors.deepPurple, // Button color
+          color: Colors.deepPurple,
+          elevation: 10,
           child: InkWell(
             onTap: () {
               // Action to be performed when the FAB is pressed
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), 
               );
             },
             child: const SizedBox(

@@ -156,7 +156,7 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
               const Text("Rank:", style: TextStyle(fontSize: 16)),
               Row(
                 children: [
-                  Text("$myPosition", style: const TextStyle(fontSize: 26)),
+                  if(myPosition>0) Text("$myPosition", style: const TextStyle(fontSize: 26)),
                   if (getBadgeIcon(myPosition) != null) getBadgeIcon(myPosition)!,
                 ],
               ),
