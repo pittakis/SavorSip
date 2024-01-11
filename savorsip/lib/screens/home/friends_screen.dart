@@ -194,8 +194,8 @@ Widget _generateFriendTile(Users userFriend, int index){
             MaterialPageRoute(builder: (context) => AddFriendsScreen(userID: widget.userID)),
           );
         },
-        child: const Icon(Icons.add),
         backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }

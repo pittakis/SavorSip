@@ -7,7 +7,7 @@ class WineCardSearch extends StatefulWidget {
   final Function(double) onRate;
   
 
-  WineCardSearch({super.key, required this.wineDetails, required this.onRate});
+  const WineCardSearch({super.key, required this.wineDetails, required this.onRate});
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();

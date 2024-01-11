@@ -111,7 +111,7 @@ Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
               padding: EdgeInsets.only(top: 50, bottom: 16),
               alignment: Alignment.center,
               child: Text(
-                'Who is More Of a Drunk',
+                'Who is More Of a Drunk ?',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),

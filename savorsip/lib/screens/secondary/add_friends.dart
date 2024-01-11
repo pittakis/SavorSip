@@ -144,29 +144,16 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
             ),
           ],
         ),
-        floatingActionButton: ClipOval(
-        child: Material(
-          color: Colors.deepPurple, 
-          elevation: 10,
-          child: InkWell(
-            onTap: () {
-              // Action to be performed when the FAB is pressed
-              Navigator.push(
+       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => QRScanScreen(myUserID: widget.userID,)),
               );
-            },
-            child: const SizedBox(
-              width: 56,
-              height: 56,
-              child: Icon(
-                Icons.qr_code_2,
-                color: Colors.white, 
-              ),
-            ),
-          ),
-        ),
+        },
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.qr_code_2_outlined, color: Colors.white,),
       ),
     );
   }
