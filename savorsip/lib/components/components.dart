@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/rating.dart';
 
 class WineCardHome extends StatelessWidget {
   final String imageUrl;
@@ -8,7 +9,7 @@ class WineCardHome extends StatelessWidget {
   final double rating;
   final double friendsRating;
 
-  const WineCardHome({super.key, 
+  const WineCardHome(Rating myfirstrating, {super.key, 
     required this.imageUrl,
     required this.wineName,
     required this.venueName,

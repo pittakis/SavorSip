@@ -4,8 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/components.dart';
+//import 'package:savorsip/components/components.dart';
+import 'package:savorsip/components/WineCardHome.dart';
 
+List<Rating> myfirstratings = [
+    Rating(
+      uid: '655',
+      wid: '111',
+      ratingOftheUser: 4.0,
+      city: 'Athens',
+    ),
+    Rating(
+      uid: '655',
+      wid: '123',
+      ratingOftheUser: 3.0,
+      city: 'Thessaloniki',
+    ),
+     Rating(
+      uid: '557',
+      wid: '123',
+      ratingOftheUser: 4.0,
+      city: 'Patras',
+    )
+];
 class CellarScreen extends StatefulWidget {
   final String userID;
   const CellarScreen({Key? key, required this.userID}) : super(key: key);
@@ -16,13 +37,7 @@ class CellarScreen extends StatefulWidget {
 
 class _CellarScreenState extends State<CellarScreen> {
   late Future<List<Map<String, dynamic>>> leaderboard;
-  Rating myfirstrating = 
-    Rating(
-      uid: 'Marty',
-      wid: 'Moschofillero',
-      ratingOftheUser: 4.0,
-      city: 'Athens',
-    );
+  
 
 
   @override
@@ -85,14 +100,20 @@ Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Cellar")),
-      body: const Placeholder(),
+      body: ListView.builder(
+      itemCount: myfirstratings.length,
+      itemBuilder: (context, index) {
+        Rating currentRating = myfirstratings[index];
+        return WineCardHome(rating: currentRating);
+      },
+    ),
       drawer: Drawer(
         child: Column(
           children: [
             Container(
               padding: EdgeInsets.only(top: 50, bottom: 16),
               alignment: Alignment.center,
-              child: Text(
+              child: const  Text(
                 'Who is More Of a Drunk ?',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),

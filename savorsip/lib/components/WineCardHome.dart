@@ -1,120 +1,152 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/Models/Wines.dart';
+import 'package:savorsip/Models/rating.dart';
+import 'package:savorsip/Models/users.dart';
 
 class WineCardHome extends StatelessWidget {
-  final String imageUrl;
-  final String wineName;
-  final String venueName;
-  final String description;
-  final double rating;
-  final double friendsRating;
+  final Rating rating;
 
-  const WineCardHome({super.key, 
-    required this.imageUrl,
-    required this.wineName,
-    required this.venueName,
-    required this.description,
-    required this.rating,
-    required this.friendsRating,
-  });
+  WineCardHome({super.key, required this.rating});
+
+  //Here there is a function that can fetch a users object based on the rating.uid paramater
+  final Users user1 = Users(
+    uid: '654',
+    firstName: 'James',
+    lastName: 'McGill',
+    username: 'saulgoodman',
+    email: 'saulgoodman@gmail.com',
+    profilePic: 'https://via.placeholder.com/150',
+    numOfRatings: 23 ,
+  );
+
+  //Here there is a functiont that can return a wine object based on the rating.wid parameter
+  final Wine wine1 = Wine(
+    wid: '678',
+    wineName:'Moschato',
+    numOfRatings: 55,
+    wineRating: 4.3,
+    wineDescription: "Sweet and fruity",
+    winePic:'https://via.placeholder.com/150',
+    wineType: 'Rose',
+  );
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+ Widget build(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(10),
+    child: Container(
       padding: const EdgeInsets.all(15),
-      child: Container(
-        width: 479,
-        height: 400,
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF9B8CC4),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(imageUrl, wineName, venueName),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            _buildDetails(wineName, venueName, description),
-            _buildRatings('SavorSip Rating', rating),
-            _buildRatings("Friend's Rating", friendsRating),
-          ],
-        ),
+      decoration: BoxDecoration(
+        color: Colors.deepPurple,
+        borderRadius: BorderRadius.circular(10),
       ),
-    );
-  }
-
-  Widget _buildHeader(String imageUrl, String wineName, String venueName) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(imageUrl),
-            radius: 32,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  wineName,
-                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400),
-                ),
-                Text(
-                  venueName,
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetails(String wineName, String venueName, String description) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(wineName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-          Text(venueName, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-          Text(description, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w500)),
+          _generateFriendTile(user1),
+          SizedBox(height: 10),
+          _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
+          SizedBox(height: 10),
+          _buildTimeAndPLaceDetails(rating.city, rating.dateOfRate),
+          SizedBox(height: 10),
+          _buildRatings("${user1.firstName} rated:", rating.ratingOftheUser),
+          SizedBox(height: 5),
+          _buildRatings("SavorSip Rating", wine1.wineRating),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget _buildRatings(String title, double rating) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+Widget _buildHeader(String imageUrl, String wineName, String description) {
+  return Row(
+    children: [
+      Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      SizedBox(width: 15),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              wineName,
+              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 5),
+            Text(
+              "'$description'",
+              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildTimeAndPLaceDetails(String cityName, DateTime dateAndTime) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Text("$cityName, ", style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400)),
+      const SizedBox(height: 5),
+      Text(dateAndTime.toString(), style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400)),
+    ],
+  );
+}
+
+Widget _buildRatings(String title, double rating) {
+  return Row(
+    children: [
+      Text(title, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
+      SizedBox(width: 10),
+      Row(
         children: [
-          Text(title, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400)),
-          Row(
-            children: [
-              const Icon(Icons.star, color: Color(0xFFFFD700)),
-              Text(
-                '${rating.toStringAsFixed(1)}/5',
-                style: const TextStyle(color: Color(0xFFFFD700), fontSize: 28, fontWeight: FontWeight.w400),
-              ),
-            ],
+          Icon(Icons.star, color: Colors.amber, size: 22),
+          Text(
+            '${rating.toStringAsFixed(1)}/5',
+            style: TextStyle(color: Color(0xFFFFD700), fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ],
       ),
-    );
+    ],
+  );
+}
+
+Widget _generateFriendTile(Users userFriend) {
+  ImageProvider<Object> profileImage;
+  if (userFriend.profilePic.isNotEmpty && Uri.tryParse(userFriend.profilePic)?.isAbsolute == true) {
+    profileImage = NetworkImage(userFriend.profilePic);
+  } else {
+    profileImage = AssetImage(userFriend.profilePic);
   }
+  return ListTile(
+    contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+    leading: CircleAvatar(
+      radius: 25,
+      backgroundImage: profileImage,
+    ),
+    title: Row(
+      children: [
+        Text(
+          '${userFriend.firstName} ${userFriend.lastName}',
+          style: TextStyle(fontSize: 18, color: Colors.white),
+        ),
+        SizedBox(width: 5),
+        Icon(Icons.wine_bar, color: Colors.white),
+      ],
+    ),
+    subtitle: Text(userFriend.username, style: TextStyle(fontSize: 14, color: Colors.grey)),
+  );
+}
 }
