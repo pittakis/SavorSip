@@ -58,8 +58,10 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
 
- double _sliderValue = 0;
+ double _sliderValue1 = 0;
+ double _sliderValue2 =0;
  List<bool> isSelected = [true, true, true,];
+ bool filtersVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +72,30 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           _buildSearchBar(),
-          _buildButtonRow(),
-          _buildSlider(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-            child: Text(
-              "Adjust the slider to select minimum rating",
-              style:TextStyle( fontSize: 10, color: Colors.grey[700])
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Filters'),
+              IconButton(
+                icon: Icon(
+                    filtersVisible ? Icons.expand_less : Icons.expand_more),
+                onPressed: () =>
+                    setState(() => filtersVisible = !filtersVisible),
+              ),
+            ],
+          ),
+          if(filtersVisible)
+          Column(
+            children: [
+              _buildButtonRow(),
+              _buildSliderForMinimumRating(),
+              _buildSliderForMinimumNumberOfReviews(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                child: Text("Adjust the slider to select minimum rating",
+                    style: TextStyle(fontSize: 10, color: Colors.grey[700])),
+              ),
+            ],
           ),
           Expanded(child: _buildList()),
         ],
@@ -137,17 +155,33 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
   
-  Widget _buildSlider() {
+  Widget _buildSliderForMinimumRating() {
   return Slider(
-    value: _sliderValue,
+    value: _sliderValue1,
     min: 0,
     max: 4.5,
     divisions: 9,
-    label: _sliderValue.toStringAsFixed(1),
+    label: _sliderValue1.toStringAsFixed(1),
     onChanged: (double value) {
       print("Slider bar set to $value");
       setState(() {
-        _sliderValue = value;
+        _sliderValue1 = value;
+      });
+    },
+  );
+}
+
+  Widget _buildSliderForMinimumNumberOfReviews() {
+  return Slider(
+    value: _sliderValue2,
+    min: 0,
+    max: 100,
+    divisions: 10,
+    label: _sliderValue2.toStringAsFixed(1),
+    onChanged: (double value) {
+      print("Slider bar set to $value");
+      setState(() {
+        _sliderValue2 = value;
       });
     },
   );
