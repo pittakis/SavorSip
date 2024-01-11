@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:savorsip/Models/Wines.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
   final Function(double) onRate;
+  //variable RatingVal
 
   const WineCardSearch(
       {super.key, required this.wineDetails, required this.onRate});
@@ -20,6 +20,9 @@ class _WineCardSearchState extends State<WineCardSearch> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the winePic is a network image or an asset
+    final isNetworkImage = Uri.tryParse(widget.wineDetails.winePic)?.hasAbsolutePath ?? false;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
@@ -28,12 +31,20 @@ class _WineCardSearchState extends State<WineCardSearch> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Image.network(
-                  widget.wineDetails.winePic,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+                isNetworkImage
+                    ? Image.network(
+                        widget.wineDetails.winePic,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        widget.wineDetails.winePic,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                const SizedBox(width: 10),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(

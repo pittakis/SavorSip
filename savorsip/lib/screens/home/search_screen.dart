@@ -1,52 +1,7 @@
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/Wines.dart';
-import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/components.dart';
 import 'package:savorsip/components/wineCardSearch.dart';
-
-List<Wine> WineList = [
-  Wine(
-      wid: '1',
-      wineName: 'Chateau Margaux',
-      numOfRatings: 120,
-      wineRating: 4.2,
-      winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'Slimey yet Satisfying with a rich aftertaste like mr Koniaris',
-      wineType: 'Red'),
-  Wine(
-      wid: '2',
-      wineName: 'Screaming Eagle Cabernet 2012',
-      numOfRatings: 80,
-      wineRating: 4.6,
-      winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'hey',
-      wineType: 'Red'),
-  Wine(
-      wid: '3',
-      wineName: 'Moschato',
-      numOfRatings: 30,
-      wineRating: 4.1,
-      winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'hey',
-      wineType: 'Rose'),
-  Wine(
-      wid: '4',
-      wineName: 'Leonidas',
-      numOfRatings: 53,
-      wineRating: 4.9,
-      winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'hey',
-      wineType: 'White'),
-  Wine(
-      wid: '5',
-      wineName: 'Screaming Elephant Cabernet 2002',
-      numOfRatings: 33,
-      wineRating: 3.8,
-      winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'hey',
-      wineType: 'White')
-];
 
 class SearchScreen extends StatefulWidget {
   final String userID;
@@ -57,15 +12,56 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  List<Wine> allWines = []; // List to store all fetched wines
+  List<Wine> filteredWines = []; // List to store filtered wines
   double _sliderValue1 = 0;
   double _sliderValue2 = 0;
-  List<bool> isSelected = [
-    true,
-    true,
-    true,
-  ];
+  List<bool> isSelected = [true, true, true]; // Red, Rose, White
   bool filtersVisible = false;
   bool showOnlyMyRatings = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWines();
+  }
+
+  Future<void> fetchWines() async {
+    QuerySnapshot wineSnapshot = await FirebaseFirestore.instance.collection('Wines').get();
+    List<Wine> fetchedWines = wineSnapshot.docs.map((doc) => Wine.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    setState(() {
+      allWines = fetchedWines;
+      applyFilters();
+    });
+  }
+
+  void applyFilters() async{
+    List<Wine> tempWines = allWines;
+
+  if (showOnlyMyRatings) {
+    // Fetch user's ratings from Firestore
+    var userRatingsSnapshot = await FirebaseFirestore.instance
+        .collection('Ratings') // Assuming 'UserRatings' is the collection name
+        .where('uid', isEqualTo: widget.userID)
+        .get();
+
+    var userRatedWineIds = userRatingsSnapshot.docs.map((doc) => doc.data()['wid'] as String).toSet();
+
+    // Filter wines to include only those that the user has rated
+    tempWines = tempWines.where((wine) => userRatedWineIds.contains(wine.wid)).toList();
+  }
+
+    // Filter by wine type
+    if (!isSelected[0]) tempWines = tempWines.where((wine) => wine.wineType != 'Red').toList();
+    if (!isSelected[1]) tempWines = tempWines.where((wine) => wine.wineType != 'Rose').toList();
+    if (!isSelected[2]) tempWines = tempWines.where((wine) => wine.wineType != 'White').toList();
+
+    // Filter by rating and number of ratings
+  tempWines = tempWines.where((wine) => wine.wineRating >= _sliderValue1 && wine.numOfRatings >= _sliderValue2).toList();
+
+  setState(() => filteredWines = tempWines);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +76,15 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Filters',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               IconButton(
                 icon: Icon(
-                    filtersVisible ? Icons.expand_less : Icons.expand_more),
-                onPressed: () =>
-                    setState(() => filtersVisible = !filtersVisible),
+                  filtersVisible ? Icons.expand_less : Icons.expand_more),
+                onPressed: () => setState(() => filtersVisible = !filtersVisible),
               ),
             ],
           ),
-          if (filtersVisible)
+          if (filtersVisible) 
             Column(
               children: [
                 Row(
@@ -103,6 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           showOnlyMyRatings = value!;
                           if (showOnlyMyRatings) {
                             print("Only show my ratings");
+
                           } else {
                             print('Show all');
                           }
@@ -125,6 +121,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Text(
                       "Adjust the slider to select the minimum number of user ratings",
                       style: TextStyle(fontSize: 10, color: Colors.grey[700])),
+                ),
+                 ElevatedButton(
+                  onPressed: () {
+                    applyFilters(); // Call the applyFilters method when the button is pressed
+                    setState(() => filtersVisible = !filtersVisible);
+                  },
+                  child: const Text('Apply Filters'),
                 ),
               ],
             ),
@@ -222,23 +225,20 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildList() {
-    // Use ListView or ListView.builder
     return ListView.builder(
-        itemCount: WineList.length,
-        itemBuilder: (context, index) {
-          final wine = WineList[index];
-          final winecard = WineCardSearch(
-              wineDetails: wine,
-              onRate: (double rrr) {
-                setState(() {
-                  print("Saved rating $rrr for wine ${wine.wineName}");
-                  //WineList.removeAt(index);
-                  // Logic to handle the rating action
-                  // This could involve removing the wine, updating its rating, etc.
-                });
-              });
-            return winecard;
-        });
+      itemCount: filteredWines.length, // Use 'filteredWines' for itemCount
+      itemBuilder: (context, index) {
+        final wine = filteredWines[index]; // Use 'filteredWines' for list items
+        return WineCardSearch(
+          wineDetails: wine,
+          onRate: (double rating) {
+            // Handle rating logic
+            print("Saved rating $rating for wine ${wine.wineName}");
+            //Update or add Rating
+          },
+        );
+      },
+    );
   }
 }
 
