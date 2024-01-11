@@ -1,105 +1,15 @@
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
-  List<Users> friendList = [
-    Users(
-      uid: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      username: 'john_doe',
-      email: 'john@example.com',
-      numOfRatings: 10, 
-      profilePic: '',
-    ),
-    Users(
-      uid: '2',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      username: 'jane_doe',
-      email: 'jane@example.com',
-      numOfRatings: 15,
-      profilePic: '',
-    ),
-    Users(
-      uid: '3',
-      firstName: 'Alice',
-      lastName: 'Smith',
-      username: 'alice_smith',
-      email: 'alice@example.com',
-      numOfRatings: 20,
-      profilePic: '',
-    ),
-    Users(
-      uid: '4',
-      firstName: 'Bob',
-      lastName: 'Johnson',
-      username: 'bob_johnson',
-      email: 'bob@example.com',
-      numOfRatings: 5,
-      profilePic: '',
-    ),
-    Users(
-      uid: '5',
-      firstName: 'Eve',
-      lastName: 'Taylor',
-      username: 'eve_taylor',
-      email: 'eve@example.com',
-      numOfRatings: 8,
-      profilePic: '',
-    ),
-    Users(
-      uid: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      username: 'john_doe',
-      email: 'john@example.com',
-      numOfRatings: 10, 
-      profilePic: '',
-    ),
-    Users(
-      uid: '2',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      username: 'jane_doe',
-      email: 'jane@example.com',
-      numOfRatings: 15,
-      profilePic: '',
-    ),
-    Users(
-      uid: '3',
-      firstName: 'Alice',
-      lastName: 'Smith',
-      username: 'alice_smith',
-      email: 'alice@example.com',
-      numOfRatings: 20,
-      profilePic: '',
-    ),
-    Users(
-      uid: '4',
-      firstName: 'Bob',
-      lastName: 'Johnson',
-      username: 'bob_johnson',
-      email: 'bob@example.com',
-      numOfRatings: 5,
-      profilePic: '',
-    ),
-    Users(
-      uid: '5',
-      firstName: 'Eve',
-      lastName: 'Taylor',
-      username: 'eve_taylor',
-      email: 'eve@example.com',
-      numOfRatings: 8,
-      profilePic: '',
-    ),
-  ];
+
 
 //List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
 List<String>? myPendingRequests = List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
-Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
+Image genericProfilePicture = Image.asset('assets/images/profile_pic_default.png');
 //List<Users>? myUserFriends = List<String>.generate(5
 
 class FriendsScreen extends StatefulWidget {
@@ -112,7 +22,26 @@ class FriendsScreen extends StatefulWidget {
 
 class _FriendsScreenState extends State<FriendsScreen> {
 
-  void _popupRemoveFriend(Users userFriend, int index) async {
+  Future<List<Users>> fetchFriends() async {
+    List<Users> friends = [];
+    var friendsSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.userID)
+        .collection('friends')
+        .get();
+
+    for (var doc in friendsSnapshot.docs) {
+      String friendId = doc.id;
+      var friendDoc = await FirebaseFirestore.instance.collection('Users').doc(friendId).get();
+      if (friendDoc.exists) {
+        friends.add(Users.fromMap(friendDoc.data()!, friendDoc.id));
+      }
+    }
+
+    return friends;
+  }
+
+void _popupRemoveFriend(Users userFriend, int index) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true,
@@ -127,13 +56,25 @@ class _FriendsScreenState extends State<FriendsScreen> {
         actions: <Widget>[
           TextButton(
             child: const Text('Confirm'),
-            onPressed: () {
-              print("Remove ${userFriend.firstName} from the list");
-              setState(() {
-                friendList.removeAt(index);
-              });
+            onPressed: () async {
+              // Delete the friend from Firestore
+              await FirebaseFirestore.instance
+                  .collection('Users')
+                  .doc(widget.userID)
+                  .collection('friends')
+                  .doc(userFriend.uid)
+                  .delete();
+
               // Close the dialog
               Navigator.of(context).pop();
+
+              // Show a snackbar notification
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${userFriend.firstName} has been removed from your friends')),
+              );
+
+              // Trigger a refresh of the friend list
+              setState(() {});
             },
           ),
           TextButton(
@@ -148,13 +89,21 @@ class _FriendsScreenState extends State<FriendsScreen> {
   );
 }
 
-  Widget _generateFriendTile(Users userFriend, int index){
-  //Icon? userBadge = getBadgeIcon(userFriend.leaderboardPosition);
+
+
+Widget _generateFriendTile(Users userFriend, int index){
+  ImageProvider<Object> profileImage;
+  if (userFriend.profilePic.isNotEmpty && Uri.tryParse(userFriend.profilePic)?.isAbsolute == true) {
+    profileImage = NetworkImage(userFriend.profilePic); // If there's a valid URL, use it
+  } else {
+    profileImage = AssetImage(userFriend.profilePic); // Otherwise, fall back to the generic picture
+  }
+
   return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       leading: CircleAvatar(
         radius: 25,
-        backgroundImage: genericProfilePicture.image,
+        backgroundImage: profileImage,
       ),
       title: Row(
         children: [
@@ -173,7 +122,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
               fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
       onLongPress: () => _popupRemoveFriend(userFriend, index),
     );
-  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -186,10 +136,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
             child: IconButton(
               icon: const Icon(Icons.person_add_sharp),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PendingRequests()),
+                      builder: (context) => PendingRequests(myUserId: widget.userID,)),
                 );
               },
             ),
@@ -200,19 +150,25 @@ class _FriendsScreenState extends State<FriendsScreen> {
         children: [
           const Text("Long Press to remove someone from your friend list", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),),
           Expanded(
-          child: friendList == null || friendList.isEmpty
-              ? const Center(
-                  child: Text("Your friend list is empty"),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: friendList.length,
-                    itemBuilder: (context, index) {
-                      final item = friendList[index];
-                      return _generateFriendTile(item, index);
-                    },
-                  ),
-                ),
+            child: FutureBuilder<List<Users>>(
+              future: fetchFriends(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("Your friend list is empty"));
+                }
+                List<Users> friends = snapshot.data!;
+                return ListView.builder(
+                  itemCount: friends.length,
+                  itemBuilder: (context, index) {
+                    final item = friends[index];
+                    return _generateFriendTile(item, index);
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
