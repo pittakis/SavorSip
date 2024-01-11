@@ -70,6 +70,12 @@ void _popupRemoveFriend(Users userFriend, int index) async {
                   .collection('friends')
                   .doc(userFriend.uid)
                   .delete();
+              await FirebaseFirestore.instance
+                  .collection('Users')
+                  .doc(userFriend.uid)
+                  .collection('friends')
+                  .doc(widget.userID)
+                  .delete();              
 
               // Close the dialog
               Navigator.of(context).pop();
