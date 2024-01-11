@@ -75,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Filters'),
+              const Text('Filters', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               IconButton(
                 icon: Icon(
                     filtersVisible ? Icons.expand_less : Icons.expand_more),
