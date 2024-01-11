@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/leaderboard.dart';
+import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/components.dart';
 
@@ -15,6 +16,14 @@ class CellarScreen extends StatefulWidget {
 
 class _CellarScreenState extends State<CellarScreen> {
   late Future<List<Map<String, dynamic>>> leaderboard;
+  Rating myfirstrating = 
+    Rating(
+      uid: 'Marty',
+      wid: 'Moschofillero',
+      ratingOftheUser: 4.0,
+      city: 'Athens',
+    );
+
 
   @override
   void initState() {
@@ -76,34 +85,7 @@ Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Cellar")),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            // Your existing body content goes here...
-            //_buildTopNavigation(),
-            SizedBox(height: 10),
-            WineCardHome(
-              imageUrl: "https://via.placeholder.com/64x64",
-              wineName: "Wine Name 1",
-              venueName: "Venue Name 1",
-              description: "Here will be the wine description 1",
-              rating: 4.5,
-              friendsRating: 4.2,
-            ),
-            SizedBox(height: 16),
-            WineCardHome(
-              imageUrl: "https://via.placeholder.com/64x64",
-              wineName: "Wine Name 2",
-              venueName: "Venue Name 2",
-              description: "Here will be the wine description 2",
-              rating: 4.3,
-              friendsRating: 4.1,
-            ),
-            SizedBox(height: 10),
-            //_buildBottomNavigation(),
-          ],
-        ),
-      ),
+      body: const Placeholder(),
       drawer: Drawer(
         child: Column(
           children: [
