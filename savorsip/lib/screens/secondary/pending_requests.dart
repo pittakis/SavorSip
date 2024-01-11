@@ -46,6 +46,14 @@ class _PendingRequestsState extends State<PendingRequests> {
         .doc(friendUserId)
         .set({'uid': friendUserId});
 
+    // Add my user ID to my friends friends collection
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(friendUserId)
+        .collection('friends')
+        .doc(widget.myUserId)
+        .set({'uid': widget.myUserId});
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Friend request accepted')),
     );
