@@ -12,7 +12,7 @@ List<Wine> WineList = [
       numOfRatings: 120,
       wineRating: 4.2,
       winePic: 'https://via.placeholder.com/150',
-      wineDescription: 'Slimey get Satosying with a rich aftertaste like mr Koniaris',
+      wineDescription: 'Slimey yet Satisfying with a rich aftertaste like mr Koniaris',
       wineType: 'Red'),
   Wine(
       wid: '2',
