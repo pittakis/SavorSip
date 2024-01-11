@@ -24,7 +24,7 @@ class _PendingRequestsState extends State<PendingRequests> {
       String userId = doc.id; // The user ID of the person who sent the request
       var userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
       String username = userSnapshot.data()?['username'] ?? 'Unknown'; // Fetch the username
-      pendingRequests.add({'userId': userId, 'username': username}); // Add both userId and username
+      pendingRequests.add({'uid': userId, 'username': username}); // Add both userId and username
     }
 
     return pendingRequests;
@@ -105,7 +105,7 @@ class _PendingRequestsState extends State<PendingRequests> {
   }
 
   Widget buildRequestItem(Map<String, String> request, int index) {
-    String userId = request['userId']!;
+    String userId = request['uid']!;
     String username = request['username']!;
 
     return Dismissible(

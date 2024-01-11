@@ -146,7 +146,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
        floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
+          Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => QRScanScreen(myUserID: widget.userID,)),

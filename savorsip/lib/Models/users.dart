@@ -46,7 +46,7 @@ class Users {
   // Method to convert Users object to a map
   Map<String, dynamic> toMap() {
     return {
-      'userID': uid,
+      'uid': uid,
       'First Name': firstName,
       'Last Name': lastName,
       'username': username,
@@ -86,11 +86,11 @@ class Users {
       );
 
       // Get the UID of the newly created user
-      String userId = userCredential.user!.uid;
+      String uid = userCredential.user!.uid;
 
       // Add additional user details to Firestore
-      await FirebaseFirestore.instance.collection('Users').doc(userId).set({
-        'userID': userId,
+      await FirebaseFirestore.instance.collection('Users').doc(uid).set({
+        'uid': uid,
         'First Name': firstName,
         'Last Name': lastName,
         'email': email,
