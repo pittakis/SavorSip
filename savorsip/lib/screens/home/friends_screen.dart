@@ -41,6 +41,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
     return friends;
   }
 
+  Future<void> refreshFriendList() async {
+    setState(() {
+      // This will trigger fetchFriends() again
+    });
+  }
+
 void _popupRemoveFriend(Users userFriend, int index) async {
   return showDialog<void>(
     context: context,
@@ -136,7 +142,7 @@ Widget _generateFriendTile(Users userFriend, int index){
             child: IconButton(
               icon: const Icon(Icons.person_add_sharp),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => PendingRequests(myUserId: widget.userID,)),
@@ -159,44 +165,32 @@ Widget _generateFriendTile(Users userFriend, int index){
                 if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text("Your friend list is empty"));
                 }
-                List<Users> friends = snapshot.data!;
-                return ListView.builder(
-                  itemCount: friends.length,
-                  itemBuilder: (context, index) {
-                    final item = friends[index];
-                    return _generateFriendTile(item, index);
-                  },
+                return RefreshIndicator(
+                  onRefresh: refreshFriendList,
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final item = snapshot.data![index];
+                      return _generateFriendTile(item, index);
+                    },
+                  ),
                 );
               },
             ),
           ),
         ],
       ),
-      floatingActionButton: ClipOval(
-        child: Material(
-          color: Colors.deepPurple,
-          elevation: 10,
-          child: InkWell(
-            onTap: () {
-              // Action to be performed when the FAB is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddFriendsScreen(userID: widget.userID,)), 
-              );
-            },
-            child: const SizedBox(
-              width: 56,
-              height: 56,
-              child: Icon(
-                Icons.add,
-                color: Colors.white, // Icon color
-              ),
-            ),
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to AddFriendsScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFriendsScreen(userID: widget.userID)),
+          );
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.deepPurple,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

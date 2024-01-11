@@ -11,9 +11,8 @@ class PendingRequests extends StatefulWidget {
 }
 
 class _PendingRequestsState extends State<PendingRequests> {
-
-  Future<List<String>> fetchPendingRequests() async {
-    List<String> pendingRequests = [];
+  Future<List<Map<String, String>>> fetchPendingRequests() async {
+    List<Map<String, String>> pendingRequests = [];
 
     var snapshot = await FirebaseFirestore.instance
         .collection('Users')
@@ -22,7 +21,10 @@ class _PendingRequestsState extends State<PendingRequests> {
         .get();
 
     for (var doc in snapshot.docs) {
-      pendingRequests.add(doc.id); // Assuming the document ID is the userID of the person who sent the request
+      String userId = doc.id; // The user ID of the person who sent the request
+      var userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+      String username = userSnapshot.data()?['username'] ?? 'Unknown'; // Fetch the username
+      pendingRequests.add({'userId': userId, 'username': username}); // Add both userId and username
     }
 
     return pendingRequests;
@@ -78,20 +80,8 @@ class _PendingRequestsState extends State<PendingRequests> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Friend Requests"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate back to FriendsScreen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FriendsScreen(userID: widget.myUserId),
-              ),
-            );
-          },
-        ),
       ),
-      body: FutureBuilder<List<String>>(
+      body: FutureBuilder<List<Map<String, String>>>(
         future: fetchPendingRequests(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -114,7 +104,10 @@ class _PendingRequestsState extends State<PendingRequests> {
     );
   }
 
-  Widget buildRequestItem(String userId, int index) {
+  Widget buildRequestItem(Map<String, String> request, int index) {
+    String userId = request['userId']!;
+    String username = request['username']!;
+
     return Dismissible(
       key: Key(userId),
       onDismissed: (direction) {
@@ -123,9 +116,7 @@ class _PendingRequestsState extends State<PendingRequests> {
         } else if (direction == DismissDirection.startToEnd) {
           acceptFriendRequest(userId);
         }
-        setState(() {
-          // Update the UI
-        });
+        setState(() {});
       },
       background: Container(
         color: Colors.green,
@@ -140,9 +131,20 @@ class _PendingRequestsState extends State<PendingRequests> {
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       child: ListTile(
-        title: Text(userId), // Here you might want to display the user's name instead of userId
+        title: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: Colors.black, width: 2), // Only bottom border
+            ),
+          ),
+          child: Text(
+            username,
+            style: const TextStyle(fontSize: 22),
+          ),
+        ),
       ),
     );
   }
-}
 
+}
