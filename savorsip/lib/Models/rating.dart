@@ -1,18 +1,23 @@
 class Rating {
-  String wineID;
-  String userID;
+  String uid;
+  String wid;
   double ratingOftheUser;
   //String descriptionOftheUser;
   //String venue
 
   Rating({
-    required this.wineID,
-    required this.userID,
+    required this.wid,
+    required this.uid,
     required this.ratingOftheUser,
   });
 
   @override
   String toString() {
-    return 'User $userID rated wine $wineID with a score of: $ratingOftheUser';
+    return 'User $uid rated wine $wid with a score of: $ratingOftheUser';
   }
+
+//Add rating
+
+//update rating
+
 }
