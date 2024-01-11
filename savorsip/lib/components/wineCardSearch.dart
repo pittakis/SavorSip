@@ -78,8 +78,8 @@ class _WineCardSearchState extends State<WineCardSearch> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.wineDetails.wineType),
-                Text(widget.wineDetails.wineDescription),
+                Text('Wine Type: ${widget.wineDetails.wineType}'),
+                Text('Description: ${widget.wineDetails.wineDescription}'),
                 TextButton(
                     onPressed: () => _showRatingDialog(context),
                     child: const Row(
