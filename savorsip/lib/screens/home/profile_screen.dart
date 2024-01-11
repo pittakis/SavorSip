@@ -95,13 +95,14 @@ void signMeOut() async {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+
             _generateButton("Edit Profile ", Colors.deepPurple,
                 Icons.edit_note, () {
               navigateToEditProfileScreen(context); // Pass the context parameter
             }),
-            _generateButton("My Ratings ", Colors.deepPurple, Icons.star, () {
-              navigateToMyRatingsScreen(context); // Pass the context parameter
-            }),
+            //_generateButton("My Ratings ", Colors.deepPurple, Icons.star, () {
+            //  navigateToMyRatingsScreen(context); // Pass the context parameter
+            //}),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

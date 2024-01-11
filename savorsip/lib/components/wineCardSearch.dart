@@ -59,8 +59,8 @@ class _WineCardSearchState extends State<WineCardSearch> {
                         Row(
                           children: [
                             const Text('Your Rating: '),
-                            const Icon(Icons.star, color: Colors.deepPurple),
-                            Text('$sliderValue/5'),
+                            const Icon(Icons.star, color: Colors.amber),
+                            Text('$sliderValue'),
                           ],
                         ),
                     ],
