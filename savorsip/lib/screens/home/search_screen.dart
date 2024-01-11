@@ -29,7 +29,7 @@ List<Wine> WineList = [
       wineRating: 4.1,
       winePic: 'https://via.placeholder.com/150',
       wineDescription: 'hey',
-      wineType: 'Rosé'),
+      wineType: 'Rose'),
   Wine(
       wid: '4',
       wineName: 'Leonidas',
