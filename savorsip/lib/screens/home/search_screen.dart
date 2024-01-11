@@ -89,10 +89,16 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               _buildButtonRow(),
               _buildSliderForMinimumRating(),
-              _buildSliderForMinimumNumberOfReviews(),
+              
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
                 child: Text("Adjust the slider to select minimum rating",
+                    style: TextStyle(fontSize: 10, color: Colors.grey[700])),
+              ),
+              _buildSliderForMinimumNumberOfReviews(),
+               Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
+                child: Text("Adjust the slider to select the minimum number of user ratings",
                     style: TextStyle(fontSize: 10, color: Colors.grey[700])),
               ),
             ],
