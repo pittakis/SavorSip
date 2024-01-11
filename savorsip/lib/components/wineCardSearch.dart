@@ -5,9 +5,9 @@ import 'package:savorsip/Models/Wines.dart';
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
   final Function(double) onRate;
-  
 
-  const WineCardSearch({super.key, required this.wineDetails, required this.onRate});
+  const WineCardSearch(
+      {super.key, required this.wineDetails, required this.onRate});
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();
@@ -16,6 +16,7 @@ class WineCardSearch extends StatefulWidget {
 class _WineCardSearchState extends State<WineCardSearch> {
   bool isExpanded = false;
   double sliderValue = 1;
+  bool rated = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,20 +41,34 @@ class _WineCardSearchState extends State<WineCardSearch> {
                     children: [
                       Text(
                         widget.wineDetails.wineName,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Row(
                         children: [
+                          const Text('SS Rating: '),
                           const Icon(Icons.star, color: Colors.amber),
-                          Text("${widget.wineDetails.wineRating} / 5   "),
-                          Text("(${widget.wineDetails.numOfRatings})", style: const TextStyle(fontSize: 10),),
+                          Text("${widget.wineDetails.wineRating}/5  "),
+                          Text(
+                            "(${widget.wineDetails.numOfRatings})",
+                            style: const TextStyle(fontSize: 10),
+                          ),
                         ],
                       ),
+                      if (rated)
+                        Row(
+                          children: [
+                            const Text('Your Rating: '),
+                            const Icon(Icons.star, color: Colors.deepPurple),
+                            Text('$sliderValue/5'),
+                          ],
+                        ),
                     ],
                   ),
                 ),
                 IconButton(
-                  icon: Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
+                  icon:
+                      Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
                   onPressed: () => setState(() => isExpanded = !isExpanded),
                 ),
               ],
@@ -69,22 +84,28 @@ class _WineCardSearchState extends State<WineCardSearch> {
                   child: Text(widget.wineDetails.wineDescription),
                 ),
                 TextButton(
-                  onPressed: ()=>_showRatingDialog(context),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.star, size: 20),
-                      Text('Rate', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                    ],
-                  )
-                )
+                    onPressed: () => _showRatingDialog(context),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.star, size: 20),
+                        Text(
+                          'Rate',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
+                    ))
               ],
             ),
         ],
       ),
     );
   }
- void _showRatingDialog(BuildContext context) {
+
+  void _showRatingDialog(BuildContext context) {
+    double initialSliderValue = sliderValue; // Store the initial value
+
     showDialog(
       context: context,
       builder: (context) {
@@ -119,14 +140,22 @@ class _WineCardSearchState extends State<WineCardSearch> {
                       TextButton(
                         onPressed: () {
                           widget.onRate(sliderValue);
-                          // Handle the 'Save' action here
+                          rated = true;
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Save', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        child: const Text('Save',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Close', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        onPressed: () {
+                          // Reset the slider value to the initial value on cancel
+                          setState(() => sliderValue = initialSliderValue);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
                     ],
                   ),
