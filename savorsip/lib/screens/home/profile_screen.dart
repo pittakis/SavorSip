@@ -84,8 +84,8 @@ void signMeOut() async {
             currentUser!.firstName,
             currentUser!.lastName,
             currentUser!.username,
-            currentUser!.numOfRatings, // Assuming static for now
-            userPosition, // Assuming static for now
+            currentUser!.numOfRatings,
+            userPosition,
             currentUser!.profilePic,
             widget.userID,
           )
@@ -118,27 +118,36 @@ void signMeOut() async {
 
 Widget _generateMyProfile(String myFirstName, String myLastName, String myUserName,
     int myNumOfReviews, int myPosition, String myProfilePicUrl, String userID) {
+  ImageProvider<Object> profileImage;
+  if (Uri.tryParse(myProfilePicUrl)?.hasAbsolutePath ?? false) {
+    // If the string can be parsed as a URL and has an absolute path, use NetworkImage
+    profileImage = NetworkImage(myProfilePicUrl);
+  } else {
+    // Otherwise, assume it's an asset and use AssetImage
+    profileImage = AssetImage(myProfilePicUrl);
+  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       ListTile(
-          contentPadding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(myProfilePicUrl),
-          ),
-          title: Row(
-            children: [
-              Text(
-                "$myFirstName $myLastName ",
-                style: const TextStyle(fontSize: 18,),
-              ),
-            ],
-          ),
-          subtitle: Text(myUserName,
-              style: const TextStyle(
-                  fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
+        contentPadding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
+        leading: CircleAvatar(
+          radius: 25,
+          backgroundImage: profileImage,
+        ),
+        title: Row(
+          children: [
+            Text(
+              "$myFirstName $myLastName ",
+              style: const TextStyle(fontSize: 18,),
+            ),
+          ],
+        ),
+        subtitle: Text(myUserName,
+            style: const TextStyle(
+                fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
       ),
       const Divider(),
       const SizedBox(height: 10),
@@ -156,11 +165,10 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
               const Text("Rank:", style: TextStyle(fontSize: 16)),
               Row(
                 children: [
-                  if(myPosition>0) Text("$myPosition", style: const TextStyle(fontSize: 26)),
+                  if(myPosition > 0) Text("$myPosition", style: const TextStyle(fontSize: 26)),
                   if (getBadgeIcon(myPosition) != null) getBadgeIcon(myPosition)!,
                 ],
               ),
-              
             ],
           ),
         ],
@@ -168,16 +176,16 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
       Padding(
         padding: const EdgeInsets.fromLTRB(80, 20, 80, 20),
         child: QrImageView(
-                data: userID,
-                version: QrVersions.auto,
-                size: 200.0,
-                gapless: false,
-              )
-
+          data: userID,
+          version: QrVersions.auto,
+          size: 200.0,
+          gapless: false,
+        ),
       ),
     ],
   );
 }
+
 
 Widget _generateButton (String textLabel, Color buttonColor, IconData buttonIcon, Function handlePressing) {
   //Prepei na prosthesoume onPressedFunction
