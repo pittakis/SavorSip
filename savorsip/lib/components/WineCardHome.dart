@@ -47,7 +47,7 @@ class WineCardHome extends StatelessWidget {
           SizedBox(height: 10),
           _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
           SizedBox(height: 10),
-          _buildTimeAndPLaceDetails(rating.city, rating.dateOfRate),
+         // _buildTimeAndPLaceDetails(rating.city, rating.dateOfRate),
           SizedBox(height: 10),
           _buildRatings("${user1.firstName} rated:", rating.ratingOftheUser),
           SizedBox(height: 5),

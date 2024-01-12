@@ -236,6 +236,7 @@ class _SearchScreenState extends State<SearchScreen> {
             print("Saved rating $rating for wine ${wine.wineName}");
             //Update or add Rating
           },
+          userID: widget.userID,
         );
       },
     );

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/Wines.dart';
+import 'package:savorsip/Models/rating.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
   final Function(double) onRate;
+  final String userID;
   //variable RatingVal
 
   const WineCardSearch(
-      {super.key, required this.wineDetails, required this.onRate});
+      {super.key, required this.wineDetails, required this.onRate, required this.userID});
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();
@@ -17,12 +19,72 @@ class _WineCardSearchState extends State<WineCardSearch> {
   bool isExpanded = false;
   double sliderValue = 1;
   bool rated = false;
+  double rating = -1;
+  double ratingOftheUser = 0;
+  bool isLoading = true; // New variable to track loading state
+
+  @override
+  void initState() {
+    super.initState();
+    getRating(); // Fetch rating on init
+  }
+
+  void getRating() async {
+    try {
+      double fetchedRating = await findRating(widget.userID, widget.wineDetails.wid);
+      if (mounted) {
+        setState(() {
+          if (fetchedRating != -1) {
+            rated = true;
+            rating = fetchedRating;
+            sliderValue = fetchedRating;
+          }
+          isLoading = false; // Set loading to false once data is fetched
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false; // Set loading to false in case of an error
+        });
+      }
+      print('An error occurred: $e');
+    }
+  }
+
+void updateRating() async {
+  try {
+    await addOrUpdateRating(widget.userID, widget.wineDetails.wid, ratingOftheUser);
+    if (mounted) {
+      setState(() {
+        rated = true; // Set to true as rating now exists
+        rating = ratingOftheUser; // Update the rating with the new value
+        sliderValue = ratingOftheUser; // Update the slider value as well
+        isLoading = false; // Set loading to false as the operation is complete
+      });
+    }
+  } catch (e) {
+    if (mounted) {
+      setState(() {
+        isLoading = false; // In case of an error, also stop loading
+      });
+    }
+    print('An error occurred: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return CircularProgressIndicator(); // Show loading indicator while data is being fetched
+    }
     // Determine if the winePic is a network image or an asset
     final isNetworkImage = Uri.tryParse(widget.wineDetails.winePic)?.hasAbsolutePath ?? false;
-
+  if(rating != -1){
+    rated = true;
+    sliderValue = rating;
+  }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
@@ -71,7 +133,7 @@ class _WineCardSearchState extends State<WineCardSearch> {
                           children: [
                             const Text('Your Rating: '),
                             const Icon(Icons.star, color: Colors.amber),
-                            Text('$sliderValue'),
+                            Text('$rating'),
                           ],
                         ),
                     ],
@@ -112,6 +174,7 @@ class _WineCardSearchState extends State<WineCardSearch> {
   }
 
   void _showRatingDialog(BuildContext context) {
+
   double initialSliderValue = sliderValue; // Store the initial value
 
   showDialog(
@@ -154,7 +217,11 @@ class _WineCardSearchState extends State<WineCardSearch> {
                     TextButton(
                       onPressed: () {
                         widget.onRate(sliderValue);
-                        rated = true;
+                        //rated = true;
+                        isLoading = true;
+                        ratingOftheUser = sliderValue;
+                        updateRating();
+
                         Navigator.of(context).pop();
                       },
                       child: const Text('Save',

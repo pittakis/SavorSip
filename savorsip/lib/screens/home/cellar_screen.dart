@@ -12,19 +12,19 @@ List<Rating> myfirstratings = [
       uid: '655',
       wid: '111',
       ratingOftheUser: 4.0,
-      city: 'Athens',
+      //city: 'Athens',
     ),
     Rating(
       uid: '655',
       wid: '123',
       ratingOftheUser: 3.0,
-      city: 'Thessaloniki',
+      //city: 'Thessaloniki',
     ),
      Rating(
       uid: '557',
       wid: '123',
       ratingOftheUser: 4.0,
-      city: 'Patras',
+      //city: 'Patras',
     )
 ];
 class CellarScreen extends StatefulWidget {
