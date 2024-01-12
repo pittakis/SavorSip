@@ -112,67 +112,74 @@ class _WineCardSearchState extends State<WineCardSearch> {
   }
 
   void _showRatingDialog(BuildContext context) {
-    double initialSliderValue = sliderValue; // Store the initial value
+  double initialSliderValue = sliderValue; // Store the initial value
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Row(
-            children: [
-              Icon(Icons.star, color: Colors.amber),
-              Text('Insert your rating'),
-              Icon(Icons.star, color: Colors.amber),
-            ],
-          ),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Slider(
-                    value: sliderValue,
-                    min: 1,
-                    max: 5,
-                    divisions: 4,
-                    label: '${sliderValue.toStringAsFixed(1)}/5',
-                    thumbColor: Colors.amber,
-                    activeColor: Colors.amber,
-                    onChanged: (value) {
-                      setState(() => sliderValue = value);
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          widget.onRate(sliderValue);
-                          rated = true;
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Save',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.star, color: Colors.amber),
+            Text('Insert your rating'),
+            Icon(Icons.star, color: Colors.amber),
+          ],
+        ),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(5, (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          sliderValue = index + 1.0;
+                        });
+                      },
+                      child: Icon(
+                        Icons.star,
+                        color: index < sliderValue.toInt()
+                            ? Colors.amber
+                            : Colors.grey,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          // Reset the slider value to the initial value on cancel
-                          setState(() => sliderValue = initialSliderValue);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Close',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
+                    );
+                  }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        widget.onRate(sliderValue);
+                        rated = true;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Save',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // Reset the slider value to the initial value on cancel
+                        setState(() => sliderValue = initialSliderValue);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Close',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18)),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      );
+    },
+  );
+}
+
 }
