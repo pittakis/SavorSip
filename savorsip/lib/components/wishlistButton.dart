@@ -28,7 +28,7 @@ class _WishlistButtonState extends State<WishlistButton> {
           ),
           const SizedBox(width: 4),
           Text(
-            addedToWishlist ? "Added to Wishlist" : "Add to Wishlist ",
+            addedToWishlist ? "Added to Wishlist" : " Add to Wishlist   ",
             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
         ],
