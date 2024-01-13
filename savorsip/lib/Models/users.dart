@@ -243,10 +243,59 @@ class Users {
     String fileUrl = await ref.getDownloadURL();
 
     // Step 2: Update the profilePic field in Firestore
-    await FirebaseFirestore.instance.collection('Users').doc(this.uid).update({'profilePic': fileUrl});
+    await FirebaseFirestore.instance.collection('Users').doc(uid).update({'profilePic': fileUrl});
+  }
+
+// Function to fetch potential friends
+  static Future<List<Users>> fetchPotentialFriends(String uid) async {
+    List<Users> potentialFriends = [];
+
+    // Fetch the user's friends
+    Set<String> friendsIds = await _fetchUserFriendsIds(uid);
+
+    // Fetch all users
+    var usersSnapshot = await FirebaseFirestore.instance.collection('Users').get();
+    for (var userDoc in usersSnapshot.docs) {
+      if (!friendsIds.contains(userDoc.id) && userDoc.id != uid) {
+        Users user = Users.fromMap(userDoc.data(), userDoc.id);
+        potentialFriends.add(user);
+      }
+    }
+    
+    return potentialFriends;
+  }
+
+  // Helper function to fetch user's friends' IDs
+  static Future<Set<String>> _fetchUserFriendsIds(String uid) async {
+    Set<String> friendsIds = {};
+
+    var friendsSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('friends')
+        .get();
+
+    for (var friendDoc in friendsSnapshot.docs) {
+      friendsIds.add(friendDoc.id);
+    }
+
+    return friendsIds;
+  }
+
+// Method to send a friend request
+  static Future<void> sendFriendRequest(String currentUserId, String targetUserId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(targetUserId)
+          .collection('pendingRequests')
+          .doc(currentUserId)
+          .set({'uid': currentUserId});
+    } catch (e) {
+      print('Error sending friend request: $e');
+    }
   }
 
 
 }
-
 

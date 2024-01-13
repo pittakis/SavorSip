@@ -2,99 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/Tertiary/qr_scan_screen.dart';
 
-Image genericProfilePicture = Image.asset('savorsip/assets/images/logo.PNG');
-List<Users> potentialFriendList = [
-  Users(
-    uid: '1',
-    firstName: 'John',
-    lastName: 'Doe',
-    username: 'john_doe',
-    email: 'john@example.com',
-    numOfRatings: 10,
-    profilePic: '',
-  ),
-  Users(
-    uid: '2',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    username: 'jane_doe',
-    email: 'jane@example.com',
-    numOfRatings: 15,
-    profilePic: '',
-  ),
-  Users(
-    uid: '3',
-    firstName: 'Alice',
-    lastName: 'Smith',
-    username: 'alice_smith',
-    email: 'alice@example.com',
-    numOfRatings: 20,
-    profilePic: '',
-  ),
-  Users(
-    uid: '4',
-    firstName: 'Bob',
-    lastName: 'Johnson',
-    username: 'bob_johnson',
-    email: 'bob@example.com',
-    numOfRatings: 5,
-    profilePic: '',
-  ),
-  Users(
-    uid: '5',
-    firstName: 'Eve',
-    lastName: 'Taylor',
-    username: 'eve_taylor',
-    email: 'eve@example.com',
-    numOfRatings: 8,
-    profilePic: '',
-  ),
-  Users(
-    uid: '1',
-    firstName: 'John',
-    lastName: 'Doe',
-    username: 'john_doe',
-    email: 'john@example.com',
-    numOfRatings: 10,
-    profilePic: '',
-  ),
-  Users(
-    uid: '2',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    username: 'jane_doe',
-    email: 'jane@example.com',
-    numOfRatings: 15,
-    profilePic: '',
-  ),
-  Users(
-    uid: '3',
-    firstName: 'Alice',
-    lastName: 'Smith',
-    username: 'alice_smith',
-    email: 'alice@example.com',
-    numOfRatings: 20,
-    profilePic: '',
-  ),
-  Users(
-    uid: '4',
-    firstName: 'Bob',
-    lastName: 'Johnson',
-    username: 'bob_johnson',
-    email: 'bob@example.com',
-    numOfRatings: 5,
-    profilePic: '',
-  ),
-  Users(
-    uid: '5',
-    firstName: 'Eve',
-    lastName: 'Taylor',
-    username: 'eve_taylor',
-    email: 'eve@example.com',
-    numOfRatings: 8,
-    profilePic: '',
-  ),
-];
+Image genericProfilePicture = Image.asset('assets/images/logo.PNG');
+List<Users> potentialFriendList = [];
 
 class AddFriendsScreen extends StatefulWidget {
   final String userID;
@@ -107,11 +16,25 @@ class AddFriendsScreen extends StatefulWidget {
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
 
   Users? currentUser; // Local variable to hold the updated user data
+  String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+    _fetchPotentialFriends();
     _fetchAndSetCurrentUser();
+  }
+
+  Future<void> _fetchPotentialFriends() async {
+    try {
+      List<Users> fetchedPotentialFriends = await Users.fetchPotentialFriends(widget.userID);
+      setState(() {
+        potentialFriendList = fetchedPotentialFriends;
+      });
+    } catch (e) {
+      // Handle errors
+      print("Error fetching potential friends: $e");
+    }
   }
 
   Future<void> _fetchAndSetCurrentUser() async {
@@ -126,8 +49,18 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
     }
   }
 
+  // Add this method to filter the potential friends based on the search query
+  List<Users> _filterPotentialFriends() {
+    return potentialFriendList
+        .where((user) => user.username.toLowerCase().contains(searchQuery.toLowerCase()) ||
+                         user.firstName.toLowerCase().contains(searchQuery.toLowerCase()) ||
+                         user.lastName.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filteredFriendsList = _filterPotentialFriends();
     return Scaffold(
         appBar: AppBar(title: const Text('Add Friends')),
         body: Column(
@@ -135,9 +68,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
             _buildSearchBar(),
             Expanded(
               child: ListView.builder(
-                itemCount: potentialFriendList.length,
+                itemCount: filteredFriendsList.length,
                 itemBuilder: (context, index) {
-                  final item = potentialFriendList[index];
+                  final item = filteredFriendsList[index];
                   return _generateTile(item, index);
                 },
               ),
@@ -170,11 +103,24 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           ),
         ),
         onChanged: (value) {
+        setState(() {
+          searchQuery = value;
+        });
           print("user typed $value");
           // Update the state based on the search input
         },
       ),
     );
+  }
+
+  ImageProvider<Object> _getImageProvider(String imagePath) {
+    // Check if imagePath is a URL for a network image
+    if (Uri.tryParse(imagePath)?.hasAbsolutePath ?? false) {
+      return NetworkImage(imagePath);
+    } else {
+      // If not a network image, return AssetImage
+      return AssetImage(imagePath.isNotEmpty ? imagePath : 'assets/images/default_profile_pic.png');
+    }
   }
 
   Widget _generateTile(Users potentialFriend, int index) {
@@ -183,7 +129,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       leading: CircleAvatar(
         radius: 25,
-        backgroundImage: genericProfilePicture.image,
+        backgroundImage: _getImageProvider(potentialFriend.profilePic),
       ),
       title: Row(
         children: [
@@ -202,6 +148,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
               fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
       trailing: IconButton(
           onPressed: () {
+            Users.sendFriendRequest(widget.userID, potentialFriend.uid);
             print('Friend Request Sent to ${potentialFriend.username}');
             setState(() {
               potentialFriendList.removeAt(index);
