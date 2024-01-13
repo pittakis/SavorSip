@@ -186,6 +186,17 @@ Widget _generateFriendTile(Users userFriend, int index){
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to AddFriendsScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFriendsScreen(userID: widget.userID)),
+          );
+        },
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.add, color: Colors.white,),
+      ),
     );
   }
 }

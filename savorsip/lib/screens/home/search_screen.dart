@@ -78,17 +78,6 @@ if (mounted) {
           Expanded(child: _buildList()),
         ],
       ),
-      
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("barcode reader");
-        },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(
-          Icons.barcode_reader,
-          color: Colors.white,
-        ),
-      ),
     );
   }
 
