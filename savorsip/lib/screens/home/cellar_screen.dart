@@ -9,21 +9,21 @@ import 'package:savorsip/components/WineCardHome.dart';
 
 List<Rating> myfirstratings = [
     Rating(
-      uid: '655',
-      wid: '111',
-      ratingOftheUser: 4.0,
+      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
+      wid: 'wine3',
+      ratingOftheUser: 5.0,
       //city: 'Athens',
     ),
     Rating(
-      uid: '655',
-      wid: '123',
+      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
+      wid: 'wine1',
       ratingOftheUser: 3.0,
       //city: 'Thessaloniki',
     ),
      Rating(
-      uid: '557',
-      wid: '123',
-      ratingOftheUser: 4.0,
+      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
+      wid: 'wine10',
+      ratingOftheUser: 2.0,
       //city: 'Patras',
     )
 ];
