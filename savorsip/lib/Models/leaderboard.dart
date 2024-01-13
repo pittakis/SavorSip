@@ -47,7 +47,7 @@ static Future<void> makeLeaderboard() async {
         // Increment the user's rating count
         int currentRatingCount = leaderboardSnapshot['numberOfRating'] as int;
         transaction.update(leaderboardRef, {
-          'numberOfRating': currentRatingCount + 1,
+          'numberOfRating': numberOfRating,
         });
       }
     });

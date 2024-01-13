@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:savorsip/Models/Wines.dart';
+import 'package:savorsip/Models/users.dart';
 
 class Rating {
   final String uid;
@@ -58,6 +59,7 @@ class Rating {
       //if null .... ++ user Rating number, wine: number of ratings n ++, wine rating = (wineRating*n-1 + new rating)/n
       if(currentRate == null){
         Wine.updateWineRating(wid, -1, newRating);
+        Users.addOneMoreRating(uid: uid);
       }
       else{
         Wine.updateWineRating(wid, currentRate.ratingOftheUser, newRating);

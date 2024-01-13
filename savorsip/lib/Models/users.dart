@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
+import 'package:savorsip/Models/leaderboard.dart';
 
 
 class Users {
@@ -130,6 +131,33 @@ class Users {
       return null;
     }
   }
+  static Future<void> addOneMoreRating({required String uid}) async {
+  try {
+    var userDoc = FirebaseFirestore.instance.collection('Users').doc(uid);
+
+    // Fetch the current user document
+    var userSnapshot = await userDoc.get();
+
+    if (userSnapshot.exists) {
+      // Get the current value of numOfRatings
+      int currentNumOfRatings = userSnapshot['numOfRating'] ?? 0;
+      String uN = userSnapshot['username'] ?? "";
+
+      // Increment the numOfRatings by 1
+      int updatedNumOfRatings = currentNumOfRatings + 1;
+
+      // Update the user document in Firestore with the new numOfRatings value
+      await userDoc.update({'numOfRating': updatedNumOfRatings});
+      await LeaderboardService.updateLeaderboard(uid, uN, updatedNumOfRatings);
+    } else {
+      // Handle the case where the user document does not exist
+      // You may want to create the document or handle it differently
+    }
+  } catch (e) {
+    throw ('Error in updating numOfRatings: $e');
+  }
+}
+
 
   // Method to update existing user data in Firestore and password in Firebase Auth
   static Future<String> updateUser({
