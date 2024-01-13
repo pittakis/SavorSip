@@ -7,26 +7,7 @@ import 'package:savorsip/Models/users.dart';
 //import 'package:savorsip/components/components.dart';
 import 'package:savorsip/components/WineCardHome.dart';
 
-List<Rating> myfirstratings = [
-    Rating(
-      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
-      wid: 'wine3',
-      ratingOftheUser: 5.0,
-      //city: 'Athens',
-    ),
-    Rating(
-      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
-      wid: 'wine1',
-      ratingOftheUser: 3.0,
-      //city: 'Thessaloniki',
-    ),
-     Rating(
-      uid: 'fQ3SqpKKaDVGxI1M3jxTi8LAQ213',
-      wid: 'wine10',
-      ratingOftheUser: 2.0,
-      //city: 'Patras',
-    )
-];
+
 class CellarScreen extends StatefulWidget {
   final String userID;
   const CellarScreen({Key? key, required this.userID}) : super(key: key);
@@ -36,6 +17,7 @@ class CellarScreen extends StatefulWidget {
 }
 
 class _CellarScreenState extends State<CellarScreen> {
+  late Future<List<Rating>> myfriendsRatings;
   late Future<List<Map<String, dynamic>>> leaderboard;
   
 
@@ -43,6 +25,7 @@ class _CellarScreenState extends State<CellarScreen> {
   @override
   void initState() {
     super.initState();
+     myfriendsRatings = Rating.fetchFriendsRatings(widget.userID);
     leaderboard = LeaderboardService.getLeaderboard();
   }
 
@@ -100,13 +83,26 @@ Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Cellar")),
-      body: ListView.builder(
-      itemCount: myfirstratings.length,
-      itemBuilder: (context, index) {
-        Rating currentRating = myfirstratings[index];
-        return WineCardHome(rating: currentRating);
-      },
-    ),
+      body: FutureBuilder<List<Rating>>(
+        future: myfriendsRatings,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text("No ratings found"));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                Rating currentRating = snapshot.data![index];
+                return WineCardHome(rating: currentRating);
+              },
+            );
+          }
+        },
+      ),
       drawer: Drawer(
         child: Column(
           children: [

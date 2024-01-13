@@ -119,4 +119,48 @@ class Rating {
 
     return userRatings;
   }
+
+ // Function to get ratings of all user's friends
+  static Future<List<Rating>> fetchFriendsRatings(String uid) async {
+    List<Rating> friendsRatings = [];
+
+    try {
+      // Fetch user's friends
+      var friendsSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .collection('friends')
+          .get();
+
+      // Iterate over each friend and fetch their ratings
+      for (var friendDoc in friendsSnapshot.docs) {
+        String friendId = friendDoc.id;
+        var ratingsSnapshot = await FirebaseFirestore.instance
+            .collection('Ratings')
+            .where('uid', isEqualTo: friendId)
+            .get();
+
+        for (var ratingDoc in ratingsSnapshot.docs) {
+          var data = ratingDoc.data();
+          var ratingTime = (data['ratingTime'] as Timestamp).toDate();
+
+          Rating rating = Rating(
+            uid: friendId,
+            wid: data['wid'],
+            ratingOftheUser: data['ratingOftheUser'],
+            ratingTime: ratingTime,
+            latitude: data['latitude'] as double?,
+            longitude: data['longitude'] as double?,
+            city: data['city'] as String?,
+            country: data['country'] as String?,
+          );
+          friendsRatings.add(rating);
+        }
+      }
+    } catch (e) {
+      print('Error fetching friends ratings: $e');
+    }
+
+    return friendsRatings;
+  }
 }

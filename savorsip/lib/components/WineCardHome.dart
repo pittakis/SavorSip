@@ -8,57 +8,75 @@ class WineCardHome extends StatelessWidget {
 
   WineCardHome({super.key, required this.rating});
 
-  //Here there is a function that can fetch a users object based on the rating.uid paramater
-  final Users user1 = Users(
-    uid: '654',
-    firstName: 'James',
-    lastName: 'McGill',
-    username: 'saulgoodman',
-    email: 'saulgoodman@gmail.com',
-    profilePic: 'https://via.placeholder.com/150',
-    numOfRatings: 23 ,
-  );
-
-  //Here there is a functiont that can return a wine object based on the rating.wid parameter
-  final Wine wine1 = Wine(
-    wid: '678',
-    wineName:'Moschato',
-    numOfRatings: 55,
-    wineRating: 4.3,
-    wineDescription: "Sweet and fruity",
-    winePic:'https://via.placeholder.com/150',
-    wineType: 'Rose',
-  );
-
   @override
- Widget build(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(10),
-    child: Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.deepPurple,
-        borderRadius: BorderRadius.circular(10),
+  Widget build(BuildContext context) {
+    return FutureBuilder<Users>(
+      future: Users.fetchUserData(rating.uid),
+      builder: (context, userSnapshot) {
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (userSnapshot.hasError) {
+          return Text('Error: ${userSnapshot.error}');
+        } else if (!userSnapshot.hasData) {
+          return Text('User not found');
+        } else {
+          Users user1 = userSnapshot.data!;
+          return FutureBuilder<Wine?>(
+            future: Wine.fetchWineByWid(rating.wid),
+            builder: (context, wineSnapshot) {
+              if (wineSnapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (wineSnapshot.hasError) {
+                return Text('Error: ${wineSnapshot.error}');
+              } else if (!wineSnapshot.hasData) {
+                return Text('Wine not found');
+              } else {
+                Wine wine1 = wineSnapshot.data!;
+                return _buildCard(user1, wine1, context);
+              }
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildCard(Users user, Wine wine1, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.deepPurple,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _generateFriendTile(user),
+            SizedBox(height: 10),
+            _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
+            SizedBox(height: 10),
+            // _buildTimeAndPLaceDetails(rating.city, rating.dateOfRate),
+            SizedBox(height: 10),
+            _buildRatings("${user.firstName} rated:", rating.ratingOftheUser),
+            SizedBox(height: 5),
+            _buildRatings("SS Rating:", wine1.wineRating),
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _generateFriendTile(user1),
-          SizedBox(height: 10),
-          _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
-          SizedBox(height: 10),
-         // _buildTimeAndPLaceDetails(rating.city, rating.dateOfRate),
-          SizedBox(height: 10),
-          _buildRatings("${user1.firstName} rated:", rating.ratingOftheUser),
-          SizedBox(height: 5),
-          _buildRatings("SavorSip Rating", wine1.wineRating),
-        ],
-      ),
-    ),
-  );
-}
+    );
+  }
 
 Widget _buildHeader(String imageUrl, String wineName, String description) {
+  // Determine if the imageUrl is a network image or an asset image
+  final ImageProvider imageProvider;
+  if (imageUrl.startsWith('http') || imageUrl.startsWith('https')) {
+    imageProvider = NetworkImage(imageUrl);
+  } else {
+    imageProvider = AssetImage(imageUrl);
+  }
+
   return Row(
     children: [
       Container(
@@ -67,7 +85,7 @@ Widget _buildHeader(String imageUrl, String wineName, String description) {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: imageProvider,
             fit: BoxFit.cover,
           ),
         ),
@@ -92,6 +110,7 @@ Widget _buildHeader(String imageUrl, String wineName, String description) {
     ],
   );
 }
+
 
 Widget _buildTimeAndPLaceDetails(String cityName, DateTime dateAndTime) {
   return Row(
