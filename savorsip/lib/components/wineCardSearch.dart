@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
+import 'package:savorsip/components/wishlistButton.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
@@ -207,19 +208,32 @@ Future<bool> _checkAndRequestLocationPermission() async {
                 children: [
                   Text('Wine Type: ${widget.wineDetails.wineType}'),
                   Text('Description: ${widget.wineDetails.wineDescription}'),
-                  TextButton(
-                    onPressed: () => _showRatingDialog(context),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.star, size: 20),
-                        Text(
-                          'Rate',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.deepPurple, // Set the background color
+                          ),
+                          onPressed: () => _showRatingDialog(context),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.star, size: 20, color: Colors.white,),
+                              Text(
+                                'Rate',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      WishlistButton(),
+                    ],
                   ),
                 ],
               ),
