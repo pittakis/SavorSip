@@ -31,9 +31,11 @@ void initState() {
 
   Future<void> _fetchUserPosition() async {
     int position = await LeaderboardService.getUserPosition(widget.userID);
-    setState(() {
+    if (mounted) {
+  setState(() {
       userPosition = position;
     });
+  }
   }
 
   Future<void> _fetchAndSetCurrentUser() async {

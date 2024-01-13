@@ -92,11 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
             _currentIndex = index;
           });
           // Scroll to the corresponding page
+           _pageController.jumpToPage(index);
+          /*
           _pageController.animateToPage(
             index,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-          );
+          );*/
         },
         selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,

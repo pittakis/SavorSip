@@ -42,10 +42,13 @@ class _SearchScreenState extends State<SearchScreen> {
     List<Wine> fetchedWines = wineSnapshot.docs
         .map((doc) => Wine.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
-    setState(() {
+    
+if (mounted) {
+  setState(() {
       allWines = fetchedWines;
       applyFilters(); // Apply filters initially
     });
+}
   }
 
   @override
