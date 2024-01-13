@@ -1,17 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Rating {
   final String uid;
   final String wid;
   double ratingOftheUser;
   DateTime ratingTime;
+  double? latitude; // Add latitude
+  double? longitude; // Add longitude
+  String? city; // Add city
+  String? country; // Add country
 
   Rating({
     required this.wid,
     required this.uid,
     required this.ratingOftheUser,
     DateTime? ratingTime,
-  }):ratingTime = ratingTime ?? DateTime.now();
+    this.latitude,
+    this.longitude,
+    this.city,
+    this.country,
+  }) : ratingTime = ratingTime ?? DateTime.now();
 
   // Fetch a rating from Firestore
   static Future<Rating?> fetchRating(String uid, String wid) async {
@@ -23,37 +33,48 @@ class Rating {
     if (!doc.exists) {
       return null;
     }
-  var data = doc.data()!;
-  var ratingTime = (data['ratingTime'] as Timestamp).toDate();
+
+    var data = doc.data()!;
+    var ratingTime = (data['ratingTime'] as Timestamp).toDate();
+
     return Rating(
       uid: uid,
       wid: wid,
-      ratingOftheUser: doc.data()!['ratingOftheUser'],
+      ratingOftheUser: data['ratingOftheUser'],
       ratingTime: ratingTime,
+      latitude: data['latitude'] as double?,
+      longitude: data['longitude'] as double?,
+      city: data['city'] as String?,
+      country: data['country'] as String?,
     );
   }
 
-static Future<void> updateRating(String uid, String wid, double newRating) async {
-  try {
-    String docId = '${uid}-$wid';
-    //print('Updating/Creating rating with doc ID: $docId');
-    await FirebaseFirestore.instance
-        .collection('Ratings')
-        .doc(docId)
-        .set({
-          'uid': uid,
-          'wid': wid,
-          'ratingOftheUser': newRating,
-          'ratingTime': DateTime.now(),
-        }, SetOptions(merge: true));
-    //print('Rating updated/created successfully.');
-  } catch (e) {
-    print('Error updating/creating rating: $e');
-    // Handle the error appropriately
+  static Future<void> updateRating(
+      String uid, String wid, double newRating) async {
+    try {
+      // Get current location
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+        print(position);
+      // Get address information using geocoding
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      String docId = '$uid-$wid';
+      await FirebaseFirestore.instance.collection('Ratings').doc(docId).set({
+        'uid': uid,
+        'wid': wid,
+        'ratingOftheUser': newRating,
+        'ratingTime': DateTime.now(),
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+        'city': placemarks[0].locality,
+        'country': placemarks[0].country,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print('Error updating/creating rating: $e');
+    }
   }
-}
-
-
 
 // List all ratings and corresponding wines for a specific user
   static Future<List<Map<String, dynamic>>> listRatings(String uid) async {
@@ -75,7 +96,8 @@ static Future<void> updateRating(String uid, String wid, double newRating) async
       if (wineSnapshot.exists) {
         userRatings.add({
           'wineDetails': wineSnapshot.data(), // Details of the wine
-          'userRating': ratingDoc.data()['ratingOftheUser'] // User's rating for the wine
+          'userRating':
+              ratingDoc.data()['ratingOftheUser'] // User's rating for the wine
         });
       }
     }

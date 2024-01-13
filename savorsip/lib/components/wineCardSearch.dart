@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
 
@@ -64,6 +65,7 @@ class _WineCardSearchState extends State<WineCardSearch> {
 
 void updateRating() async {
   try {
+    if(await _checkAndRequestLocationPermission()){
     await Rating.updateRating(
         widget.userID, widget.wineDetails.wid, ratingOftheUser);
     // Update the local state to reflect the new rating immediately
@@ -75,13 +77,46 @@ void updateRating() async {
       });
     }
     // Optionally, you can fetch the latest rating again to ensure consistency
-    getRating();
+    getRating();}
   } catch (e) {
     if (mounted) {
       setState(() {});
     }
     print('An error occurred: $e');
   }
+  
+}
+
+Future<bool> _checkAndRequestLocationPermission() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Check if location services are enabled
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled, request the user to enable it.
+    return Future.error('Location services are disabled.');
+  }
+
+  // Check location permission
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try requesting permissions again
+      return Future.error('Location permissions are denied');
+    }
+  }
+  
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately.
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  } 
+
+  // When we reach here, permissions are granted and we can continue accessing the position of the device.
+  // You can call your method to get the location here.
+  return true;
 }
 
 
