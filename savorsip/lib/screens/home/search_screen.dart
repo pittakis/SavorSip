@@ -54,12 +54,13 @@ if (mounted) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(
-      //  title: const Text('Search'),
-      //),
+      appBar: AppBar(
+        //title: const Text('Search'),
+        toolbarHeight: 20,
+      ),
       body: Column(
         children: [
-          const SizedBox(height: 50,),
+          //const SizedBox(height: 50,),
           _buildSearchBar(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -125,23 +126,49 @@ Widget _buildSearchBar() {
 
   Widget _buildFilters() {
     return Column(
+
       children: [
         // Toggle buttons for wine types
-        _buildButtonRow(),
-        const SizedBox(height: 8),
-        const Text('Minimum Rating'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildButtonRow(),
+            ElevatedButton(
+              onPressed: applyFilters,
+              style: ElevatedButton.styleFrom(
+                elevation: 4, // Adjust the elevation as needed
+                //padding: EdgeInsets.all(12), // Adjust the padding as needed
+              ),
+              child: const Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text('Apply',
+                        style: TextStyle(
+                            fontSize: 14)),
+                  ), // Adjust the font size as needed
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text('Filters',
+                        style: TextStyle(
+                            fontSize: 14)),
+                  ), // Adjust the font size as needed
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        const Text('Minimum SavorSip Rating',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
         // Slider for minimum rating
         _buildSliderForMinimumRating(),
-        const Text('Minimum No of Ratings'),
+        const Text('Minimum No. of Ratings',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
         // Slider for minimum number of reviews
         _buildSliderForMinimumNumberOfReviews(),
         // Checkbox for "Only Show Wines I have rated"
         _buildShowOnlyMyRatingsCheckbox(),
         // Apply Filters button
-        ElevatedButton(
-          onPressed: applyFilters,
-          child: const Text('Apply Filters'),
-        ),
+        
       ],
     );
   }
@@ -158,16 +185,31 @@ Widget _buildSearchBar() {
       },
       children: const <Widget>[
         Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text('Red Wines'),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+           child: Column(
+            children: [
+              Text('Red'),
+              Text('Wines'),
+            ],
+          ),
         ),
         Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text('Rosé Wines'),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+          child: Column(
+            children: [
+              Text('Rosé'),
+              Text('Wines'),
+            ],
+          ),
         ),
         Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text('White Wines'),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+          child: Column(
+            children: [
+              Text('White'),
+              Text('Wines'),
+            ],
+          ),
         ),
       ],
     );

@@ -77,44 +77,49 @@ void signMeOut() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-        if (currentUser != null) // Check if currentUser is not null
-          _generateMyProfile(
-            currentUser!.firstName,
-            currentUser!.lastName,
-            currentUser!.username,
-            currentUser!.numOfRatings,
-            userPosition,
-            currentUser!.profilePic,
-            widget.userID,
-          )
-        else
-          const CircularProgressIndicator(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-
-            _generateButton("Edit Profile ", Colors.deepPurple,
-                Icons.edit_note, () {
-              navigateToEditProfileScreen(context); // Pass the context parameter
-            }),
-            //_generateButton("My Ratings ", Colors.deepPurple, Icons.star, () {
-            //  navigateToMyRatingsScreen(context); // Pass the context parameter
-            //}),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(),
-                    _generateButton ("Sign Out ", Colors.red[400]!, Icons.exit_to_app, signMeOut),
-                  ],
-                ),
-              ],
+      appBar: AppBar(
+        toolbarHeight: 40,
+      ),
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+          if (currentUser != null) // Check if currentUser is not null
+            _generateMyProfile(
+              currentUser!.firstName,
+              currentUser!.lastName,
+              currentUser!.username,
+              currentUser!.numOfRatings,
+              userPosition,
+              currentUser!.profilePic,
+              widget.userID,
             )
-          ],
+          else
+            const CircularProgressIndicator(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+              
+              _generateButton("Edit Profile ", Colors.deepPurple,
+                  Icons.edit_note, () {
+                navigateToEditProfileScreen(context); // Pass the context parameter
+              }),
+              //_generateButton("My Ratings ", Colors.deepPurple, Icons.star, () {
+              //  navigateToMyRatingsScreen(context); // Pass the context parameter
+              //}),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(),
+                      _generateButton ("Sign Out ", Colors.red[400]!, Icons.exit_to_app, signMeOut),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ));
   }
 }
@@ -130,62 +135,64 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
     profileImage = AssetImage(myProfilePicUrl);
   }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      ListTile(
-        contentPadding: const EdgeInsets.fromLTRB(16, 32, 16, 8),
-        leading: CircleAvatar(
-          radius: 25,
-          backgroundImage: profileImage,
-        ),
-        title: Row(
-          children: [
-            Text(
-              "$myFirstName $myLastName ",
-              style: const TextStyle(fontSize: 18,),
-            ),
-          ],
-        ),
-        subtitle: Text(myUserName,
-            style: const TextStyle(
-                fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
-      ),
-      const Divider(),
-      const SizedBox(height: 10),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              const Text("Total Reviews:", style: TextStyle(fontSize: 16)),
-              Text("$myNumOfReviews", style: const TextStyle(fontSize: 26)),
-            ],
+  return SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ListTile(
+          contentPadding: const EdgeInsets.fromLTRB(20, 16, 16, 8),
+          leading: CircleAvatar(
+            radius: 28,
+            backgroundImage: profileImage,
           ),
-          Column(
+          title: Row(
             children: [
-              const Text("Rank:", style: TextStyle(fontSize: 16)),
-              Row(
-                children: [
-                  if(myPosition > 0) Text("$myPosition", style: const TextStyle(fontSize: 26)),
-                  if (getBadgeIcon(myPosition) != null) getBadgeIcon(myPosition)!,
-                ],
+              Text(
+                "$myFirstName $myLastName ",
+                style: const TextStyle(fontSize: 22,),
               ),
             ],
           ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(80, 20, 80, 20),
-        child: QrImageView(
-          data: userID,
-          version: QrVersions.auto,
-          size: 200.0,
-          gapless: false,
+          subtitle: Text(myUserName,
+              style: const TextStyle(
+                  fontSize: 18, color: Color.fromARGB(255, 124, 112, 112))),
         ),
-      ),
-    ],
+        const Divider(),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                const Text("Total Reviews:", style: TextStyle(fontSize: 16)),
+                Text("$myNumOfReviews", style: const TextStyle(fontSize: 24)),
+              ],
+            ),
+            Column(
+              children: [
+                const Text("Rank:", style: TextStyle(fontSize: 16)),
+                Row(
+                  children: [
+                    if(myPosition > 0) Text("$myPosition", style: const TextStyle(fontSize: 24)),
+                    if (getBadgeIcon(myPosition) != null) getBadgeIcon(myPosition)!,
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(80, 20, 80, 20),
+          child: QrImageView(
+            data: userID,
+            version: QrVersions.auto,
+            size: 200.0,
+            gapless: false,
+          ),
+        ),
+      ],
+    ),
   );
 }
 
