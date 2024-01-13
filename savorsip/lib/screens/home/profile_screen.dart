@@ -7,6 +7,7 @@ import 'package:savorsip/screens/authentication/login.dart';
 import 'package:savorsip/screens/secondary/edit_profile.dart';
 import 'package:savorsip/screens/secondary/my_ratings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:savorsip/screens/secondary/wishlist.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userID;
@@ -59,10 +60,10 @@ void signMeOut() async {
           );
   }
 
-  void navigateToMyRatingsScreen(BuildContext context) {
+  void navigateToWishlistScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyRatingsScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(builder: (context) => WishlistScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
     );
   }
 
@@ -106,9 +107,9 @@ void signMeOut() async {
                   Icons.edit_note, () {
                 navigateToEditProfileScreen(context); // Pass the context parameter
               }),
-              //_generateButton("My Ratings ", Colors.deepPurple, Icons.star, () {
-              //  navigateToMyRatingsScreen(context); // Pass the context parameter
-              //}),
+              _generateButton("Wishlist ", Colors.deepPurple, Icons.star, () {
+                navigateToWishlistScreen(context); // Pass the context parameter
+              }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

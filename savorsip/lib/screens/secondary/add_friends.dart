@@ -126,7 +126,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Widget _generateTile(Users potentialFriend, int index) {
     //Icon? userBadge = getBadgeIcon(userFriend.leaderboardPosition);
     return ListTile(
-      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
       leading: CircleAvatar(
         radius: 25,
         backgroundImage: _getImageProvider(potentialFriend.profilePic),
@@ -136,7 +136,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           Text(
             '${potentialFriend.firstName} ${potentialFriend.lastName}',
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
             ),
           ),
           //if (userBadge != null) userBadge, // Display badge if not null
@@ -145,7 +145,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       ),
       subtitle: Text(potentialFriend.username,
           style: const TextStyle(
-              fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
+              fontSize: 12, color: Color.fromARGB(255, 124, 112, 112))),
       trailing: IconButton(
           onPressed: () {
             Users.sendFriendRequest(widget.userID, potentialFriend.uid);
