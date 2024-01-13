@@ -9,7 +9,10 @@ class WineCardSearch extends StatefulWidget {
   //variable RatingVal
 
   const WineCardSearch(
-      {super.key, required this.wineDetails, required this.onRate, required this.userID});
+      {super.key,
+      required this.wineDetails,
+      required this.onRate,
+      required this.userID});
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();
@@ -31,43 +34,46 @@ class _WineCardSearchState extends State<WineCardSearch> {
 
   void getRating() async {
     try {
-      double fetchedRating = await findRating(widget.userID, widget.wineDetails.wid);
-      if (mounted) {
+      print(
+          "Fetching rating for ${widget.userID} and ${widget.wineDetails.wid}");
+      Rating? fetchedRating =
+          await Rating.fetchRating(widget.userID, widget.wineDetails.wid);
+      print("Fetched rating: $fetchedRating");
+      if (fetchedRating != null && mounted) {
         setState(() {
-          if (fetchedRating != -1) {
-            rated = true;
-            rating = fetchedRating;
-            sliderValue = fetchedRating;
-          }
-          isLoading = false; // Set loading to false once data is fetched
+          rated = true;
+          rating = fetchedRating.ratingOftheUser;
+          sliderValue = fetchedRating.ratingOftheUser;
+          isLoading = false;
         });
+      } else {
+        setState(() => isLoading = false);
       }
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false; // Set loading to false in case of an error
-        });
-      }
       print('An error occurred: $e');
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
 void updateRating() async {
   try {
-    await addOrUpdateRating(widget.userID, widget.wineDetails.wid, ratingOftheUser);
+    await Rating.updateRating(
+        widget.userID, widget.wineDetails.wid, ratingOftheUser);
+    // Update the local state to reflect the new rating immediately
     if (mounted) {
       setState(() {
-        rated = true; // Set to true as rating now exists
-        rating = ratingOftheUser; // Update the rating with the new value
-        sliderValue = ratingOftheUser; // Update the slider value as well
-        isLoading = false; // Set loading to false as the operation is complete
+        rated = true;
+        rating = ratingOftheUser;
+        sliderValue = ratingOftheUser;
       });
     }
+    // Optionally, you can fetch the latest rating again to ensure consistency
+    getRating();
   } catch (e) {
     if (mounted) {
-      setState(() {
-        isLoading = false; // In case of an error, also stop loading
-      });
+      setState(() {});
     }
     print('An error occurred: $e');
   }
@@ -80,11 +86,14 @@ void updateRating() async {
       return CircularProgressIndicator(); // Show loading indicator while data is being fetched
     }
     // Determine if the winePic is a network image or an asset
-    final isNetworkImage = Uri.tryParse(widget.wineDetails.winePic)?.hasAbsolutePath ?? false;
-  if(rating != -1){
-    rated = true;
-    sliderValue = rating;
-  }
+    final isNetworkImage =
+        Uri.tryParse(widget.wineDetails.winePic)?.hasAbsolutePath ?? false;
+
+    if (rating != -1) {
+      rated = true;
+      sliderValue = rating;
+    }
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
@@ -128,12 +137,11 @@ void updateRating() async {
                           ),
                         ],
                       ),
-                      if (rated)
                         Row(
                           children: [
                             const Text('Your Rating: '),
                             const Icon(Icons.star, color: Colors.amber),
-                            Text('$rating'),
+                            rated ? Text('$rating'): const Text('-')
                           ],
                         ),
                     ],
@@ -147,13 +155,18 @@ void updateRating() async {
               ],
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.only(left: 18.0),
+          ),
           if (isExpanded)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Wine Type: ${widget.wineDetails.wineType}'),
-                Text('Description: ${widget.wineDetails.wineDescription}'),
-                TextButton(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Wine Type: ${widget.wineDetails.wineType}'),
+                  Text('Description: ${widget.wineDetails.wineDescription}'),
+                  TextButton(
                     onPressed: () => _showRatingDialog(context),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -165,8 +178,10 @@ void updateRating() async {
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ],
-                    ))
-              ],
+                    ),
+                  ),
+                ],
+              ),
             ),
         ],
       ),
@@ -174,79 +189,77 @@ void updateRating() async {
   }
 
   void _showRatingDialog(BuildContext context) {
+    double initialSliderValue = sliderValue; // Store the initial value
 
-  double initialSliderValue = sliderValue; // Store the initial value
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.star, color: Colors.amber),
+              Text('Insert your rating'),
+              Icon(Icons.star, color: Colors.amber),
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            sliderValue = index + 1.0;
+                          });
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: index < sliderValue.toInt()
+                              ? Colors.amber
+                              : Colors.grey,
+                        ),
+                      );
+                    }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          widget.onRate(sliderValue);
+                          //rated = true;
+                          isLoading = true;
+                          ratingOftheUser = sliderValue;
+                          updateRating();
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.star, color: Colors.amber),
-            Text('Insert your rating'),
-            Icon(Icons.star, color: Colors.amber),
-          ],
-        ),
-        content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(5, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          sliderValue = index + 1.0;
-                        });
-                      },
-                      child: Icon(
-                        Icons.star,
-                        color: index < sliderValue.toInt()
-                            ? Colors.amber
-                            : Colors.grey,
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Save',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
-                    );
-                  }),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        widget.onRate(sliderValue);
-                        //rated = true;
-                        isLoading = true;
-                        ratingOftheUser = sliderValue;
-                        updateRating();
-
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Save',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Reset the slider value to the initial value on cancel
-                        setState(() => sliderValue = initialSliderValue);
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Close',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
-      );
-    },
-  );
-}
-
+                      TextButton(
+                        onPressed: () {
+                          // Reset the slider value to the initial value on cancel
+                          setState(() => sliderValue = initialSliderValue);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 }

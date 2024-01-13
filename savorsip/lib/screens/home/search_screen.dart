@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/Wines.dart';
+import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/components/wineCardSearch.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -13,10 +14,10 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Wine> allWines = []; // List to store all fetched wines
-  List<Wine> filteredWines = []; // List to store filtered wines
-  double _sliderValue1 = 0;
-  double _sliderValue2 = 0;
-  List<bool> isSelected = [true, true, true]; // Red, Rose, White
+  List<Wine> filteredWines = [];
+  double sliderValueMinRating = 0;
+  double sliderValueMinRatingCount = 0;
+  List<bool> isSelectedType = [true, true, true]; // Red, Rose, White
   bool filtersVisible = false;
   bool showOnlyMyRatings = false;
 
@@ -27,41 +28,16 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> fetchWines() async {
-    QuerySnapshot wineSnapshot = await FirebaseFirestore.instance.collection('Wines').get();
-    List<Wine> fetchedWines = wineSnapshot.docs.map((doc) => Wine.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    QuerySnapshot wineSnapshot =
+        await FirebaseFirestore.instance.collection('Wines').get();
+    List<Wine> fetchedWines = wineSnapshot.docs
+        .map((doc) => Wine.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+        .toList();
     setState(() {
       allWines = fetchedWines;
-      applyFilters();
+      applyFilters(); // Apply filters initially
     });
   }
-
-  void applyFilters() async{
-    List<Wine> tempWines = allWines;
-
-  if (showOnlyMyRatings) {
-    // Fetch user's ratings from Firestore
-    var userRatingsSnapshot = await FirebaseFirestore.instance
-        .collection('Ratings') // Assuming 'UserRatings' is the collection name
-        .where('uid', isEqualTo: widget.userID)
-        .get();
-
-    var userRatedWineIds = userRatingsSnapshot.docs.map((doc) => doc.data()['wid'] as String).toSet();
-
-    // Filter wines to include only those that the user has rated
-    tempWines = tempWines.where((wine) => userRatedWineIds.contains(wine.wid)).toList();
-  }
-
-    // Filter by wine type
-    if (!isSelected[0]) tempWines = tempWines.where((wine) => wine.wineType != 'Red').toList();
-    if (!isSelected[1]) tempWines = tempWines.where((wine) => wine.wineType != 'Rose').toList();
-    if (!isSelected[2]) tempWines = tempWines.where((wine) => wine.wineType != 'White').toList();
-
-    // Filter by rating and number of ratings
-  tempWines = tempWines.where((wine) => wine.wineRating >= _sliderValue1 && wine.numOfRatings >= _sliderValue2).toList();
-
-  setState(() => filteredWines = tempWines);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,61 +52,16 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Filters',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               IconButton(
                 icon: Icon(
-                  filtersVisible ? Icons.expand_less : Icons.expand_more),
-                onPressed: () => setState(() => filtersVisible = !filtersVisible),
+                    filtersVisible ? Icons.expand_less : Icons.expand_more),
+                onPressed: () =>
+                    setState(() => filtersVisible = !filtersVisible),
               ),
             ],
           ),
-          if (filtersVisible) 
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Checkbox(
-                      value:
-                          showOnlyMyRatings, // Maintain a boolean variable for the checkbox state
-                      onChanged: (value) {
-                        setState(() {
-                          showOnlyMyRatings = value!;
-                          if (showOnlyMyRatings) {
-                            print("Only show my ratings");
-
-                          } else {
-                            print('Show all');
-                          }
-                        });
-                      },
-                    ),
-                    const Text("Only Show Wines I have rated"),
-                  ],
-                ),
-                _buildButtonRow(),
-                _buildSliderForMinimumRating(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
-                  child: Text("Adjust the slider to select minimum rating",
-                      style: TextStyle(fontSize: 10, color: Colors.grey[700])),
-                ),
-                _buildSliderForMinimumNumberOfReviews(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
-                  child: Text(
-                      "Adjust the slider to select the minimum number of user ratings",
-                      style: TextStyle(fontSize: 10, color: Colors.grey[700])),
-                ),
-                 ElevatedButton(
-                  onPressed: () {
-                    applyFilters(); // Call the applyFilters method when the button is pressed
-                    setState(() => filtersVisible = !filtersVisible);
-                  },
-                  child: const Text('Apply Filters'),
-                ),
-              ],
-            ),
+          if (filtersVisible) _buildFilters(),
           Expanded(child: _buildList()),
         ],
       ),
@@ -166,12 +97,50 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  Widget _buildList() {
+    return ListView.builder(
+      itemCount: filteredWines.length, // Use 'filteredWines' for itemCount
+      itemBuilder: (context, index) {
+        final wine = filteredWines[index]; // Use 'filteredWines' for list items
+        return WineCardSearch(
+          key: ObjectKey(wine), // Unique key for each WineCardSearch
+          wineDetails: wine,
+          onRate: (double rating) {
+            print("Saved rating $rating for wine ${wine.wineName}");
+          },
+          userID: widget.userID,
+        );
+      },
+    );
+  }
+
+  Widget _buildFilters() {
+    return Column(
+      children: [
+        // Toggle buttons for wine types
+        _buildButtonRow(),
+        // Slider for minimum rating
+        _buildSliderForMinimumRating(),
+        // Slider for minimum number of reviews
+        _buildSliderForMinimumNumberOfReviews(),
+        // Checkbox for "Only Show Wines I have rated"
+        _buildShowOnlyMyRatingsCheckbox(),
+        // Apply Filters button
+        ElevatedButton(
+          onPressed: applyFilters,
+          child: const Text('Apply Filters'),
+        ),
+      ],
+    );
+  }
+
+// Implement _buildButtonRow, _buildSliderForMinimumRating, _buildSliderForMinimumNumberOfReviews, and _buildShowOnlyMyRatingsCheckbox methods similar to your previous code
   Widget _buildButtonRow() {
     return ToggleButtons(
-      isSelected: isSelected,
+      isSelected: isSelectedType,
       onPressed: (int index) {
         setState(() {
-          isSelected[index] = !isSelected[index];
+          isSelectedType[index] = !isSelectedType[index];
           // Add your search filter logic here based on the state of isSelected
         });
       },
@@ -194,15 +163,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSliderForMinimumRating() {
     return Slider(
-      value: _sliderValue1,
+      value: sliderValueMinRating,
       min: 0,
-      max: 4.5,
-      divisions: 9,
-      label: _sliderValue1.toStringAsFixed(1),
+      max: 5,
+      divisions: 10,
+      label: sliderValueMinRating.toStringAsFixed(1),
       onChanged: (double value) {
-        print("Slider bar set to $value");
         setState(() {
-          _sliderValue1 = value;
+          sliderValueMinRating = value;
+          applyFilters();
         });
       },
     );
@@ -210,52 +179,67 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSliderForMinimumNumberOfReviews() {
     return Slider(
-      value: _sliderValue2,
+      value: sliderValueMinRatingCount,
       min: 0,
       max: 100,
-      divisions: 10,
-      label: _sliderValue2.toStringAsFixed(1),
+      divisions: 20,
+      label: sliderValueMinRatingCount.toStringAsFixed(0),
       onChanged: (double value) {
-        print("Slider bar set to $value");
         setState(() {
-          _sliderValue2 = value;
+          sliderValueMinRatingCount = value;
+          applyFilters();
         });
       },
     );
   }
 
-  Widget _buildList() {
-    return ListView.builder(
-      itemCount: filteredWines.length, // Use 'filteredWines' for itemCount
-      itemBuilder: (context, index) {
-        final wine = filteredWines[index]; // Use 'filteredWines' for list items
-        return WineCardSearch(
-          wineDetails: wine,
-          onRate: (double rating) {
-            // Handle rating logic
-            print("Saved rating $rating for wine ${wine.wineName}");
-            //Update or add Rating
+  Widget _buildShowOnlyMyRatingsCheckbox() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Checkbox(
+          value: showOnlyMyRatings,
+          onChanged: (bool? newValue) {
+            setState(() {
+              showOnlyMyRatings = newValue!;
+              applyFilters();
+            });
           },
-          userID: widget.userID,
-        );
-      },
+        ),
+        const Text("Only Show Wines I have rated"),
+      ],
     );
   }
-}
 
-Icon? getBadgeIcon(int position) {
-  if (position == 1) {
-    return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
-  } else if (position == 2) {
-    return const Icon(Icons.wine_bar_sharp,
-        color: Color.fromARGB(255, 117, 116, 114));
-  } else if (position == 3) {
-    return const Icon(Icons.wine_bar_sharp,
-        color: Color.fromARGB(255, 166, 102, 72));
-  } else if (position <= 20) {
-    return const Icon(Icons.check_circle,
-        color: Color.fromARGB(255, 203, 81, 81));
-  } else {
-    return null;
+  void applyFilters() async {
+    List<Wine> tempFilteredWines = List.from(allWines);
+
+    if (showOnlyMyRatings) {
+      var userRatedWines = await Rating.listRatings(widget.userID);
+      Set<String> userRatedWineIds = userRatedWines
+          .map((rating) => rating['wineDetails']['wid'] as String)
+          .toSet();
+
+      tempFilteredWines = tempFilteredWines
+          .where((wine) => userRatedWineIds.contains(wine.wid))
+          .toList();
+    }
+    tempFilteredWines = tempFilteredWines.where((wine) {
+      bool matchesType = isSelectedType[0] && wine.wineType == 'Red' ||
+          isSelectedType[1] && wine.wineType == 'Rose' ||
+          isSelectedType[2] && wine.wineType == 'White' ||
+          isSelectedType.every((element) => element);
+      bool matchesRating = wine.wineRating >= sliderValueMinRating;
+      bool matchesRatingCount = wine.numOfRatings >= sliderValueMinRatingCount;
+
+      return matchesType && matchesRating && matchesRatingCount;
+    }).toList();
+
+    // Check if the widget is still mounted before calling setState
+    if (mounted) {
+      setState(() {
+        filteredWines = tempFilteredWines;
+      });
+    }
   }
 }
