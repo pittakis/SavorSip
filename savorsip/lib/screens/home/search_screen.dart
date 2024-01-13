@@ -136,8 +136,11 @@ Widget _buildSearchBar() {
       children: [
         // Toggle buttons for wine types
         _buildButtonRow(),
+        const SizedBox(height: 8),
+        const Text('Minimum Rating'),
         // Slider for minimum rating
         _buildSliderForMinimumRating(),
+        const Text('Minimum No of Ratings'),
         // Slider for minimum number of reviews
         _buildSliderForMinimumNumberOfReviews(),
         // Checkbox for "Only Show Wines I have rated"
@@ -179,34 +182,40 @@ Widget _buildSearchBar() {
   }
 
   Widget _buildSliderForMinimumRating() {
-    return Slider(
-      value: sliderValueMinRating,
-      min: 0,
-      max: 5,
-      divisions: 10,
-      label: sliderValueMinRating.toStringAsFixed(1),
-      onChanged: (double value) {
-        setState(() {
-          sliderValueMinRating = value;
-          applyFilters();
-        });
-      },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+      child: Slider(
+        value: sliderValueMinRating,
+        min: 0,
+        max: 5,
+        divisions: 10,
+        label: sliderValueMinRating.toStringAsFixed(1),
+        onChanged: (double value) {
+          setState(() {
+            sliderValueMinRating = value;
+            applyFilters();
+          });
+        },
+      ),
     );
   }
 
   Widget _buildSliderForMinimumNumberOfReviews() {
-    return Slider(
-      value: sliderValueMinRatingCount,
-      min: 0,
-      max: 100,
-      divisions: 20,
-      label: sliderValueMinRatingCount.toStringAsFixed(0),
-      onChanged: (double value) {
-        setState(() {
-          sliderValueMinRatingCount = value;
-          applyFilters();
-        });
-      },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+      child: Slider(
+        value: sliderValueMinRatingCount,
+        min: 0,
+        max: 100,
+        divisions: 20,
+        label: sliderValueMinRatingCount.toStringAsFixed(0),
+        onChanged: (double value) {
+          setState(() {
+            sliderValueMinRatingCount = value;
+            applyFilters();
+          });
+        },
+      ),
     );
   }
 

@@ -4,28 +4,32 @@ class Rating {
   final String uid;
   final String wid;
   double ratingOftheUser;
+  DateTime ratingTime;
 
   Rating({
     required this.wid,
     required this.uid,
     required this.ratingOftheUser,
-  });
+    DateTime? ratingTime,
+  }):ratingTime = ratingTime ?? DateTime.now();
 
   // Fetch a rating from Firestore
   static Future<Rating?> fetchRating(String uid, String wid) async {
     var doc = await FirebaseFirestore.instance
         .collection('Ratings')
-        .doc('${uid}-$wid')
+        .doc('$uid-$wid')
         .get();
 
     if (!doc.exists) {
       return null;
     }
-
+  var data = doc.data()!;
+  var ratingTime = (data['ratingTime'] as Timestamp).toDate();
     return Rating(
       uid: uid,
       wid: wid,
       ratingOftheUser: doc.data()!['ratingOftheUser'],
+      ratingTime: ratingTime,
     );
   }
 
@@ -39,7 +43,8 @@ static Future<void> updateRating(String uid, String wid, double newRating) async
         .set({
           'uid': uid,
           'wid': wid,
-          'ratingOftheUser': newRating
+          'ratingOftheUser': newRating,
+          'ratingTime': DateTime.now(),
         }, SetOptions(merge: true));
     //print('Rating updated/created successfully.');
   } catch (e) {

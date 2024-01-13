@@ -47,8 +47,13 @@ class _WineCardSearchState extends State<WineCardSearch> {
           isLoading = false;
         });
       } else {
-        setState(() => isLoading = false);
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+          rated = false; // Ensure this is set to false if no rating is found
+        });
       }
+    }
     } catch (e) {
       print('An error occurred: $e');
       if (mounted) {
