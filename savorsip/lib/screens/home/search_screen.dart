@@ -51,11 +51,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
-      ),
+      //appBar: AppBar(
+      //  title: const Text('Search'),
+      //),
       body: Column(
         children: [
+          const SizedBox(height: 50,),
           _buildSearchBar(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -74,6 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Expanded(child: _buildList()),
         ],
       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("barcode reader");
