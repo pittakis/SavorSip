@@ -20,6 +20,15 @@ class _SearchScreenState extends State<SearchScreen> {
   List<bool> isSelectedType = [true, true, true]; // Red, Rose, White
   bool filtersVisible = false;
   bool showOnlyMyRatings = false;
+  String searchQuery = "";
+
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -78,24 +87,30 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Search...',
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+Widget _buildSearchBar() {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: TextField(
+      controller: searchController,
+      decoration: InputDecoration(
+        hintText: 'Search...',
+        prefixIcon: const Icon(Icons.search),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        onChanged: (value) {
-          print("user typed $value");
-          // Update the state based on the search input
-        },
       ),
-    );
-  }
+      onChanged: (value) {
+        // Update the search query variable
+        searchQuery = value;
+      },
+      onSubmitted: (value) {
+        // Apply filters when Enter key is pressed
+        applyFilters();
+      },
+    ),
+  );
+}
+
 
   Widget _buildList() {
     return ListView.builder(
@@ -212,8 +227,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void applyFilters() async {
-    List<Wine> tempFilteredWines = List.from(allWines);
-
+    List<Wine> tempFilteredWines = allWines.where((wine) {
+      return wine.wineName.toLowerCase().contains(searchQuery.toLowerCase());
+    }).toList();
     if (showOnlyMyRatings) {
       var userRatedWines = await Rating.listRatings(widget.userID);
       Set<String> userRatedWineIds = userRatedWines
@@ -224,6 +240,7 @@ class _SearchScreenState extends State<SearchScreen> {
           .where((wine) => userRatedWineIds.contains(wine.wid))
           .toList();
     }
+
     tempFilteredWines = tempFilteredWines.where((wine) {
       bool matchesType = isSelectedType[0] && wine.wineType == 'Red' ||
           isSelectedType[1] && wine.wineType == 'Rose' ||
@@ -235,11 +252,11 @@ class _SearchScreenState extends State<SearchScreen> {
       return matchesType && matchesRating && matchesRatingCount;
     }).toList();
 
-    // Check if the widget is still mounted before calling setState
     if (mounted) {
       setState(() {
         filteredWines = tempFilteredWines;
       });
     }
   }
+
 }
