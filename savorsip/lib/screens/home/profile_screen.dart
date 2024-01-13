@@ -75,7 +75,7 @@ void signMeOut() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //appBar: AppBar(title: const Text("")),
+        resizeToAvoidBottomInset: true,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

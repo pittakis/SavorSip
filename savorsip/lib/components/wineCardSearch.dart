@@ -140,8 +140,8 @@ void updateRating() async {
                         Row(
                           children: [
                             const Text('Your Rating: '),
-                            const Icon(Icons.star, color: Colors.amber),
-                            rated ? Text('$rating'): const Text('-')
+                            const Icon(Icons.star, color: Colors.deepPurple),
+                            rated ? Text('$rating/5'): const Text('-')
                           ],
                         ),
                     ],
@@ -196,10 +196,11 @@ void updateRating() async {
       builder: (context) {
         return AlertDialog(
           title: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.star, color: Colors.amber),
+              //Icon(Icons.star, color: Colors.amber),
               Text('Insert your rating'),
-              Icon(Icons.star, color: Colors.amber),
+              //Icon(Icons.star, color: Colors.amber),
             ],
           ),
           content: StatefulBuilder(
