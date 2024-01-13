@@ -51,11 +51,22 @@ class Wine {
   }
 
   // Method to update wine rating and number of ratings
-  static Future<void> updateWineRating(String wid, double rating, int numOfRatings, double newRating) async {
+  static Future<void> updateWineRating(String wid, double oldRating, double newRating) async {
     try {
+      Wine? myWine = await fetchWineByWid(wid);
+      //Update case
+      double newAvg = myWine!.wineRating;
+      if(oldRating != -1){
+          newAvg = ((newAvg*myWine.numOfRatings) + newRating - oldRating)/myWine.numOfRatings;
+      }
+      else{
+        myWine.numOfRatings ++;
+        newAvg = (newAvg*(myWine.numOfRatings - 1) + newRating)/myWine.numOfRatings;
+      }
+      
       await FirebaseFirestore.instance.collection('Wines').doc(wid).update({
-        'wineRating': (rating + newRating)/(numOfRatings + 1),
-        'numOfRatings': numOfRatings++
+        'wineRating': newAvg,
+        'numOfRatings': myWine.numOfRatings,
       });
     } catch (e) {
       print("Error updating wine rating: $e");

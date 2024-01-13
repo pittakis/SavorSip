@@ -170,7 +170,7 @@ Future<bool> _checkAndRequestLocationPermission() async {
                         children: [
                           const Text('SS Rating: '),
                           const Icon(Icons.star, color: Colors.amber),
-                          Text("${widget.wineDetails.wineRating}/5  "),
+                          Text("${widget.wineDetails.wineRating.toStringAsFixed(1)}/5  "),
                           Text(
                             "(${widget.wineDetails.numOfRatings})",
                             style: const TextStyle(fontSize: 10),
@@ -181,7 +181,8 @@ Future<bool> _checkAndRequestLocationPermission() async {
                           children: [
                             const Text('Your Rating: '),
                             const Icon(Icons.star, color: Colors.deepPurple),
-                            rated ? Text('$rating/5'): const Text('-')
+                            rated ? Text('${rating.toStringAsFixed(1)}/5') : const Text('-')
+                            //rated ? Text('$rating/5'): const Text('-')
                           ],
                         ),
                     ],

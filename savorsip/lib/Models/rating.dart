@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:savorsip/Models/Wines.dart';
 
 class Rating {
   final String uid;
@@ -52,10 +53,22 @@ class Rating {
   static Future<void> updateRating(
       String uid, String wid, double newRating) async {
     try {
+      //
+      Rating? currentRate = await fetchRating(uid, wid);
+      //if null .... ++ user Rating number, wine: number of ratings n ++, wine rating = (wineRating*n-1 + new rating)/n
+      if(currentRate == null){
+        Wine.updateWineRating(wid, -1, newRating);
+      }
+      else{
+        Wine.updateWineRating(wid, currentRate.ratingOftheUser, newRating);
+      }
+    
+      //else ... wineRating = (wineRating*n + newRating - currentrating.ratingoftheuser)/n
+
       // Get current location
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-        print(position);
+        //print(position);
       // Get address information using geocoding
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -72,7 +85,7 @@ class Rating {
         'country': placemarks[0].country,
       }, SetOptions(merge: true));
     } catch (e) {
-      print('Error updating/creating rating: $e');
+      return Future.error('Error updating/creating rating: $e');
     }
   }
 
