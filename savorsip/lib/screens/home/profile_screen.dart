@@ -87,7 +87,7 @@ void signMeOut() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 20,
+        toolbarHeight: 0,
       ),
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
