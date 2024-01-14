@@ -68,12 +68,20 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/logo.PNG", // Update this path to your actual image path
-                  width: 196,
-                  height: 200,
+                GestureDetector(
+                  onTap: () async {
+                    await audioPlayer.play(AssetSource('audio/ss.mp3'));
+                  },
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(30), // Adjust the radius here
+                    child: Image.asset(
+                      "assets/images/logo.PNG", // Your image path
+                      width: 200,
+                      height: 200,
+                    ),
+                  ),
                 ),
-                
                 SizedBox(height: 30),
                 TextField(
                   controller: _emailController,
@@ -105,12 +113,6 @@ class _LoginState extends State<Login> {
                       },
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.volume_up),
-                  onPressed: () async {
-                    await audioPlayer.play(AssetSource('audio/ss.mp3'));
-                  },
                 ),
                 SizedBox(height: 10),
               ],
