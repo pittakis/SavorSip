@@ -38,10 +38,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
         .doc(widget.userID)
         .collection('pendingRequests')
         .get();
-
-    setState(() {
-      pendingRequestsCount = pendingRequestsSnapshot.docs.length;
-    });
+    if (mounted) {
+      setState(() {
+        pendingRequestsCount = pendingRequestsSnapshot.docs.length;
+      });
+    }
   }
 
   Future<List<Users>> fetchFriends() async {

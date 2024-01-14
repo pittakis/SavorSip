@@ -9,12 +9,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-    // Call the makeLeaderboard function after Firebase initialization
+  // Call the makeLeaderboard function after Firebase initialization
   await LeaderboardService.makeLeaderboard();
   await LeaderboardService.getLeaderboard();
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
