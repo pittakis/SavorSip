@@ -4,37 +4,41 @@ class LeaderboardService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 //Leaderboard Constructor
-static Future<void> makeLeaderboard() async {
-  CollectionReference usersRef = _firestore.collection('Users');
-  CollectionReference leaderboardRef = _firestore.collection('leaderboard');
+  static Future<void> makeLeaderboard() async {
+    CollectionReference usersRef = _firestore.collection('Users');
+    CollectionReference leaderboardRef = _firestore.collection('leaderboard');
 
-  QuerySnapshot usersSnapshot = await usersRef.get();
+    QuerySnapshot usersSnapshot = await usersRef.get();
 
-  for (var userDoc in usersSnapshot.docs) {
-    String userId = userDoc.id;
-    String username = userDoc['username'];  // Assuming 'username' exists in 'Users' collection
-    int existingRatings = userDoc['numOfRating'] ?? 0; // Get existing ratings, default to 0 if not present
+    for (var userDoc in usersSnapshot.docs) {
+      String userId = userDoc.id;
+      String username = userDoc[
+          'username']; // Assuming 'username' exists in 'Users' collection
+      int existingRatings = userDoc['numOfRating'] ??
+          0; // Get existing ratings, default to 0 if not present
 
-    DocumentSnapshot leaderboardSnapshot = await leaderboardRef.doc(userId).get();
+      DocumentSnapshot leaderboardSnapshot =
+          await leaderboardRef.doc(userId).get();
 
-    if (!leaderboardSnapshot.exists) {
-      await leaderboardRef.doc(userId).set({
-        'userId': userId,
-        'username': username,
-        'numberOfRating': existingRatings, // Use existing ratings count
-      });
+      if (!leaderboardSnapshot.exists) {
+        await leaderboardRef.doc(userId).set({
+          'userId': userId,
+          'username': username,
+          'numberOfRating': existingRatings, // Use existing ratings count
+        });
+      }
     }
   }
-}
-
-
 
   // Function to update the leaderboard when a user rates a wine
-  static Future<void> updateLeaderboard(String userId, String username, int numberOfRating) async {
-    DocumentReference leaderboardRef = _firestore.collection('leaderboard').doc(userId);
+  static Future<void> updateLeaderboard(
+      String userId, String username, int numberOfRating) async {
+    DocumentReference leaderboardRef =
+        _firestore.collection('leaderboard').doc(userId);
 
     await _firestore.runTransaction((transaction) async {
-      DocumentSnapshot leaderboardSnapshot = await transaction.get(leaderboardRef);
+      DocumentSnapshot leaderboardSnapshot =
+          await transaction.get(leaderboardRef);
 
       if (!leaderboardSnapshot.exists) {
         // Add the user to the leaderboard with an initial rating count of 1
@@ -45,7 +49,7 @@ static Future<void> makeLeaderboard() async {
         });
       } else {
         // Increment the user's rating count
-        int currentRatingCount = leaderboardSnapshot['numberOfRating'] as int;
+        //int currentRatingCount = leaderboardSnapshot['numberOfRating'] as int;
         transaction.update(leaderboardRef, {
           'numberOfRating': numberOfRating,
         });
@@ -55,7 +59,8 @@ static Future<void> makeLeaderboard() async {
 
   // Function to retrieve a user's position in the leaderboard
   static Future<int> getUserPosition(String userId) async {
-    QuerySnapshot leaderboardSnapshot = await _firestore.collection('leaderboard')
+    QuerySnapshot leaderboardSnapshot = await _firestore
+        .collection('leaderboard')
         .orderBy('numberOfRating', descending: true)
         .get();
 
@@ -72,7 +77,8 @@ static Future<void> makeLeaderboard() async {
 
   // Function to retrieve and print the leaderboard, returning it as an array
   static Future<List<Map<String, dynamic>>> getLeaderboard() async {
-    QuerySnapshot leaderboardSnapshot = await _firestore.collection('leaderboard')
+    QuerySnapshot leaderboardSnapshot = await _firestore
+        .collection('leaderboard')
         .orderBy('numberOfRating', descending: true)
         .get();
 
@@ -90,9 +96,9 @@ static Future<void> makeLeaderboard() async {
     }
 
     // Print the leaderboard
-    for (var user in leaderboard) {
-      print('User ID: ${user['userId']}, username: ${user['username']} Number of Rating: ${user['numberOfRating']}');
-    }
+    //for (var user in leaderboard) {
+    //print('User ID: ${user['userId']}, username: ${user['username']} Number of Rating: ${user['numberOfRating']}');
+    //}
 
     return leaderboard;
   }

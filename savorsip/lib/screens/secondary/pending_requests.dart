@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:savorsip/screens/home/friends_screen.dart';
 
 class PendingRequests extends StatefulWidget {
   final String myUserId;
@@ -22,16 +23,22 @@ class _PendingRequestsState extends State<PendingRequests> {
 
     for (var doc in snapshot.docs) {
       String userId = doc.id; // The user ID of the person who sent the request
-      var userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
-      String username = userSnapshot.data()?['username'] ?? 'Unknown'; // Fetch the username
-      pendingRequests.add({'uid': userId, 'username': username}); // Add both userId and username
+      var userSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .get();
+      String username =
+          userSnapshot.data()?['username'] ?? 'Unknown'; // Fetch the username
+      pendingRequests.add({
+        'uid': userId,
+        'username': username
+      }); // Add both userId and username
     }
 
     return pendingRequests;
   }
 
   void acceptFriendRequest(String friendUserId) async {
-
     // Remove the request from pendingRequests
     await FirebaseFirestore.instance
         .collection('Users')
@@ -57,7 +64,7 @@ class _PendingRequestsState extends State<PendingRequests> {
         .set({'uid': widget.myUserId});
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Friend request accepted')),
+      const SnackBar(content: Text('Friend request accepted')),
     );
   }
 
@@ -71,7 +78,7 @@ class _PendingRequestsState extends State<PendingRequests> {
         .delete();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Friend request rejected')),
+      const SnackBar(content: Text('Friend request rejected')),
     );
   }
 
@@ -132,10 +139,11 @@ class _PendingRequestsState extends State<PendingRequests> {
       ),
       child: ListTile(
         title: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: const BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.deepPurple, width: 2), // Only bottom border
+              bottom: BorderSide(
+                  color: Colors.deepPurple, width: 2), // Only bottom border
             ),
           ),
           child: Text(
@@ -146,5 +154,4 @@ class _PendingRequestsState extends State<PendingRequests> {
       ),
     );
   }
-
 }

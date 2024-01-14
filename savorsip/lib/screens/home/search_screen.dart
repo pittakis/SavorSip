@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
-import 'package:savorsip/components/wineCardSearch.dart';
+import 'package:savorsip/components/wine_card_search.dart';
 
 class SearchScreen extends StatefulWidget {
   final String userID;
@@ -42,13 +42,13 @@ class _SearchScreenState extends State<SearchScreen> {
     List<Wine> fetchedWines = wineSnapshot.docs
         .map((doc) => Wine.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
-    
-if (mounted) {
-  setState(() {
-      allWines = fetchedWines;
-      applyFilters(); // Apply filters initially
-    });
-}
+
+    if (mounted) {
+      setState(() {
+        allWines = fetchedWines;
+        applyFilters(); // Apply filters initially
+      });
+    }
   }
 
   @override
@@ -81,30 +81,29 @@ if (mounted) {
     );
   }
 
-Widget _buildSearchBar() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: TextField(
-      controller: searchController,
-      decoration: InputDecoration(
-        hintText: 'Search...',
-        prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          hintText: 'Search...',
+          prefixIcon: const Icon(Icons.search),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
+        onChanged: (value) {
+          // Update the search query variable
+          searchQuery = value;
+        },
+        onSubmitted: (value) {
+          // Apply filters when Enter key is pressed
+          applyFilters();
+        },
       ),
-      onChanged: (value) {
-        // Update the search query variable
-        searchQuery = value;
-      },
-      onSubmitted: (value) {
-        // Apply filters when Enter key is pressed
-        applyFilters();
-      },
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildList() {
     return ListView.builder(
@@ -114,9 +113,9 @@ Widget _buildSearchBar() {
         return WineCardSearch(
           key: ObjectKey(wine), // Unique key for each WineCardSearch
           wineDetails: wine,
-          onWishlistChanged: (){},
+          onWishlistChanged: () {},
           //onRate: (double rating) {
-            //print("Saved rating $rating for wine ${wine.wineName}");
+          //print("Saved rating $rating for wine ${wine.wineName}");
           //},
           userID: widget.userID,
         );
@@ -126,7 +125,6 @@ Widget _buildSearchBar() {
 
   Widget _buildFilters() {
     return Column(
-
       children: [
         // Toggle buttons for wine types
         Row(
@@ -143,15 +141,11 @@ Widget _buildSearchBar() {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 8.0),
-                    child: Text('Apply',
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text('Apply', style: TextStyle(fontSize: 14)),
                   ), // Adjust the font size as needed
                   Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text('Filters',
-                        style: TextStyle(
-                            fontSize: 14)),
+                    child: Text('Filters', style: TextStyle(fontSize: 14)),
                   ), // Adjust the font size as needed
                 ],
               ),
@@ -159,16 +153,21 @@ Widget _buildSearchBar() {
           ],
         ),
         const SizedBox(height: 8),
-        const Text('Minimum SavorSip Rating',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+        const Text(
+          'Minimum SavorSip Rating',
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+        ),
         // Slider for minimum rating
         _buildSliderForMinimumRating(),
-        const Text('Minimum No. of Ratings',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+        const Text(
+          'Minimum No. of Ratings',
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+        ),
         // Slider for minimum number of reviews
         _buildSliderForMinimumNumberOfReviews(),
         // Checkbox for "Only Show Wines I have rated"
         _buildShowOnlyMyRatingsCheckbox(),
         // Apply Filters button
-        
       ],
     );
   }
@@ -185,8 +184,13 @@ Widget _buildSearchBar() {
       },
       children: const <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
-           child: Column(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            4,
+            16,
+            4,
+          ),
+          child: Column(
             children: [
               Text('Red'),
               Text('Wines'),
@@ -194,7 +198,12 @@ Widget _buildSearchBar() {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            4,
+            16,
+            4,
+          ),
           child: Column(
             children: [
               Text('Rosé'),
@@ -203,7 +212,12 @@ Widget _buildSearchBar() {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            4,
+            16,
+            4,
+          ),
           child: Column(
             children: [
               Text('White'),
@@ -303,5 +317,4 @@ Widget _buildSearchBar() {
       });
     }
   }
-
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
@@ -93,13 +95,15 @@ class _SignUpState extends State<SignUp> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 70),
+            const SizedBox(height: 70),
             _entryField("First Name", _firstNameController),
             _entryField("Last Name", _lastNameController),
             _entryField("username", _usernameController),
             _entryField("email", _emailController),
-            _passwordEntryField("password", _passwordController, _passwordVisible, _togglePasswordVisibility),
-            _passwordEntryField("Confirm password", _confirmPasswordController, _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
+            _passwordEntryField("password", _passwordController,
+                _passwordVisible, _togglePasswordVisibility),
+            _passwordEntryField("Confirm password", _confirmPasswordController,
+                _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
             const SizedBox(height: 15),
             if (_isEmptyField)
               const Padding(
@@ -119,10 +123,10 @@ class _SignUpState extends State<SignUp> {
               ),
             if (_registrationError.isNotEmpty)
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   _registrationError,
-                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
             Align(
@@ -159,18 +163,23 @@ class _SignUpState extends State<SignUp> {
                               lastName: _lastNameController.text,
                               email: _emailController.text,
                               username: _usernameController.text,
-                              profilePic: "assets/images/profile_pic_default.png",
+                              profilePic:
+                                  "assets/images/profile_pic_default.png",
                               numOfRatings: 0);
-                            await LeaderboardService.updateLeaderboard(newUser.uid, newUser.username, newUser.numOfRatings);
+                          await LeaderboardService.updateLeaderboard(
+                              newUser.uid,
+                              newUser.username,
+                              newUser.numOfRatings);
 
                           // Optionally, pass newUser to the next screen or store it using a state management solution
                           //Printing the User Object
-                          print("This is the user Object: $newUser");
+                          //print("This is the user Object: $newUser");
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    MyHomePage(userID: newUser.uid,)), // Pass newUser as an argument if needed
+                                builder: (context) => MyHomePage(
+                                      userID: newUser.uid,
+                                    )), // Pass newUser as an argument if needed
                           );
                         } else {
                           setState(() {
@@ -181,7 +190,7 @@ class _SignUpState extends State<SignUp> {
                     },
                     // Button styling
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
+                      backgroundColor: const Color(0xFF624E99),
                       minimumSize: const Size(150, 50),
                     ),
                     child: const Text(

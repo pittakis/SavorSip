@@ -9,15 +9,14 @@ class Wine {
   String winePic;
   String wineType;
 
-  Wine({
-    required this.wid,
-    required this.wineName,
-    required this.numOfRatings,
-    required this.winePic,
-    required this.wineRating,
-    required this.wineDescription,
-    required this.wineType
-  });
+  Wine(
+      {required this.wid,
+      required this.wineName,
+      required this.numOfRatings,
+      required this.winePic,
+      required this.wineRating,
+      required this.wineDescription,
+      required this.wineType});
 
   @override
   String toString() {
@@ -40,39 +39,41 @@ class Wine {
   // Method to fetch a wine by its wid
   static Future<Wine?> fetchWineByWid(String wid) async {
     try {
-      DocumentSnapshot wineDoc = await FirebaseFirestore.instance.collection('Wines').doc(wid).get();
+      DocumentSnapshot wineDoc =
+          await FirebaseFirestore.instance.collection('Wines').doc(wid).get();
       if (wineDoc.exists) {
         return Wine.fromMap(wineDoc.data() as Map<String, dynamic>, wid);
       }
     } catch (e) {
-      print("Error fetching wine: $e");
+      //print("Error fetching wine: $e");
     }
     return null;
   }
 
   // Method to update wine rating and number of ratings
-  static Future<void> updateWineRating(String wid, double oldRating, double newRating) async {
+  static Future<void> updateWineRating(
+      String wid, double oldRating, double newRating) async {
     try {
       Wine? myWine = await fetchWineByWid(wid);
       //Update case
       double newAvg = myWine!.wineRating;
-      if(oldRating != -1){
-          newAvg = ((newAvg*myWine.numOfRatings) + newRating - oldRating)/myWine.numOfRatings;
+      if (oldRating != -1) {
+        newAvg = ((newAvg * myWine.numOfRatings) + newRating - oldRating) /
+            myWine.numOfRatings;
+      } else {
+        myWine.numOfRatings++;
+        newAvg = (newAvg * (myWine.numOfRatings - 1) + newRating) /
+            myWine.numOfRatings;
       }
-      else{
-        myWine.numOfRatings ++;
-        newAvg = (newAvg*(myWine.numOfRatings - 1) + newRating)/myWine.numOfRatings;
-      }
-      
+
       await FirebaseFirestore.instance.collection('Wines').doc(wid).update({
         'wineRating': newAvg,
         'numOfRatings': myWine.numOfRatings,
       });
     } catch (e) {
-      print("Error updating wine rating: $e");
+      //print("Error updating wine rating: $e");
     }
   }
-
 
   // Method to check if wine is in wishlist
   static Future<bool> isWineInWishList(String userId, String wineId) async {
@@ -86,7 +87,8 @@ class Wine {
   }
 
   // Method to add or remove wine from wishlist
-  static Future<void> toggleWishList(String userId, String wineId, bool isInWishList) async {
+  static Future<void> toggleWishList(
+      String userId, String wineId, bool isInWishList) async {
     var wishlistRef = FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)

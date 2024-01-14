@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
@@ -66,10 +67,10 @@ class _QRScanScreenState extends State<QRScanScreen> {
           .doc(currentUserID)
           .set({'uid': currentUserID});
 
-      print('Friend request sent to $targetUserID from $currentUserID');
+      //print('Friend request sent to $targetUserID from $currentUserID');
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Friend Request Sent Successfully')),
+        const SnackBar(content: Text('Friend Request Sent Successfully')),
       );
 
       // Navigate back to AddFriendsScreen
@@ -81,7 +82,6 @@ class _QRScanScreenState extends State<QRScanScreen> {
       );
     });
   }
-
 
   @override
   void dispose() {

@@ -1,8 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
-import 'package:savorsip/screens/home/profile_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String userID;
@@ -13,7 +14,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  
   Users? currentUser; // Local variable to hold the updated user data
 
   @override
@@ -30,11 +30,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
     } catch (e) {
       // Handle errors, e.g., user not found or network issues
-      print("Error fetching user data: $e");
+      //print("Error fetching user data: $e");
     }
   }
 
-  
+  // ignore: unused_field
   bool _isEmptyField = false;
   bool _isPasswordMismatch = false;
   bool _passwordVisible = false;
@@ -98,7 +98,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-
   void _togglePasswordVisibility() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -110,7 +109,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       _confirmPasswordVisible = !_confirmPasswordVisible;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +122,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             _entryField("Change Last Name", _lastNameController),
             _entryField("Change username", _usernameController),
             _entryField("Old Password", _oldPasswordController),
-            _passwordEntryField("New password", _passwordController, _passwordVisible, _togglePasswordVisibility),
-            _passwordEntryField("Confirm new password", _confirmPasswordController, _confirmPasswordVisible, _toggleConfirmPasswordVisibility),
+            _passwordEntryField("New password", _passwordController,
+                _passwordVisible, _togglePasswordVisibility),
+            _passwordEntryField(
+                "Confirm new password",
+                _confirmPasswordController,
+                _confirmPasswordVisible,
+                _toggleConfirmPasswordVisibility),
             const SizedBox(height: 15),
-
             if (_isPasswordMismatch)
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -136,16 +138,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   style: TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
-
             if (_changeError.isNotEmpty)
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   _changeError,
-                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
                 ),
               ),
-            
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(
@@ -155,25 +155,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     padding: const EdgeInsets.fromLTRB(70, 10, 70, 10),
                     child: ElevatedButton(
                       onPressed: () {
-                          pickImageAndUpdateProfile();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyHomePage(userID: widget.userID), // Or pass the whole updatedUser object if needed
-                                ),
-                              );
+                        pickImageAndUpdateProfile();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyHomePage(
+                                userID: widget
+                                    .userID), // Or pass the whole updatedUser object if needed
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 156, 129, 231),
-                        minimumSize: const Size(150, 50),
-                        elevation: 10
-                      ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 156, 129, 231),
+                          minimumSize: const Size(150, 50),
+                          elevation: 10),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.camera_alt_outlined,color:Colors.white),
-                          SizedBox( width:8), 
-                          Text('Change Picture', style: TextStyle(color: Colors.white)),
+                          Icon(Icons.camera_alt_outlined, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('Change Picture',
+                              style: TextStyle(color: Colors.white)),
                         ],
                       ),
                     ),
@@ -185,16 +188,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         onPressed: () async {
                           // Set flags for field checks
                           setState(() {
-                            _isEmptyField = false; // As we will use existing data if field is empty
-                            _isPasswordMismatch = _passwordController.text.isNotEmpty && _passwordController.text != _confirmPasswordController.text;
+                            _isEmptyField =
+                                false; // As we will use existing data if field is empty
+                            _isPasswordMismatch =
+                                _passwordController.text.isNotEmpty &&
+                                    _passwordController.text !=
+                                        _confirmPasswordController.text;
                             _changeError = '';
                           });
 
                           if (!_isPasswordMismatch) {
                             // Prepare new values, fallback to current values if fields are empty
-                            String newFirstName = _firstNameController.text.isEmpty ? currentUser!.firstName : _firstNameController.text;
-                            String newLastName = _lastNameController.text.isEmpty ? currentUser!.lastName : _lastNameController.text;
-                            String newUsername = _usernameController.text.isEmpty ? currentUser!.username : _usernameController.text;
+                            String newFirstName =
+                                _firstNameController.text.isEmpty
+                                    ? currentUser!.firstName
+                                    : _firstNameController.text;
+                            String newLastName =
+                                _lastNameController.text.isEmpty
+                                    ? currentUser!.lastName
+                                    : _lastNameController.text;
+                            String newUsername =
+                                _usernameController.text.isEmpty
+                                    ? currentUser!.username
+                                    : _usernameController.text;
 
                             // Call the updateUser method
                             String result = await Users.updateUser(
@@ -203,18 +219,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               lastName: newLastName,
                               username: newUsername,
                               oldPassword: _oldPasswordController.text,
-                              newPassword: _passwordController.text.isEmpty ? null : _passwordController.text,
+                              newPassword: _passwordController.text.isEmpty
+                                  ? null
+                                  : _passwordController.text,
                             );
 
                             if (result == "Success") {
-                              // Update was successful                           
+                              // Update was successful
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Profile updated successfully')),
+                                const SnackBar(
+                                    content:
+                                        Text('Profile updated successfully')),
                               );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MyHomePage(userID: widget.userID), // Or pass the whole updatedUser object if needed
+                                  builder: (context) => MyHomePage(
+                                      userID: widget
+                                          .userID), // Or pass the whole updatedUser object if needed
                                 ),
                               );
                             } else {
@@ -232,20 +254,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           } else {
                             // Handle password mismatch
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Passwords do not match')),
+                              const SnackBar(
+                                  content: Text('Passwords do not match')),
                             );
-                                setState(() {
-                                _firstNameController.clear();
-                                _lastNameController.clear();
-                                _usernameController.clear();
-                                _oldPasswordController.clear();
-                                _passwordController.clear();
-                                _confirmPasswordController.clear();
-                              });
+                            setState(() {
+                              _firstNameController.clear();
+                              _lastNameController.clear();
+                              _usernameController.clear();
+                              _oldPasswordController.clear();
+                              _passwordController.clear();
+                              _confirmPasswordController.clear();
+                            });
                           }
-                        }, 
+                        },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 156, 129, 231),
+                          backgroundColor:
+                              const Color.fromARGB(255, 156, 129, 231),
                           minimumSize: const Size(150, 50),
                           elevation: 10,
                         ),
@@ -265,35 +289,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+  Future<void> pickImageAndUpdateProfile() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
 
-Future<void> pickImageAndUpdateProfile() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-
-  if (image != null) {
-    try {
-      if (currentUser != null) {
-        await currentUser!.updateProfilePicture(image);
+    if (image != null) {
+      try {
+        if (currentUser != null) {
+          await currentUser!.updateProfilePicture(image);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('Profile picture updated successfully!')),
+            );
+          }
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('User not found.')),
+            );
+          }
+        }
+      } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile picture updated successfully!')),
+            SnackBar(content: Text('Something went wrong: $e')),
           );
         }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('User not found.')),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Something went wrong: $e')),
-        );
       }
     }
   }
-}
-
 }

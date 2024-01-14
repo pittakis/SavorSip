@@ -14,7 +14,6 @@ class AddFriendsScreen extends StatefulWidget {
 }
 
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
-
   Users? currentUser; // Local variable to hold the updated user data
   String searchQuery = '';
 
@@ -27,13 +26,14 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
 
   Future<void> _fetchPotentialFriends() async {
     try {
-      List<Users> fetchedPotentialFriends = await Users.fetchPotentialFriends(widget.userID);
+      List<Users> fetchedPotentialFriends =
+          await Users.fetchPotentialFriends(widget.userID);
       setState(() {
         potentialFriendList = fetchedPotentialFriends;
       });
     } catch (e) {
       // Handle errors
-      print("Error fetching potential friends: $e");
+      //print("Error fetching potential friends: $e");
     }
   }
 
@@ -45,16 +45,17 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       });
     } catch (e) {
       // Handle errors, e.g., user not found or network issues
-      print("Error fetching user data: $e");
+      //print("Error fetching user data: $e");
     }
   }
 
   // Add this method to filter the potential friends based on the search query
   List<Users> _filterPotentialFriends() {
     return potentialFriendList
-        .where((user) => user.username.toLowerCase().contains(searchQuery.toLowerCase()) ||
-                         user.firstName.toLowerCase().contains(searchQuery.toLowerCase()) ||
-                         user.lastName.toLowerCase().contains(searchQuery.toLowerCase()))
+        .where((user) =>
+            user.username.toLowerCase().contains(searchQuery.toLowerCase()) ||
+            user.firstName.toLowerCase().contains(searchQuery.toLowerCase()) ||
+            user.lastName.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
   }
 
@@ -62,31 +63,36 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Widget build(BuildContext context) {
     final filteredFriendsList = _filterPotentialFriends();
     return Scaffold(
-        appBar: AppBar(title: const Text('Add Friends')),
-        body: Column(
-          children: [
-            _buildSearchBar(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredFriendsList.length,
-                itemBuilder: (context, index) {
-                  final item = filteredFriendsList[index];
-                  return _generateTile(item, index);
-                },
-              ),
+      appBar: AppBar(title: const Text('Add Friends')),
+      body: Column(
+        children: [
+          _buildSearchBar(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredFriendsList.length,
+              itemBuilder: (context, index) {
+                final item = filteredFriendsList[index];
+                return _generateTile(item, index);
+              },
             ),
-          ],
-        ),
-       floatingActionButton: FloatingActionButton(
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => QRScanScreen(myUserID: widget.userID,)),
-              );
+            context,
+            MaterialPageRoute(
+                builder: (context) => QRScanScreen(
+                      myUserID: widget.userID,
+                    )),
+          );
         },
         backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.qr_code_2_outlined, color: Colors.white,),
+        child: const Icon(
+          Icons.qr_code_2_outlined,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -103,10 +109,10 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           ),
         ),
         onChanged: (value) {
-        setState(() {
-          searchQuery = value;
-        });
-          print("user typed $value");
+          setState(() {
+            searchQuery = value;
+          });
+          //print("user typed $value");
           // Update the state based on the search input
         },
       ),
@@ -119,7 +125,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       return NetworkImage(imagePath);
     } else {
       // If not a network image, return AssetImage
-      return AssetImage(imagePath.isNotEmpty ? imagePath : 'assets/images/default_profile_pic.png');
+      return AssetImage(imagePath.isNotEmpty
+          ? imagePath
+          : 'assets/images/default_profile_pic.png');
     }
   }
 
@@ -149,7 +157,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       trailing: IconButton(
           onPressed: () {
             Users.sendFriendRequest(widget.userID, potentialFriend.uid);
-            print('Friend Request Sent to ${potentialFriend.username}');
+            //print('Friend Request Sent to ${potentialFriend.username}');
             setState(() {
               potentialFriendList.removeAt(index);
             });

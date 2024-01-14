@@ -1,15 +1,17 @@
 //import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
-
-
 //List<String>? myFriends = List<String>.generate(16, (i) => 'Friend No. ${i + 1}');
-List<String>? myPendingRequests = List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
-Image genericProfilePicture = Image.asset('assets/images/profile_pic_default.png');
+List<String>? myPendingRequests =
+    List<String>.generate(2, (i) => 'Friend No. ${i + 1}');
+Image genericProfilePicture =
+    Image.asset('assets/images/profile_pic_default.png');
 //List<Users>? myUserFriends = List<String>.generate(5
 
 class FriendsScreen extends StatefulWidget {
@@ -21,8 +23,8 @@ class FriendsScreen extends StatefulWidget {
 }
 
 class _FriendsScreenState extends State<FriendsScreen> {
-
-   int pendingRequestsCount = 0; // New state variable to store pending requests count
+  int pendingRequestsCount =
+      0; // New state variable to store pending requests count
 
   @override
   void initState() {
@@ -52,7 +54,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
     for (var doc in friendsSnapshot.docs) {
       String friendId = doc.id;
-      var friendDoc = await FirebaseFirestore.instance.collection('Users').doc(friendId).get();
+      var friendDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(friendId)
+          .get();
       if (friendDoc.exists) {
         friends.add(Users.fromMap(friendDoc.data()!, friendDoc.id));
       }
@@ -67,71 +72,74 @@ class _FriendsScreenState extends State<FriendsScreen> {
     });
   }
 
-void _popupRemoveFriend(Users userFriend, int index) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: SingleChildScrollView(
-          child: Text(
-            'Remove ${userFriend.firstName} from your friends?',
-            style: const TextStyle(fontSize: 16),
+  void _popupRemoveFriend(Users userFriend, int index) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Text(
+              'Remove ${userFriend.firstName} from your friends?',
+              style: const TextStyle(fontSize: 16),
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Confirm'),
-            onPressed: () async {
-              // Delete the friend from Firestore
-              await FirebaseFirestore.instance
-                  .collection('Users')
-                  .doc(widget.userID)
-                  .collection('friends')
-                  .doc(userFriend.uid)
-                  .delete();
-              await FirebaseFirestore.instance
-                  .collection('Users')
-                  .doc(userFriend.uid)
-                  .collection('friends')
-                  .doc(widget.userID)
-                  .delete();              
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () async {
+                // Delete the friend from Firestore
+                await FirebaseFirestore.instance
+                    .collection('Users')
+                    .doc(widget.userID)
+                    .collection('friends')
+                    .doc(userFriend.uid)
+                    .delete();
+                await FirebaseFirestore.instance
+                    .collection('Users')
+                    .doc(userFriend.uid)
+                    .collection('friends')
+                    .doc(widget.userID)
+                    .delete();
 
-              // Close the dialog
-              Navigator.of(context).pop();
+                // Close the dialog
+                Navigator.of(context).pop();
 
-              // Show a snackbar notification
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${userFriend.firstName} has been removed from your friends')),
-              );
+                // Show a snackbar notification
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          '${userFriend.firstName} has been removed from your friends')),
+                );
 
-              // Trigger a refresh of the friend list
-              setState(() {});
-            },
-          ),
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
-
-Widget _generateFriendTile(Users userFriend, int index){
-  ImageProvider<Object> profileImage;
-  if (userFriend.profilePic.isNotEmpty && Uri.tryParse(userFriend.profilePic)?.isAbsolute == true) {
-    profileImage = NetworkImage(userFriend.profilePic); // If there's a valid URL, use it
-  } else {
-    profileImage = AssetImage(userFriend.profilePic); // Otherwise, fall back to the generic picture
+                // Trigger a refresh of the friend list
+                setState(() {});
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  return ListTile(
+  Widget _generateFriendTile(Users userFriend, int index) {
+    ImageProvider<Object> profileImage;
+    if (userFriend.profilePic.isNotEmpty &&
+        Uri.tryParse(userFriend.profilePic)?.isAbsolute == true) {
+      profileImage =
+          NetworkImage(userFriend.profilePic); // If there's a valid URL, use it
+    } else {
+      profileImage = AssetImage(
+          userFriend.profilePic); // Otherwise, fall back to the generic picture
+    }
+
+    return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       leading: CircleAvatar(
         radius: 25,
@@ -154,67 +162,71 @@ Widget _generateFriendTile(Users userFriend, int index){
               fontSize: 14, color: Color.fromARGB(255, 124, 112, 112))),
       onLongPress: () => _popupRemoveFriend(userFriend, index),
     );
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-  title: const Text('My Friends'),
-  actions: [
-    Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            iconSize: 35,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PendingRequests(myUserId: widget.userID)),
-              ).then((_) => _fetchPendingRequestsCount()); // Refresh count when returning from PendingRequests screen
-            },
-          ),
-          if (pendingRequestsCount > 0) // Only show if there are pending requests
-            Positioned(
-              // Position the count at the top right of the icon
-              right: 11,
-              top: 11,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(50),
+        title: const Text('My Friends'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.notifications),
+                  iconSize: 35,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PendingRequests(myUserId: widget.userID)),
+                    ).then((_) =>
+                        _fetchPendingRequestsCount()); // Refresh count when returning from PendingRequests screen
+                  },
                 ),
-                constraints: const BoxConstraints(
-                  minWidth: 17,
-                  minHeight: 17,
-                ),
-                child: Center(
-                  child: Text(
-                    '$pendingRequestsCount', // Showing the count
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
+                if (pendingRequestsCount >
+                    0) // Only show if there are pending requests
+                  Positioned(
+                    // Position the count at the top right of the icon
+                    right: 11,
+                    top: 11,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 17,
+                        minHeight: 17,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$pendingRequestsCount', // Showing the count
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              ),
+              ],
             ),
+          ),
         ],
       ),
-    ),
-  ],
-),
-
       body: Column(
         children: [
-          const Text("Long Press to remove someone from your friend list", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),),
+          const Text(
+            "Long Press to remove someone from your friend list",
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+          ),
           Expanded(
             child: FutureBuilder<List<Users>>(
               future: fetchFriends(),
@@ -222,7 +234,9 @@ Widget _generateFriendTile(Users userFriend, int index){
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                if (snapshot.hasError ||
+                    !snapshot.hasData ||
+                    snapshot.data!.isEmpty) {
                   return const Center(child: Text("Your friend list is empty"));
                 }
                 return RefreshIndicator(
@@ -245,11 +259,15 @@ Widget _generateFriendTile(Users userFriend, int index){
           // Navigate to AddFriendsScreen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddFriendsScreen(userID: widget.userID)),
+            MaterialPageRoute(
+                builder: (context) => AddFriendsScreen(userID: widget.userID)),
           );
         },
         backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white,),
+        child: const Icon(
+          Icons.person_add_alt_1_rounded,
+          color: Colors.white,
+        ),
       ),
     );
   }

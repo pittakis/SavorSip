@@ -57,20 +57,19 @@ class Rating {
       //
       Rating? currentRate = await fetchRating(uid, wid);
       //if null .... ++ user Rating number, wine: number of ratings n ++, wine rating = (wineRating*n-1 + new rating)/n
-      if(currentRate == null){
+      if (currentRate == null) {
         Wine.updateWineRating(wid, -1, newRating);
         Users.addOneMoreRating(uid: uid);
-      }
-      else{
+      } else {
         Wine.updateWineRating(wid, currentRate.ratingOftheUser, newRating);
       }
-    
+
       //else ... wineRating = (wineRating*n + newRating - currentrating.ratingoftheuser)/n
 
       // Get current location
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-        //print(position);
+      //print(position);
       // Get address information using geocoding
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -120,7 +119,7 @@ class Rating {
     return userRatings;
   }
 
- // Function to get ratings of all user's friends
+  // Function to get ratings of all user's friends
   static Future<List<Rating>> fetchFriendsRatings(String uid) async {
     List<Rating> friendsRatings = [];
 
@@ -158,14 +157,15 @@ class Rating {
         }
       }
     } catch (e) {
-      print('Error fetching friends ratings: $e');
+      //print('Error fetching friends ratings: $e');
     }
 
     return friendsRatings;
   }
 
   // Function to retrieve all ratings and wine names for a specific user
-  static Future<List<Map<String, dynamic>>> fetchUserRatingsWithWineNames(String uid) async {
+  static Future<List<Map<String, dynamic>>> fetchUserRatingsWithWineNames(
+      String uid) async {
     List<Map<String, dynamic>> userRatings = [];
 
     try {
@@ -185,19 +185,22 @@ class Rating {
         if (wineSnapshot.exists) {
           // Combine rating data with wine name
           userRatings.add({
-            'wineName': wineSnapshot.data()!['wineName'], // Wine name from the Wines collection
+            'wineName': wineSnapshot
+                .data()!['wineName'], // Wine name from the Wines collection
             'wid': wineSnapshot.data()!['wid'],
-            'rating': data['ratingOftheUser'], // Rating from the Ratings collection
-            'latitude': data['latitude'], // Latitude from the Ratings collection
-            'longitude': data['longitude'], // Longitude from the Ratings collection
+            'rating':
+                data['ratingOftheUser'], // Rating from the Ratings collection
+            'latitude':
+                data['latitude'], // Latitude from the Ratings collection
+            'longitude':
+                data['longitude'], // Longitude from the Ratings collection
           });
         }
       }
     } catch (e) {
-      print('Error fetching user ratings: $e');
+      //print('Error fetching user ratings: $e');
     }
 
     return userRatings;
   }
 }
-

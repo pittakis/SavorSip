@@ -129,7 +129,7 @@ class _LoginState extends State<Login> {
                     onPressed: _handleLogin,
                     child: Text(
                       'Login',
-                      style: TextStyle(color: AppColors.on_primary),
+                      style: TextStyle(color: AppColors.onPrimary),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,

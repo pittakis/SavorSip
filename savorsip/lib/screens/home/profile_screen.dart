@@ -1,12 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/UserTile.dart';
 import 'package:savorsip/screens/authentication/login.dart';
 import 'package:savorsip/screens/secondary/edit_profile.dart';
 import 'package:savorsip/screens/secondary/map_screen.dart';
-import 'package:savorsip/screens/secondary/my_ratings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/screens/secondary/wishlist.dart';
 
@@ -16,28 +16,26 @@ class ProfileScreen extends StatefulWidget {
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
-
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Users? currentUser; // Local variable to hold the updated user data
+  int userPosition = -1; // Initialize with a default value
 
-Users? currentUser; // Local variable to hold the updated user data
-int userPosition = -1; // Initialize with a default value
-
-@override
-void initState() {
-  super.initState();
-  _fetchAndSetCurrentUser();
-  _fetchUserPosition();
-}
+  @override
+  void initState() {
+    super.initState();
+    _fetchAndSetCurrentUser();
+    _fetchUserPosition();
+  }
 
   Future<void> _fetchUserPosition() async {
     int position = await LeaderboardService.getUserPosition(widget.userID);
     if (mounted) {
-  setState(() {
-      userPosition = position;
-    });
-  }
+      setState(() {
+        userPosition = position;
+      });
+    }
   }
 
   Future<void> _fetchAndSetCurrentUser() async {
@@ -48,84 +46,98 @@ void initState() {
       });
     } catch (e) {
       // Handle errors, e.g., user not found or network issues
-      print("Error fetching user data: $e");
+      //print("Error fetching user data: $e");
     }
   }
 
 //sign Out Function
-void signMeOut() async {
-  await FirebaseAuth.instance.signOut();
-          Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),  //here we can add the newUser ass parameter
-          );
+  void signMeOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              const Login()), //here we can add the newUser ass parameter
+    );
   }
 
   void navigateToWishlistScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WishlistScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(
+          builder: (context) => WishlistScreen(
+                userID: widget.userID,
+              )), // Replace MyRatingsScreen with your actual screen
     );
   }
 
   void navigateToMapScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MapScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(
+          builder: (context) => MapScreen(
+                userID: widget.userID,
+              )), // Replace MyRatingsScreen with your actual screen
     );
   }
 
   void navigateToEditProfileScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfileScreen(userID: widget.userID,)), // Replace MyRatingsScreen with your actual screen
+      MaterialPageRoute(
+          builder: (context) => EditProfileScreen(
+                userID: widget.userID,
+              )), // Replace MyRatingsScreen with your actual screen
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-      ),
+        appBar: AppBar(
+          toolbarHeight: 0,
+        ),
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-          if (currentUser != null) // Check if currentUser is not null
-            _generateMyProfile(
-              currentUser!.firstName,
-              currentUser!.lastName,
-              currentUser!.username,
-              currentUser!.numOfRatings,
-              userPosition,
-              currentUser!.profilePic,
-              widget.userID,
-            )
-          else
-            const CircularProgressIndicator(),
+              if (currentUser != null) // Check if currentUser is not null
+                _generateMyProfile(
+                  currentUser!.firstName,
+                  currentUser!.lastName,
+                  currentUser!.username,
+                  currentUser!.numOfRatings,
+                  userPosition,
+                  currentUser!.profilePic,
+                  widget.userID,
+                )
+              else
+                const CircularProgressIndicator(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-              
-              _generateButton("Edit Profile ", Colors.deepPurple,
-                  Icons.edit_note, () {
-                navigateToEditProfileScreen(context); // Pass the context parameter
-              }),
-              _generateButton("Wishlist ", Colors.deepPurple, Icons.bookmark_added, () {
-                navigateToWishlistScreen(context); // Pass the context parameter
-              }),
-              _generateButton("My Locations ", Colors.deepPurple, Icons.location_on_outlined, () {
-                navigateToMapScreen(context); // Pass the context parameter
-              }),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  _generateButton(
+                      "Edit Profile ", Colors.deepPurple, Icons.edit_note, () {
+                    navigateToEditProfileScreen(
+                        context); // Pass the context parameter
+                  }),
+                  _generateButton(
+                      "Wishlist ", Colors.deepPurple, Icons.bookmark_added, () {
+                    navigateToWishlistScreen(
+                        context); // Pass the context parameter
+                  }),
+                  _generateButton("My Locations ", Colors.deepPurple,
+                      Icons.location_on_outlined, () {
+                    navigateToMapScreen(context); // Pass the context parameter
+                  }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(),
-                      _generateButton ("Sign Out ", Colors.red[400]!, Icons.exit_to_app, signMeOut),
+                      _generateButton("Sign Out ", Colors.red[400]!,
+                          Icons.exit_to_app, signMeOut),
                     ],
                   ),
                 ],
@@ -136,8 +148,14 @@ void signMeOut() async {
   }
 }
 
-Widget _generateMyProfile(String myFirstName, String myLastName, String myUserName,
-    int myNumOfReviews, int myPosition, String myProfilePicUrl, String userID) {
+Widget _generateMyProfile(
+    String myFirstName,
+    String myLastName,
+    String myUserName,
+    int myNumOfReviews,
+    int myPosition,
+    String myProfilePicUrl,
+    String userID) {
   ImageProvider<Object> profileImage;
   if (Uri.tryParse(myProfilePicUrl)?.hasAbsolutePath ?? false) {
     // If the string can be parsed as a URL and has an absolute path, use NetworkImage
@@ -162,7 +180,9 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
             children: [
               Text(
                 "$myFirstName $myLastName ",
-                style: const TextStyle(fontSize: 22,),
+                style: const TextStyle(
+                  fontSize: 22,
+                ),
               ),
             ],
           ),
@@ -186,8 +206,10 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
                 const Text("Rank:", style: TextStyle(fontSize: 16)),
                 Row(
                   children: [
-                    if(myPosition > 0) Text("$myPosition", style: const TextStyle(fontSize: 24)),
-                    if (getBadgeIcon(myPosition) != null) getBadgeIcon(myPosition)!,
+                    if (myPosition > 0)
+                      Text("$myPosition", style: const TextStyle(fontSize: 24)),
+                    if (getBadgeIcon(myPosition) != null)
+                      getBadgeIcon(myPosition)!,
                   ],
                 ),
               ],
@@ -208,28 +230,40 @@ Widget _generateMyProfile(String myFirstName, String myLastName, String myUserNa
   );
 }
 
-
-Widget _generateButton (String textLabel, Color buttonColor, IconData buttonIcon, Function handlePressing) {
+Widget _generateButton(String textLabel, Color buttonColor, IconData buttonIcon,
+    Function handlePressing) {
   //Prepei na prosthesoume onPressedFunction
   return Padding(
     padding: const EdgeInsets.fromLTRB(50, 5, 50, 5),
     child: ElevatedButton(
-    onPressed: () {
-        handlePressing();
-      },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: buttonColor,
-      elevation: 8 
-      
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          textLabel,
-          style: const TextStyle(fontSize: 20, color: Colors.white)),
-        Icon(buttonIcon,  color: Colors.white) ,
-      ],
-    )),
+        onPressed: () {
+          handlePressing();
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: buttonColor, elevation: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(textLabel,
+                style: const TextStyle(fontSize: 20, color: Colors.white)),
+            Icon(buttonIcon, color: Colors.white),
+          ],
+        )),
   );
+}
+
+Icon? getBadgeIcon(int position) {
+  if (position == 1) {
+    return const Icon(Icons.wine_bar_sharp, color: Colors.amber);
+  } else if (position == 2) {
+    return const Icon(Icons.wine_bar_sharp,
+        color: Color.fromARGB(255, 117, 116, 114));
+  } else if (position == 3) {
+    return const Icon(Icons.wine_bar_sharp,
+        color: Color.fromARGB(255, 166, 102, 72));
+  } else if (position <= 20) {
+    return const Icon(Icons.check_circle, color: Colors.deepPurple);
+  } else {
+    return null;
+  }
 }

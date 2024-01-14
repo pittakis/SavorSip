@@ -16,10 +16,10 @@ class WineCardSearch extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _WineCardSearchState createState() => _WineCardSearchState();
+  WineCardSearchState createState() => WineCardSearchState();
 }
 
-class _WineCardSearchState extends State<WineCardSearch> {
+class WineCardSearchState extends State<WineCardSearch> {
   bool isExpanded = false;
   double sliderValue = 1;
   bool rated = false;
@@ -36,28 +36,28 @@ class _WineCardSearchState extends State<WineCardSearch> {
   }
 
   void checkWishlistStatus() async {
-    bool status = await Wine.isWineInWishList(widget.userID, widget.wineDetails.wid);
+    bool status =
+        await Wine.isWineInWishList(widget.userID, widget.wineDetails.wid);
     if (mounted) {
-    setState(() {
-      isInWishlist = status;
-    });
+      setState(() {
+        isInWishlist = status;
+      });
     }
   }
 
-void toggleWishlist() async {
-  await Wine.toggleWishList(widget.userID, widget.wineDetails.wid, isInWishlist);
-  checkWishlistStatus(); // Update wishlist status
-  widget.onWishlistChanged(); // Notify parent widget
-}
-
+  void toggleWishlist() async {
+    await Wine.toggleWishList(
+        widget.userID, widget.wineDetails.wid, isInWishlist);
+    checkWishlistStatus(); // Update wishlist status
+    widget.onWishlistChanged(); // Notify parent widget
+  }
 
   void getRating() async {
     try {
-      print(
-          "Fetching rating for ${widget.userID} and ${widget.wineDetails.wid}");
+      //print("Fetching rating for ${widget.userID} and ${widget.wineDetails.wid}");
       Rating? fetchedRating =
           await Rating.fetchRating(widget.userID, widget.wineDetails.wid);
-      print("Fetched rating: $fetchedRating");
+      //print("Fetched rating: $fetchedRating");
       if (fetchedRating != null && mounted) {
         setState(() {
           rated = true;
@@ -66,82 +66,81 @@ void toggleWishlist() async {
           isLoading = false;
         });
       } else {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-          rated = false; // Ensure this is set to false if no rating is found
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            rated = false; // Ensure this is set to false if no rating is found
+          });
+        }
       }
-    }
     } catch (e) {
-      print('An error occurred: $e');
+      //print('An error occurred: $e');
       if (mounted) {
         setState(() => isLoading = false);
       }
     }
   }
 
-void updateRating() async {
-  try {
-    if(await _checkAndRequestLocationPermission()){
-    await Rating.updateRating(
-        widget.userID, widget.wineDetails.wid, ratingOftheUser);
-    // Update the local state to reflect the new rating immediately
-    if (mounted) {
-      setState(() {
-        rated = true;
-        rating = ratingOftheUser;
-        sliderValue = ratingOftheUser;
-      });
+  void updateRating() async {
+    try {
+      if (await _checkAndRequestLocationPermission()) {
+        await Rating.updateRating(
+            widget.userID, widget.wineDetails.wid, ratingOftheUser);
+        // Update the local state to reflect the new rating immediately
+        if (mounted) {
+          setState(() {
+            rated = true;
+            rating = ratingOftheUser;
+            sliderValue = ratingOftheUser;
+          });
+        }
+        // Optionally, you can fetch the latest rating again to ensure consistency
+        getRating();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {});
+      }
+      //print('An error occurred: $e');
     }
-    // Optionally, you can fetch the latest rating again to ensure consistency
-    getRating();}
-  } catch (e) {
-    if (mounted) {
-      setState(() {});
-    }
-    print('An error occurred: $e');
-  }
-  
-}
-
-Future<bool> _checkAndRequestLocationPermission() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-
-  // Check if location services are enabled
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled, request the user to enable it.
-    return Future.error('Location services are disabled.');
   }
 
-  // Check location permission
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
+  Future<bool> _checkAndRequestLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled, request the user to enable it.
+      return Future.error('Location services are disabled.');
+    }
+
+    // Check location permission
+    permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try requesting permissions again
-      return Future.error('Location permissions are denied');
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try requesting permissions again
+        return Future.error('Location permissions are denied');
+      }
     }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can continue accessing the position of the device.
+    // You can call your method to get the location here.
+    return true;
   }
-  
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  } 
-
-  // When we reach here, permissions are granted and we can continue accessing the position of the device.
-  // You can call your method to get the location here.
-  return true;
-}
-
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return CircularProgressIndicator(); // Show loading indicator while data is being fetched
+      return const CircularProgressIndicator(); // Show loading indicator while data is being fetched
     }
     // Determine if the winePic is a network image or an asset
     final isNetworkImage =
@@ -188,21 +187,24 @@ Future<bool> _checkAndRequestLocationPermission() async {
                         children: [
                           const Text('SS Rating: '),
                           const Icon(Icons.star, color: Colors.amber),
-                          Text("${widget.wineDetails.wineRating.toStringAsFixed(1)}/5  "),
+                          Text(
+                              "${widget.wineDetails.wineRating.toStringAsFixed(1)}/5  "),
                           Text(
                             "(${widget.wineDetails.numOfRatings})",
                             style: const TextStyle(fontSize: 10),
                           ),
                         ],
                       ),
-                        Row(
-                          children: [
-                            const Text('Your Rating: '),
-                            const Icon(Icons.star, color: Colors.deepPurple),
-                            rated ? Text('${rating.toStringAsFixed(1)}/5') : const Text('-')
-                            //rated ? Text('$rating/5'): const Text('-')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          const Text('Your Rating: '),
+                          const Icon(Icons.star, color: Colors.deepPurple),
+                          rated
+                              ? Text('${rating.toStringAsFixed(1)}/5')
+                              : const Text('-')
+                          //rated ? Text('$rating/5'): const Text('-')
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -230,17 +232,24 @@ Future<bool> _checkAndRequestLocationPermission() async {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple, // Set the background color
+                            backgroundColor:
+                                Colors.deepPurple, // Set the background color
                           ),
                           onPressed: () => _showRatingDialog(context),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.star, size: 20, color: Colors.white,),
+                              Icon(
+                                Icons.star,
+                                size: 20,
+                                color: Colors.white,
+                              ),
                               Text(
                                 'Rate',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.white),
                               ),
                             ],
                           ),
@@ -249,11 +258,13 @@ Future<bool> _checkAndRequestLocationPermission() async {
                       const SizedBox(
                         width: 6,
                       ),
-                                IconButton(
-            icon: Icon(isInWishlist ? Icons.bookmark_remove : Icons.bookmark_add),
-            color:isInWishlist ? Colors.red : Colors.green,
-            onPressed: toggleWishlist,
-                                )
+                      IconButton(
+                        icon: Icon(isInWishlist
+                            ? Icons.bookmark_remove
+                            : Icons.bookmark_add),
+                        color: isInWishlist ? Colors.red : Colors.green,
+                        onPressed: toggleWishlist,
+                      )
                     ],
                   ),
                 ],

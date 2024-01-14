@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/screens/home/cellar_screen.dart';
 import 'package:savorsip/screens/home/friends_screen.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';
 import 'package:savorsip/screens/home/search_screen.dart';
-import 'package:savorsip/screens/home/testing_screen.dart';
 import 'dart:core';
 
 class MyHomePage extends StatefulWidget {
@@ -32,7 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
       //TestingScreen(userID: widget.userID),
     ];
   }
- /* final List<Widget> _screens = [
+
+  /* final List<Widget> _screens = [
     const CellarScreen(currentUser: currentUser),
     const FriendsScreen(),
     const SearchScreen(),
@@ -81,9 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.person_pin_rounded),
             label: 'Profile',
           ),
-         // BottomNavigationBarItem(
+          // BottomNavigationBarItem(
           //  icon: Icon(Icons.edit),
-         //   label: 'Testing',
+          //   label: 'Testing',
           //),
         ],
         onTap: (index) {
@@ -92,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _currentIndex = index;
           });
           // Scroll to the corresponding page
-           _pageController.jumpToPage(index);
+          _pageController.jumpToPage(index);
           /*
           _pageController.animateToPage(
             index,
