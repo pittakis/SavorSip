@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
-import 'package:savorsip/components/wishlistButton.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
