@@ -156,7 +156,7 @@ Widget _generateFriendTile(Users userFriend) {
         //const Icon(Icons.wine_bar, color: Colors.white),
       ],
     ),
-    subtitle: Text(userFriend.username, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+    subtitle: Text(userFriend.username, style: TextStyle(fontSize: 14, color: Colors.grey[400])),
   );
 }
 }

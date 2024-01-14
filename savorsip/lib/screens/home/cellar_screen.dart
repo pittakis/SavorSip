@@ -25,59 +25,9 @@ class _CellarScreenState extends State<CellarScreen> {
   @override
   void initState() {
     super.initState();
-     myfriendsRatings = Rating.fetchFriendsRatings(widget.userID);
+    myfriendsRatings = Rating.fetchFriendsRatings(widget.userID);
     leaderboard = LeaderboardService.getLeaderboard();
   }
-
-Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
-  ImageProvider<Object> backgroundImage;
-
-  if (Uri.tryParse(userFriend.profilePic)?.isAbsolute ?? false) {
-    backgroundImage = NetworkImage(userFriend.profilePic);
-  } else {
-    backgroundImage = AssetImage(userFriend.profilePic);
-  }
-
-  Color? textColor;
-  switch (index) {
-    case 0:
-      textColor = const Color(0xFFFFD700); // Gold color for the first place
-      break;
-    case 1:
-      textColor = const Color(0xFFC0C0C0); // Silver color for the second place
-      break;
-    case 2:
-      textColor = const Color(0xFFCD7F32); // Bronze color for the third place
-      break;
-  }
-
-  return ListTile(
-    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-    leading: CircleAvatar(
-      radius: 25,
-      backgroundImage: backgroundImage,
-    ),
-    title: Text(
-      '${userFriend.firstName} ${userFriend.lastName}',
-      style: const TextStyle(fontSize: 18),
-    ),
-    subtitle: Text(
-      userFriend.username,
-      style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 124, 112, 112)),
-    ),
-    trailing: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '#${index + 1}',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
-        ),
-        Text('$numberOfRatings') // Display just the number of ratings
-      ],
-    ),
-  );
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -156,4 +106,53 @@ Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
       ),
     );
   }
+
+  Widget _generateFriendTile(Users userFriend, int index, int numberOfRatings) {
+  ImageProvider<Object> backgroundImage;
+
+  if (Uri.tryParse(userFriend.profilePic)?.isAbsolute ?? false) {
+    backgroundImage = NetworkImage(userFriend.profilePic);
+  } else {
+    backgroundImage = AssetImage(userFriend.profilePic);
+  }
+
+  Color? textColor;
+  switch (index) {
+    case 0:
+      textColor = const Color(0xFFFFD700); // Gold color for the first place
+      break;
+    case 1:
+      textColor = const Color(0xFFC0C0C0); // Silver color for the second place
+      break;
+    case 2:
+      textColor = const Color(0xFFCD7F32); // Bronze color for the third place
+      break;
+  }
+
+  return ListTile(
+    contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+    leading: CircleAvatar(
+      radius: 25,
+      backgroundImage: backgroundImage,
+    ),
+    title: Text(
+      '${userFriend.firstName} ${userFriend.lastName}',
+      style: const TextStyle(fontSize: 18),
+    ),
+    subtitle: Text(
+      userFriend.username,
+      style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 124, 112, 112)),
+    ),
+    trailing: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '#${index + 1}',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColor),
+        ),
+        Text('$numberOfRatings') // Display just the number of ratings
+      ],
+    ),
+  );
+}
 }
