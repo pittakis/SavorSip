@@ -115,6 +115,7 @@ Widget _buildSearchBar() {
         return WineCardSearch(
           key: ObjectKey(wine), // Unique key for each WineCardSearch
           wineDetails: wine,
+          onWishlistChanged: (){},
           //onRate: (double rating) {
             //print("Saved rating $rating for wine ${wine.wineName}");
           //},

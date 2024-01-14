@@ -5,15 +5,15 @@ import 'package:savorsip/Models/rating.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
-  //final Function(double) onRate;
   final String userID;
-  //variable RatingVal
+  final Function onWishlistChanged; // Add this callback
 
-  const WineCardSearch(
-      {super.key,
-      required this.wineDetails,
-      //required this.onRate,
-      required this.userID});
+  const WineCardSearch({
+    Key? key,
+    required this.wineDetails,
+    required this.userID,
+    required this.onWishlistChanged, // Initialize in constructor
+  }) : super(key: key);
 
   @override
   _WineCardSearchState createState() => _WineCardSearchState();
@@ -44,10 +44,12 @@ class _WineCardSearchState extends State<WineCardSearch> {
     }
   }
 
-  void toggleWishlist() async {
-    await Wine.toggleWishList(widget.userID, widget.wineDetails.wid, isInWishlist);
-    checkWishlistStatus(); // Update wishlist status
-  }
+void toggleWishlist() async {
+  await Wine.toggleWishList(widget.userID, widget.wineDetails.wid, isInWishlist);
+  checkWishlistStatus(); // Update wishlist status
+  widget.onWishlistChanged(); // Notify parent widget
+}
+
 
   void getRating() async {
     try {

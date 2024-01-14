@@ -37,6 +37,10 @@ class _WishlistScreen extends State<WishlistScreen> {
     fetchWinesWishList();
   }
 
+    void updateWishlist() {
+    fetchWinesWishList(); // Refetch the wishlist
+  }
+
 Future<void> fetchWinesWishList() async {
   // Fetch the wishlist
   QuerySnapshot wishListSnapshot = await FirebaseFirestore.instance
@@ -137,6 +141,7 @@ Widget _buildSearchBar() {
           key: ObjectKey(wine), // Unique key for each WineCardSearch
           wineDetails: wine,
           userID: widget.userID,
+          onWishlistChanged: updateWishlist,
         );
       },
     );
