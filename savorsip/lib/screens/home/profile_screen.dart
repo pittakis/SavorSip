@@ -115,10 +115,10 @@ void signMeOut() async {
                   Icons.edit_note, () {
                 navigateToEditProfileScreen(context); // Pass the context parameter
               }),
-              _generateButton("Wishlist ", Colors.deepPurple, Icons.star, () {
+              _generateButton("Wishlist ", Colors.deepPurple, Icons.bookmark_added, () {
                 navigateToWishlistScreen(context); // Pass the context parameter
               }),
-              _generateButton("MapScreen ", Colors.deepPurple, Icons.location_on_outlined, () {
+              _generateButton("My Locations ", Colors.deepPurple, Icons.location_on_outlined, () {
                 navigateToMapScreen(context); // Pass the context parameter
               }),
               Row(
@@ -219,7 +219,8 @@ Widget _generateButton (String textLabel, Color buttonColor, IconData buttonIcon
       },
     style: ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
-      elevation: 10 // Set the desired color
+      elevation: 8 
+      
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

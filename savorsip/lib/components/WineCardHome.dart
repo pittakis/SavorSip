@@ -47,7 +47,7 @@ class WineCardHome extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.deepPurple,
           borderRadius: BorderRadius.circular(10),
@@ -141,7 +141,7 @@ Widget _generateFriendTile(Users userFriend) {
     profileImage = AssetImage(userFriend.profilePic);
   }
   return ListTile(
-    contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+    contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
     leading: CircleAvatar(
       radius: 25,
       backgroundImage: profileImage,

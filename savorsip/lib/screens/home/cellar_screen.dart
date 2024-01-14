@@ -20,17 +20,19 @@ class _CellarScreenState extends State<CellarScreen> {
   late Future<List<Rating>> myfriendsRatings;
   late Future<List<Map<String, dynamic>>> leaderboard;
   
-
-
+  
   @override
   void initState() {
     super.initState();
     myfriendsRatings = Rating.fetchFriendsRatings(widget.userID);
     leaderboard = LeaderboardService.getLeaderboard();
   }
+  
 
   @override
   Widget build(BuildContext context) {
+  
+
     return Scaffold(
       appBar: AppBar(title: const Text("Cellar")),
       body: FutureBuilder<List<Rating>>(
@@ -43,6 +45,7 @@ class _CellarScreenState extends State<CellarScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("No ratings found"));
           } else {
+            snapshot.data!.sort((a, b) => b.ratingTime.compareTo(a.ratingTime));
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
