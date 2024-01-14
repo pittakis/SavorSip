@@ -48,6 +48,8 @@ dependencies:
   geolocator: ^10.1.0
   geocoding: ^2.1.1
   google_maps_flutter: ^2.5.3
+  audioplayers: ^5.2.1
+  permission_handler: ^11.1.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,7 @@ flutter:
     - assets/images/Crown-icon-PNG.png
     - assets/images/wine_default.png
     - assets/images/pin.png
+    - assets/audio/ss.mp3
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

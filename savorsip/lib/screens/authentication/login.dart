@@ -1,15 +1,17 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:savorsip/components/colors.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/authentication/sign_up.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginState createState() => _LoginState();
 }
 
@@ -17,6 +19,7 @@ class _LoginState extends State<Login> {
   bool _passwordVisible = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  AudioPlayer audioPlayer = AudioPlayer();
 
   // Function to handle user login
   void _handleLogin() async {
@@ -27,13 +30,17 @@ class _LoginState extends State<Login> {
         password: _passwordController.text.trim(),
       );
       //Create the user Object
-      Users newUser = await Users.fetchUserData(FirebaseAuth.instance.currentUser!.uid);
+      Users newUser =
+          await Users.fetchUserData(FirebaseAuth.instance.currentUser!.uid);
       //Print users object for test
-      print('This is the user data of the object: $newUser');
+      //print('This is the user data of the object: $newUser');
       // If successful, navigate to the HomeNearby screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage(userID: newUser.uid,)),  //here we can add the newUser ass parameter
+        MaterialPageRoute(
+            builder: (context) => MyHomePage(
+                  userID: newUser.uid,
+                )), //here we can add the newUser ass parameter
       );
     } on FirebaseAuthException catch (e) {
       // Show an error message if login failed
@@ -66,6 +73,12 @@ class _LoginState extends State<Login> {
                   width: 196,
                   height: 200,
                 ),
+                IconButton(
+                  icon: Icon(Icons.volume_up),
+                  onPressed: () async {
+                    await audioPlayer.play(AssetSource('audio/ss.mp3'));
+                  },
+                ),
                 SizedBox(height: 30),
                 TextField(
                   controller: _emailController,
@@ -85,7 +98,9 @@ class _LoginState extends State<Login> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         // Choose the icon based on the password visibility
-                        _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         // Update the state to toggle password visibility
@@ -123,12 +138,11 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 0),
                   ElevatedButton(
                     onPressed: () {
-                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SignUp()),
                       );
-                      
+
                       /*Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => MyHomePage()),
