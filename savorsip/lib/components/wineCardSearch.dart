@@ -6,14 +6,14 @@ import 'package:savorsip/components/wishlistButton.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
-  final Function(double) onRate;
+  //final Function(double) onRate;
   final String userID;
   //variable RatingVal
 
   const WineCardSearch(
       {super.key,
       required this.wineDetails,
-      required this.onRate,
+      //required this.onRate,
       required this.userID});
 
   @override
@@ -286,7 +286,7 @@ Future<bool> _checkAndRequestLocationPermission() async {
                     children: [
                       TextButton(
                         onPressed: () {
-                          widget.onRate(sliderValue);
+                          //widget.onRate(sliderValue);
                           //rated = true;
                           isLoading = true;
                           ratingOftheUser = sliderValue;

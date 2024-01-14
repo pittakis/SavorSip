@@ -73,12 +73,7 @@ class _LoginState extends State<Login> {
                   width: 196,
                   height: 200,
                 ),
-                IconButton(
-                  icon: Icon(Icons.volume_up),
-                  onPressed: () async {
-                    await audioPlayer.play(AssetSource('audio/ss.mp3'));
-                  },
-                ),
+                
                 SizedBox(height: 30),
                 TextField(
                   controller: _emailController,
@@ -111,7 +106,13 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                IconButton(
+                  icon: Icon(Icons.volume_up),
+                  onPressed: () async {
+                    await audioPlayer.play(AssetSource('audio/ss.mp3'));
+                  },
+                ),
+                SizedBox(height: 10),
               ],
             ),
           ),
