@@ -163,4 +163,41 @@ class Rating {
 
     return friendsRatings;
   }
+
+  // Function to retrieve all ratings and wine names for a specific user
+  static Future<List<Map<String, dynamic>>> fetchUserRatingsWithWineNames(String uid) async {
+    List<Map<String, dynamic>> userRatings = [];
+
+    try {
+      // Fetch all ratings for the user
+      var ratingsSnapshot = await FirebaseFirestore.instance
+          .collection('Ratings')
+          .where('uid', isEqualTo: uid)
+          .get();
+
+      for (var ratingDoc in ratingsSnapshot.docs) {
+        var data = ratingDoc.data();
+        var wineSnapshot = await FirebaseFirestore.instance
+            .collection('Wines')
+            .doc(data['wid'])
+            .get();
+
+        if (wineSnapshot.exists) {
+          // Combine rating data with wine name
+          userRatings.add({
+            'wineName': wineSnapshot.data()!['wineName'], // Wine name from the Wines collection
+            'wid': wineSnapshot.data()!['wid'],
+            'rating': data['ratingOftheUser'], // Rating from the Ratings collection
+            'latitude': data['latitude'], // Latitude from the Ratings collection
+            'longitude': data['longitude'], // Longitude from the Ratings collection
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching user ratings: $e');
+    }
+
+    return userRatings;
+  }
 }
+
