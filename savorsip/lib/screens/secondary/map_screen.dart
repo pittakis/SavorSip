@@ -31,6 +31,8 @@ Future<void> _loadUserRatings() async {
     'assets/images/pin.png' // Replace with the path to your custom icon in the assets folder
   );
 
+  // Check if the widget is still in the widget tree
+  if (!mounted) return;
   setState(() {
     _markers = userRatings.map((rating) {
       return Marker(
