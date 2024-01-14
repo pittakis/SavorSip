@@ -17,21 +17,11 @@ class _WishlistButtonState extends State<WishlistButton> {
         });
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: addedToWishlist ? Colors.green : Colors.deepPurple[500], // Change color based on state
+        backgroundColor: Colors.grey[200] // Change color based on state
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            addedToWishlist ? Icons.check : Icons.add,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            addedToWishlist ? "Added to Wishlist" : " Add to Wishlist   ",
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-        ],
+      child: Icon(
+        addedToWishlist ? Icons.bookmark_remove : Icons.bookmark_add,
+        color: addedToWishlist ?  Colors.red : Colors.green,
       ),
     );
   }

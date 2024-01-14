@@ -3,6 +3,7 @@ import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:intl/intl.dart';
+import 'package:savorsip/components/colors.dart';
 
 class WineCardHome extends StatelessWidget {
   final Rating rating;
@@ -59,8 +60,8 @@ class WineCardHome extends StatelessWidget {
             _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
             const SizedBox(height: 10),
             if(rating.city!=null && rating.country!=null)
-            Text('${rating.city!}, ${rating.country!}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),),
-            Text(DateFormat('dd-MM-yyyy').format(rating.ratingTime), style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400),),
+            Text('${rating.city!}, ${rating.country!}', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),),
+            Text(DateFormat('dd-MM-yyyy').format(rating.ratingTime), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),),
             const SizedBox(height: 10),
             _buildRatings("${user.firstName} rated:", rating.ratingOftheUser),
             const SizedBox(height: 5),
