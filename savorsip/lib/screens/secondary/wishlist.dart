@@ -80,7 +80,8 @@ Future<void> fetchWinesWishList() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Wishlist'),
+        //title: const Text('My Wishlist'),
+        toolbarHeight: 30
       ),
       body: Column(
         children: [

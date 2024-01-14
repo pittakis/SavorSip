@@ -35,26 +35,33 @@ class _CellarScreenState extends State<CellarScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Cellar")),
-      body: FutureBuilder<List<Rating>>(
-        future: myfriendsRatings,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No ratings found"));
-          } else {
-            snapshot.data!.sort((a, b) => b.ratingTime.compareTo(a.ratingTime));
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                Rating currentRating = snapshot.data![index];
-                return WineCardHome(rating: currentRating);
+      body: Column(
+        children: [
+          const Text('Swipe right for the leaderboard', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),),
+          Expanded(
+            child: FutureBuilder<List<Rating>>(
+              future: myfriendsRatings,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No ratings found"));
+                } else {
+                  snapshot.data!.sort((a, b) => b.ratingTime.compareTo(a.ratingTime));
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      Rating currentRating = snapshot.data![index];
+                      return WineCardHome(rating: currentRating);
+                    },
+                  );
+                }
               },
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: Column(

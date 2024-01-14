@@ -55,8 +55,7 @@ if (mounted) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: const Text('Search'),
-        toolbarHeight: 20,
+        toolbarHeight: 10,
       ),
       body: Column(
         children: [
@@ -159,7 +158,7 @@ Widget _buildSearchBar() {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         const Text('Minimum SavorSip Rating',style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
         // Slider for minimum rating
         _buildSliderForMinimumRating(),
@@ -186,7 +185,7 @@ Widget _buildSearchBar() {
       },
       children: const <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
            child: Column(
             children: [
               Text('Red'),
@@ -195,7 +194,7 @@ Widget _buildSearchBar() {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
           child: Column(
             children: [
               Text('Rosé'),
@@ -204,7 +203,7 @@ Widget _buildSearchBar() {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 8, 16, 8,),
+          padding: EdgeInsets.fromLTRB(16, 4, 16, 4,),
           child: Column(
             children: [
               Text('White'),

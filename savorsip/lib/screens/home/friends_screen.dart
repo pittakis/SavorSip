@@ -126,7 +126,7 @@ Widget _generateFriendTile(Users userFriend, int index){
             ),
           ),
           //if (userBadge != null) userBadge, // Display badge if not null
-          const Icon(Icons.wine_bar),
+          //const Icon(Icons.wine_bar),
         ],
       ),
       subtitle: Text(userFriend.username,
@@ -146,7 +146,7 @@ Widget _generateFriendTile(Users userFriend, int index){
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: IconButton(
-              icon: const Icon(Icons.person_add_sharp),
+              icon: const Icon(Icons.notifications_none),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -195,7 +195,7 @@ Widget _generateFriendTile(Users userFriend, int index){
           );
         },
         backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white,),
       ),
     );
   }

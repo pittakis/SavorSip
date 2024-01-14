@@ -140,7 +140,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
             ),
           ),
           //if (userBadge != null) userBadge, // Display badge if not null
-          const Icon(Icons.wine_bar),
+          //const Icon(Icons.wine_bar),
         ],
       ),
       subtitle: Text(potentialFriend.username,
