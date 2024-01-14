@@ -22,6 +22,26 @@ class FriendsScreen extends StatefulWidget {
 
 class _FriendsScreenState extends State<FriendsScreen> {
 
+   int pendingRequestsCount = 0; // New state variable to store pending requests count
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPendingRequestsCount(); // Fetch pending requests count on init
+  }
+
+  Future<void> _fetchPendingRequestsCount() async {
+    var pendingRequestsSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.userID)
+        .collection('pendingRequests')
+        .get();
+
+    setState(() {
+      pendingRequestsCount = pendingRequestsSnapshot.docs.length;
+    });
+  }
+
   Future<List<Users>> fetchFriends() async {
     List<Users> friends = [];
     var friendsSnapshot = await FirebaseFirestore.instance
@@ -141,23 +161,57 @@ Widget _generateFriendTile(Users userFriend, int index){
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Friends'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: IconButton(
-              icon: const Icon(Icons.notifications_none),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PendingRequests(myUserId: widget.userID,)),
-                );
-              },
-            ),
+  title: const Text('My Friends'),
+  actions: [
+    Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            iconSize: 35,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PendingRequests(myUserId: widget.userID)),
+              ).then((_) => _fetchPendingRequestsCount()); // Refresh count when returning from PendingRequests screen
+            },
           ),
+          if (pendingRequestsCount > 0) // Only show if there are pending requests
+            Positioned(
+              // Position the count at the top right of the icon
+              right: 11,
+              top: 11,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 17,
+                  minHeight: 17,
+                ),
+                child: Center(
+                  child: Text(
+                    '$pendingRequestsCount', // Showing the count
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
+    ),
+  ],
+),
+
       body: Column(
         children: [
           const Text("Long Press to remove someone from your friend list", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),),

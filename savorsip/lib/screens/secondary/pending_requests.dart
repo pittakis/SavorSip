@@ -135,7 +135,7 @@ class _PendingRequestsState extends State<PendingRequests> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: Colors.black, width: 2), // Only bottom border
+              bottom: BorderSide(color: Colors.deepPurple, width: 2), // Only bottom border
             ),
           ),
           child: Text(
