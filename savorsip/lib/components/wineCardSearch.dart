@@ -27,11 +27,27 @@ class _WineCardSearchState extends State<WineCardSearch> {
   double rating = -1;
   double ratingOftheUser = 0;
   bool isLoading = true; // New variable to track loading state
+  bool isInWishlist = false; // Track if wine is in wishlist
 
   @override
   void initState() {
     super.initState();
     getRating(); // Fetch rating on init
+    checkWishlistStatus();
+  }
+
+  void checkWishlistStatus() async {
+    bool status = await Wine.isWineInWishList(widget.userID, widget.wineDetails.wid);
+    if (mounted) {
+    setState(() {
+      isInWishlist = status;
+    });
+    }
+  }
+
+  void toggleWishlist() async {
+    await Wine.toggleWishList(widget.userID, widget.wineDetails.wid, isInWishlist);
+    checkWishlistStatus(); // Update wishlist status
   }
 
   void getRating() async {
@@ -232,7 +248,11 @@ Future<bool> _checkAndRequestLocationPermission() async {
                       const SizedBox(
                         width: 6,
                       ),
-                      WishlistButton(),
+                                IconButton(
+            icon: Icon(isInWishlist ? Icons.bookmark_remove : Icons.bookmark_add),
+            color:isInWishlist ? Colors.red : Colors.green,
+            onPressed: toggleWishlist,
+                                )
                     ],
                   ),
                 ],

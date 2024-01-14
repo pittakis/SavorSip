@@ -72,4 +72,31 @@ class Wine {
       print("Error updating wine rating: $e");
     }
   }
+
+
+  // Method to check if wine is in wishlist
+  static Future<bool> isWineInWishList(String userId, String wineId) async {
+    var doc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('WishList')
+        .doc(wineId)
+        .get();
+    return doc.exists;
+  }
+
+  // Method to add or remove wine from wishlist
+  static Future<void> toggleWishList(String userId, String wineId, bool isInWishList) async {
+    var wishlistRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('WishList')
+        .doc(wineId);
+
+    if (isInWishList) {
+      await wishlistRef.delete(); // Remove from wishlist
+    } else {
+      await wishlistRef.set({'wid': wineId}); // Add to wishlist
+    }
+  }
 }
