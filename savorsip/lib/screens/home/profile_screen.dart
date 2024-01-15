@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     navigateToWishlistScreen(
                         context); // Pass the context parameter
                   }),
-                  _generateButton("My Locations ", Colors.deepPurple,
+                  _generateButton("Wine Map ", Colors.deepPurple,
                       Icons.location_on_outlined, () {
                     navigateToMapScreen(context); // Pass the context parameter
                   }),
