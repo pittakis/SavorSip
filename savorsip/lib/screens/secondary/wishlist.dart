@@ -40,6 +40,10 @@ class _WishlistScreen extends State<WishlistScreen> {
     fetchWinesWishList(); // Refetch the wishlist
   }
 
+    void refreshWines() {
+    fetchWinesWishList(); // Refetch or refresh the wines data
+  }
+
   Future<void> fetchWinesWishList() async {
     // Fetch the wishlist
     QuerySnapshot wishListSnapshot = await FirebaseFirestore.instance
@@ -143,6 +147,7 @@ class _WishlistScreen extends State<WishlistScreen> {
           wineDetails: wine,
           userID: widget.userID,
           onWishlistChanged: updateWishlist,
+          onUpdateRating: () {refreshWines();},
         );
       },
     );

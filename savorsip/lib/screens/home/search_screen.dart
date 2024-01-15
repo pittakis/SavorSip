@@ -36,6 +36,11 @@ class _SearchScreenState extends State<SearchScreen> {
     fetchWines();
   }
 
+
+  void refreshWines() {
+    fetchWines(); // Refetch or refresh the wines data
+  }
+
   Future<void> fetchWines() async {
     QuerySnapshot wineSnapshot =
         await FirebaseFirestore.instance.collection('Wines').get();
@@ -117,6 +122,7 @@ class _SearchScreenState extends State<SearchScreen> {
           //onRate: (double rating) {
           //print("Saved rating $rating for wine ${wine.wineName}");
           //},
+          onUpdateRating: () {refreshWines();},
           userID: widget.userID,
         );
       },
