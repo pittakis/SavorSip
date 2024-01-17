@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/authentication/sign_up.dart';
 import 'package:audioplayers/audioplayers.dart';

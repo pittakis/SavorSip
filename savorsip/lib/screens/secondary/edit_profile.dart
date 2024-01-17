@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 
 class EditProfileScreen extends StatefulWidget {

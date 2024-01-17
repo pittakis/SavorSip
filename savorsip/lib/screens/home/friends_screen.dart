@@ -4,7 +4,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 

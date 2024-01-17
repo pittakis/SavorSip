@@ -3,7 +3,6 @@ import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:intl/intl.dart';
-import 'package:savorsip/components/color_schemes.dart';
 
 class WineCardHome extends StatelessWidget {
   final Rating rating;

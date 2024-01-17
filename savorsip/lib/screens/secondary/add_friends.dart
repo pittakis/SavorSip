@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/Tertiary/qr_scan_screen.dart';
 
 Image genericProfilePicture = Image.asset('assets/images/logo.PNG');

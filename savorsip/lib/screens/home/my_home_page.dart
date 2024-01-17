@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/cellar_screen.dart';
 import 'package:savorsip/screens/home/friends_screen.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';

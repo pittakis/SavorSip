@@ -4,7 +4,6 @@ import 'package:savorsip/screens/authentication/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:savorsip/theme_notifier.dart';
 import 'firebase_options.dart';
-import 'package:savorsip/components/color_schemes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
