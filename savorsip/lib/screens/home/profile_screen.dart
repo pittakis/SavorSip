@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),*/
                       ElevatedButton(
                           onPressed: () {
-                            signMeOut;
+                            signMeOut();
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: theme.colorScheme.error,
