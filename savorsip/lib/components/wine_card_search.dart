@@ -8,12 +8,14 @@ class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
   final String userID;
   final Function onWishlistChanged; // Add this callback
+  final Function onUpdateRating;
 
   const WineCardSearch({
     Key? key,
     required this.wineDetails,
     required this.userID,
     required this.onWishlistChanged, // Initialize in constructor
+    required this.onUpdateRating,
   }) : super(key: key);
 
   @override
@@ -97,6 +99,7 @@ class WineCardSearchState extends State<WineCardSearch> {
         }
         // Optionally, you can fetch the latest rating again to ensure consistency
         getRating();
+        widget.onUpdateRating();
       }
     } catch (e) {
       if (mounted) {
@@ -328,7 +331,7 @@ class WineCardSearchState extends State<WineCardSearch> {
                           isLoading = true;
                           ratingOftheUser = sliderValue;
                           updateRating();
-
+                          //widget.onUpdateRating();
                           Navigator.of(context).pop();
                         },
                         child: const Text('Save',

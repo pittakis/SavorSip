@@ -70,13 +70,36 @@ class MapScreenState extends State<MapScreen> {
       return Future.error('Location permissions are permanently denied');
     }
 
-    return await Geolocator.getCurrentPosition();
-  }
+ 
+        Position position = await Geolocator.getCurrentPosition();
+        final BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        'assets/images/my_location.png' // Replace with the path to your custom icon in the assets folder
+        );
+
+        // Create a marker for the current location
+        final BitmapDescriptor currentLocationIcon = customIcon;
+
+        Marker currentLocationMarker = Marker(
+            markerId: const MarkerId('current_location'),
+            position: LatLng(position.latitude, position.longitude),
+            infoWindow: const InfoWindow(title: 'Current Location'),
+            icon: currentLocationIcon, // Use a distinct icon or the default one
+        );
+
+        // Add the current location marker to the set of markers
+        setState(() {
+            _markers.add(currentLocationMarker);
+        });
+
+        return position;
+    }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('User Ratings Map')),
+      appBar: AppBar(title: const Text('Wine Map')),
       body: FutureBuilder<Position>(
         future: _currentLocationFuture,
         builder: (context, snapshot) {

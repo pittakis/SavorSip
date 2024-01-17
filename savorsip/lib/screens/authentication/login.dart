@@ -83,6 +83,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
+                Text("Tap the logo", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300)),
                 SizedBox(height: 30),
                 TextField(
                   controller: _emailController,
