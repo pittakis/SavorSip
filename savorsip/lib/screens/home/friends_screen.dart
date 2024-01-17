@@ -4,6 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/secondary/add_friends.dart';
 import 'package:savorsip/screens/secondary/pending_requests.dart';
 
@@ -167,6 +168,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Friends'),
@@ -264,10 +266,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 builder: (context) => AddFriendsScreen(userID: widget.userID)),
           );
         },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(
+        backgroundColor: theme.colorScheme.primary,
+        child: Icon(
           Icons.person_add_alt_1_rounded,
-          color: Colors.white,
+          color: theme.colorScheme.onPrimary,
         ),
       ),
     );

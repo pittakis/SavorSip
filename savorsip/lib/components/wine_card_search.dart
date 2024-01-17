@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
+import 'package:savorsip/components/color_schemes.dart';
 
 class WineCardSearch extends StatefulWidget {
   final Wine wineDetails;
@@ -139,6 +140,7 @@ class WineCardSearchState extends State<WineCardSearch> {
 
   @override
   Widget build(BuildContext context) {
+   var theme = Theme.of(context);
     if (isLoading) {
       return const CircularProgressIndicator(); // Show loading indicator while data is being fetched
     }
@@ -152,6 +154,8 @@ class WineCardSearchState extends State<WineCardSearch> {
     }
 
     return Card(
+      //color: theme.colorScheme.secondaryContainer,
+      //color: theme.colorScheme.surfaceVariant,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
@@ -198,7 +202,7 @@ class WineCardSearchState extends State<WineCardSearch> {
                       Row(
                         children: [
                           const Text('Your Rating: '),
-                          const Icon(Icons.star, color: Colors.deepPurple),
+                          Icon(Icons.star, color: theme.colorScheme.primary),
                           rated
                               ? Text('${rating.toStringAsFixed(1)}/5')
                               : const Text('-')
@@ -233,23 +237,24 @@ class WineCardSearchState extends State<WineCardSearch> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Colors.deepPurple, // Set the background color
+                                theme.colorScheme.primary, // Set the background color
                           ),
                           onPressed: () => _showRatingDialog(context),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.star,
                                 size: 20,
-                                color: Colors.white,
+                                color: theme.colorScheme.onPrimary,
                               ),
                               Text(
                                 'Rate',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
-                                    color: Colors.white),
+                                    color: theme.colorScheme.onPrimary
+                                  ),
                               ),
                             ],
                           ),

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -49,20 +50,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _oldPasswordController = TextEditingController();
 
   Widget _entryField(String title, TextEditingController controller) {
+    var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
           labelText: title,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
         ),
       ),
@@ -71,20 +73,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _passwordEntryField(String title, TextEditingController controller,
       bool passwordVisibility, Function togglePasswordVisibility) {
+      var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
       child: TextField(
         controller: controller,
         obscureText: !passwordVisibility,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
           labelText: title,
           suffixIcon: IconButton(
@@ -112,6 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -166,17 +170,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 156, 129, 231),
+                          backgroundColor: theme.colorScheme.secondaryContainer,
                           minimumSize: const Size(150, 50),
-                          elevation: 10),
-                      child: const Row(
+                          elevation: 6
+                      ),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.camera_alt_outlined, color: Colors.white),
-                          SizedBox(width: 8),
+                          Icon(Icons.camera_alt_outlined, color: theme.colorScheme.onSecondaryContainer),
+                          const SizedBox(width: 8),
                           Text('Change Picture',
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: theme.colorScheme.onSecondaryContainer)),
                         ],
                       ),
                     ),
@@ -268,14 +272,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 156, 129, 231),
+                          backgroundColor: theme.colorScheme.primary,
                           minimumSize: const Size(150, 50),
                           elevation: 10,
                         ),
-                        child: const Text(
+                        child: Text(
                           'Save Changes',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: theme.colorScheme.onPrimary,),
                         ),
                       ),
                     ),

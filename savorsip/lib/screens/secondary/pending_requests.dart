@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:savorsip/components/color_schemes.dart';
 
 class PendingRequests extends StatefulWidget {
   final String myUserId;
@@ -112,6 +113,7 @@ class _PendingRequestsState extends State<PendingRequests> {
   }
 
   Widget buildRequestItem(Map<String, String> request, int index) {
+    var theme = Theme.of(context);
     String userId = request['uid']!;
     String username = request['username']!;
 
@@ -140,10 +142,10 @@ class _PendingRequestsState extends State<PendingRequests> {
       child: ListTile(
         title: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                  color: Colors.deepPurple, width: 2), // Only bottom border
+                  color: theme.colorScheme.primary, width: 2), // Only bottom border
             ),
           ),
           child: Text(

@@ -3,9 +3,11 @@ import 'package:savorsip/Models/Wines.dart';
 import 'package:savorsip/Models/rating.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:intl/intl.dart';
+import 'package:savorsip/components/color_schemes.dart';
 
 class WineCardHome extends StatelessWidget {
   final Rating rating;
+  
 
   const WineCardHome({super.key, required this.rating});
 
@@ -43,48 +45,50 @@ class WineCardHome extends StatelessWidget {
   }
 
   Widget _buildCard(Users user, Wine wine1, BuildContext context) {
+    var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.deepPurple,
+          color: theme.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _generateFriendTile(user),
+            _generateFriendTile(user, context),
             const SizedBox(height: 10),
-            _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription),
+            _buildHeader(wine1.winePic, wine1.wineName, wine1.wineDescription, context),
             const SizedBox(height: 10),
             if (rating.city != null && rating.country != null)
               Text(
                 '${rating.city!}, ${rating.country!}',
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontSize: 16,
                     fontWeight: FontWeight.w400),
               ),
             Text(
               DateFormat('dd-MM-yyyy').format(rating.ratingTime),
-              style: const TextStyle(
-                  color: Colors.white,
+              style: TextStyle(
+                  color: theme.colorScheme.onSurfaceVariant,
                   fontSize: 16,
                   fontWeight: FontWeight.w400),
             ),
             const SizedBox(height: 10),
-            _buildRatings("${user.firstName} rated:", rating.ratingOftheUser),
+            _buildRatings("${user.firstName} rated:", rating.ratingOftheUser, theme.colorScheme.primary, context),
             const SizedBox(height: 5),
-            _buildRatings("SS Rating:", wine1.wineRating),
+            _buildRatings("SS Rating:", wine1.wineRating, theme.colorScheme.primary, context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader(String imageUrl, String wineName, String description) {
-    // Determine if the imageUrl is a network image or an asset image
+Widget _buildHeader(String imageUrl, String wineName, String description, BuildContext context) {
+  var theme = Theme.of(context);
+
     final ImageProvider imageProvider;
     if (imageUrl.startsWith('http') || imageUrl.startsWith('https')) {
       imageProvider = NetworkImage(imageUrl);
@@ -112,16 +116,16 @@ class WineCardHome extends StatelessWidget {
             children: [
               Text(
                 wineName,
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontSize: 20,
                     fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 5),
               Text(
                 "'$description'",
-                style: const TextStyle(
-                    color: Colors.white,
+                style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontSize: 12,
                     fontWeight: FontWeight.w400),
               ),
@@ -132,22 +136,23 @@ class WineCardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildRatings(String title, double rating) {
+  Widget _buildRatings(String title, double rating, Color textColor, BuildContext context) {
+  var theme = Theme.of(context);
     return Row(
       children: [
         Text(title,
-            style: const TextStyle(
-                color: Colors.white,
+            style: TextStyle(
+                color: theme.colorScheme.onSurfaceVariant,
                 fontSize: 20,
                 fontWeight: FontWeight.w600)),
         const SizedBox(width: 10),
         Row(
           children: [
-            const Icon(Icons.star, color: Colors.amber, size: 22),
+            Icon(Icons.star, color: textColor, size: 22),
             Text(
               '${rating.toStringAsFixed(1)}/5',
-              style: const TextStyle(
-                  color: Color(0xFFFFD700),
+              style:  TextStyle(
+                  color: textColor,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
@@ -157,7 +162,8 @@ class WineCardHome extends StatelessWidget {
     );
   }
 
-  Widget _generateFriendTile(Users userFriend) {
+  Widget _generateFriendTile(Users userFriend, BuildContext context) {
+  var theme = Theme.of(context);
     ImageProvider<Object> profileImage;
     if (userFriend.profilePic.isNotEmpty &&
         Uri.tryParse(userFriend.profilePic)?.isAbsolute == true) {
@@ -175,14 +181,14 @@ class WineCardHome extends StatelessWidget {
         children: [
           Text(
             '${userFriend.firstName} ${userFriend.lastName}',
-            style: const TextStyle(fontSize: 18, color: Colors.white),
+            style: TextStyle(fontSize: 18, color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600),
           ),
           const SizedBox(width: 5),
           //const Icon(Icons.wine_bar, color: Colors.white),
         ],
       ),
       subtitle: Text(userFriend.username,
-          style: TextStyle(fontSize: 14, color: Colors.grey[400])),
+          style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurfaceVariant)),
     );
   }
 }

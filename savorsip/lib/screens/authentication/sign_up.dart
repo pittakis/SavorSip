@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/leaderboard.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/Models/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,20 +28,21 @@ class _SignUpState extends State<SignUp> {
   final _usernameController = TextEditingController();
 
   Widget _entryField(String title, TextEditingController controller) {
+    var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
           labelText: title,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
         ),
       ),
@@ -49,20 +51,21 @@ class _SignUpState extends State<SignUp> {
 
   Widget _passwordEntryField(String title, TextEditingController controller,
       bool passwordVisibility, Function togglePasswordVisibility) {
+        var theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
       child: TextField(
         controller: controller,
         obscureText: !passwordVisibility,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 2.0),
+          focusedBorder:  OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 2.0),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.purple, width: 1.0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.0),
           ),
           labelText: title,
           suffixIcon: IconButton(
@@ -90,7 +93,9 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
@@ -190,12 +195,12 @@ class _SignUpState extends State<SignUp> {
                     },
                     // Button styling
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF624E99),
+                      backgroundColor: theme.colorScheme.primary,
                       minimumSize: const Size(150, 50),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Sign-Up',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: theme.colorScheme.onPrimary),
                     ),
                   ),
                 ],

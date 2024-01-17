@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/Models/users.dart';
-import 'package:savorsip/components/colors.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/my_home_page.dart';
 import 'package:savorsip/screens/authentication/sign_up.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -58,6 +58,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -86,7 +87,18 @@ class _LoginState extends State<Login> {
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 1.0),
+                    ),
                     labelText: 'E-mail',
                   ),
                   keyboardType: TextInputType.emailAddress,
@@ -96,7 +108,18 @@ class _LoginState extends State<Login> {
                   controller: _passwordController,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: theme.colorScheme.primary, width: 1.0),
+                    ),
                     labelText: 'Password',
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -125,15 +148,18 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton(
-                    onPressed: _handleLogin,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: AppColors.onPrimary),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      minimumSize: Size(350, 50),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(26, 0, 26, 0),
+                    child: ElevatedButton(
+                      onPressed: _handleLogin,
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: theme.colorScheme.onPrimary),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        minimumSize: Size(350, 50),
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -153,10 +179,10 @@ class _LoginState extends State<Login> {
                     },
                     child: Text(
                       'Sign-Up',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: theme.colorScheme.onPrimary),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF624E99),
+                      backgroundColor: theme.colorScheme.primary,
                       minimumSize: Size(150, 50),
                     ),
                   ),

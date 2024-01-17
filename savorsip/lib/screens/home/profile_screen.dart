@@ -1,14 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:savorsip/Models/leaderboard.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/authentication/login.dart';
 import 'package:savorsip/screens/secondary/edit_profile.dart';
 import 'package:savorsip/screens/secondary/map_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:savorsip/screens/secondary/wishlist.dart';
+import 'package:savorsip/theme_notifier.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userID;
@@ -21,10 +24,12 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   Users? currentUser; // Local variable to hold the updated user data
   int userPosition = -1; // Initialize with a default value
+  bool isLightMode = true;
 
   @override
   void initState() {
     super.initState();
+    isLightMode = Provider.of<ThemeProvider>(context, listen: false).isLightMode;
     _fetchAndSetCurrentUser();
     _fetchUserPosition();
   }
@@ -93,10 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 0,
         ),
+        backgroundColor: theme.colorScheme.surface,
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Column(
@@ -118,26 +125,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _generateButton(
-                      "Edit Profile ", Colors.deepPurple, Icons.edit_note, () {
-                    navigateToEditProfileScreen(
-                        context); // Pass the context parameter
-                  }),
-                  _generateButton(
-                      "Wishlist ", Colors.deepPurple, Icons.bookmark_added, () {
-                    navigateToWishlistScreen(
-                        context); // Pass the context parameter
-                  }),
-                  _generateButton("My Locations ", Colors.deepPurple,
-                      Icons.location_on_outlined, () {
-                    navigateToMapScreen(context); // Pass the context parameter
-                  }),
+                 
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50,5,50,5),
+                    child: _generateButton(
+                        "Edit Profile ", theme.colorScheme.secondaryContainer,theme.colorScheme.onSecondaryContainer, Icons.edit_note, () {
+                      navigateToEditProfileScreen(
+                          context); // Pass the context parameter
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50,5,50,5),
+                    child: _generateButton(
+                        "Wishlist ", theme.colorScheme.secondaryContainer, theme.colorScheme.onSecondaryContainer, Icons.bookmark_added, () {
+                      navigateToWishlistScreen(
+                          context); // Pass the context parameter
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50,5,50,5),
+                    child: _generateButton("My Locations ",theme.colorScheme.secondaryContainer,theme.colorScheme.onSecondaryContainer,
+                        Icons.location_on_outlined, () {
+                      navigateToMapScreen(context); // Pass the context parameter
+                    }),
+                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(),
-                      _generateButton("Sign Out ", Colors.red[400]!,
-                          Icons.exit_to_app, signMeOut),
+                      Row(
+                        children: [
+                          const Icon(Icons.wb_sunny_outlined, size: 20,),
+                          Switch(
+                            value: !isLightMode,
+                            onChanged: (value) {
+                              setState(() {
+                                isLightMode = !value;
+                              });
+                              Provider.of<ThemeProvider>(context, listen: false)
+                                  .toggleTheme();
+                            },
+                            activeColor: theme.colorScheme.primary,
+                            inactiveThumbColor: theme.colorScheme.onSurface,
+                            inactiveTrackColor:
+                                theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                          const Icon(Icons.dark_mode_outlined, size: 20,)
+                        ],
+                      ),
+                      /*
+                      IconButton(
+                        icon: const Icon(Icons.brightness_6),
+                        onPressed: () =>
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .toggleTheme(),
+                      ),*/
+                      ElevatedButton(
+                          onPressed: () {
+                            signMeOut;
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: theme.colorScheme.error,
+                              elevation: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Sign Out  ",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: theme.colorScheme.onError,
+                                  )),
+                              Icon(Icons.exit_to_app,
+                                  color: theme.colorScheme.onError,
+                                  size: 16),
+                            ],
+                          )),
                     ],
                   ),
                 ],
@@ -218,11 +279,14 @@ Widget _generateMyProfile(
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(80, 20, 80, 20),
-          child: QrImageView(
-            data: userID,
-            version: QrVersions.auto,
-            size: 200.0,
-            gapless: false,
+          child: Container(
+            color: Colors.white,
+            child: QrImageView(
+              data: userID,
+              version: QrVersions.auto,
+              size: 200.0,
+              gapless: false,
+            ),
           ),
         ),
       ],
@@ -230,26 +294,23 @@ Widget _generateMyProfile(
   );
 }
 
-Widget _generateButton(String textLabel, Color buttonColor, IconData buttonIcon,
+Widget _generateButton(String textLabel, Color buttonColor, Color textColor, IconData buttonIcon,
     Function handlePressing) {
   //Prepei na prosthesoume onPressedFunction
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(50, 5, 50, 5),
-    child: ElevatedButton(
-        onPressed: () {
-          handlePressing();
-        },
-        style: ElevatedButton.styleFrom(
-            backgroundColor: buttonColor, elevation: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(textLabel,
-                style: const TextStyle(fontSize: 20, color: Colors.white)),
-            Icon(buttonIcon, color: Colors.white),
-          ],
-        )),
-  );
+  return ElevatedButton(
+      onPressed: () {
+        handlePressing();
+      },
+      style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor, elevation: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(textLabel,
+              style: TextStyle(fontSize: 20, color: textColor,)),
+          Icon(buttonIcon, color: textColor),
+        ],
+      ));
 }
 
 Icon? getBadgeIcon(int position) {
@@ -262,7 +323,7 @@ Icon? getBadgeIcon(int position) {
     return const Icon(Icons.wine_bar_sharp,
         color: Color.fromARGB(255, 166, 102, 72));
   } else if (position <= 20) {
-    return const Icon(Icons.check_circle, color: Colors.deepPurple);
+    return Icon(Icons.check_circle, color: lightColorScheme.primary);
   } else {
     return null;
   }

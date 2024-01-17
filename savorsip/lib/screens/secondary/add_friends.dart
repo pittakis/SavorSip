@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savorsip/Models/users.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/Tertiary/qr_scan_screen.dart';
 
 Image genericProfilePicture = Image.asset('assets/images/logo.PNG');
@@ -61,6 +62,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     final filteredFriendsList = _filterPotentialFriends();
     return Scaffold(
       appBar: AppBar(title: const Text('Add Friends')),
@@ -88,10 +90,10 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                     )),
           );
         },
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(
+        backgroundColor: theme.colorScheme.primary,
+        child: Icon(
           Icons.qr_code_2_outlined,
-          color: Colors.white,
+          color: theme.colorScheme.onPrimary,
         ),
       ),
     );

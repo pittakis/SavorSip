@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savorsip/components/color_schemes.dart';
 import 'package:savorsip/screens/home/cellar_screen.dart';
 import 'package:savorsip/screens/home/friends_screen.dart';
 import 'package:savorsip/screens/home/profile_screen.dart';
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 */
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
       body: PageView(
@@ -61,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           : null, // Set to null for other indices*/
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.amber,
         elevation: 10,
         currentIndex: _currentIndex,
         items: const [
@@ -99,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
             curve: Curves.easeInOut,
           );*/
         },
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: theme.colorScheme.onSurfaceVariant,
       ),
     );
   }
