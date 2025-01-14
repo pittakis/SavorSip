@@ -44,37 +44,37 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA6BKs_ncMjV1gWj-ysbYMxrK__MjWYO2o',
-    appId: '1:381630717842:web:b14a2ebb98d279e8b66b4b',
-    messagingSenderId: '381630717842',
-    projectId: 'savorsip-8c64d',
-    authDomain: 'savorsip-8c64d.firebaseapp.com',
-    storageBucket: 'savorsip-8c64d.appspot.com',
+    apiKey: 'XXXXX',
+    appId: 'XXXXX',
+    messagingSenderId: 'XXXXX',
+    projectId: 'XXXXX',
+    authDomain: 'XXXXX',
+    storageBucket: 'XXXXX',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBx8j1vb3-Gl-6ncsO-x4DV7bQEMVkhLWE',
-    appId: '1:381630717842:android:91e0383bd3ed6d8cb66b4b',
-    messagingSenderId: '381630717842',
-    projectId: 'savorsip-8c64d',
-    storageBucket: 'savorsip-8c64d.appspot.com',
+    apiKey: 'XXXXX',
+    appId: 'XXXXX',
+    messagingSenderId: 'XXXXX',
+    projectId: 'XXXXX',
+    storageBucket: 'XXXXX',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCZXHyXeB-ND8m4l_4ZS2p0svuhzhUBuqM',
-    appId: '1:381630717842:ios:ce5e62771ae6a16fb66b4b',
-    messagingSenderId: '381630717842',
-    projectId: 'savorsip-8c64d',
-    storageBucket: 'savorsip-8c64d.appspot.com',
-    iosBundleId: 'com.example.savorsip',
+    apiKey: 'XXXXX',
+    appId: 'XXXXX',
+    messagingSenderId: 'XXXXX',
+    projectId: 'XXXXX',
+    storageBucket: 'XXXXX',
+    iosBundleId: 'XXXXX',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCZXHyXeB-ND8m4l_4ZS2p0svuhzhUBuqM',
-    appId: '1:381630717842:ios:5ec5bf8b35e45ef3b66b4b',
-    messagingSenderId: '381630717842',
-    projectId: 'savorsip-8c64d',
-    storageBucket: 'savorsip-8c64d.appspot.com',
-    iosBundleId: 'com.example.savorsip.RunnerTests',
+    apiKey: 'XXXXX',
+    appId: 'XXXXX',
+    messagingSenderId: 'XXXXX',
+    projectId: 'XXXXX',
+    storageBucket: 'XXXXX',
+    iosBundleId: 'XXXXX',
   );
 }
